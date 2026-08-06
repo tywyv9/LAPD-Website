@@ -1122,7 +1122,7 @@
         <p>&copy; 2026 Los Angeles Police Department. All rights reserved.</p>
     </footer>
 
-    <!-- JAVASCRIPT LOGIC -->
+<!-- JAVASCRIPT LOGIC -->
     <script>
         // ==================== CONFIG ====================
         // Command PIN — unlocks full site editing
@@ -1131,56 +1131,11 @@
         // Officer Portal PIN — view-only access to internal documents.
         const PORTAL_PIN = "2026343pd";
 
-        const LOCAL_STORAGE_KEY = "lapd_site_state_v1";
-        const IDB_NAME = "lapd_department";
-        const IDB_STORE = "site_state";
+        // REPLACE THIS WITH YOUR CLOUDFLARE WORKER URL
+        const WORKER_URL = "https://lapd-api.tywyv9.workers.dev/";
+
         let saveTimer = null;
         let isApplyingState = false;
-
-        // IndexedDB — handles storage quota for uploaded photos
-        function idbOpen() {
-            return new Promise((resolve, reject) => {
-                const req = indexedDB.open(IDB_NAME, 1);
-                req.onupgradeneeded = () => {
-                    const db = req.result;
-                    if (!db.objectStoreNames.contains(IDB_STORE)) {
-                        db.createObjectStore(IDB_STORE);
-                    }
-                };
-                req.onsuccess = () => resolve(req.result);
-                req.onerror = () => reject(req.error);
-            });
-        }
-
-        async function idbSet(key, value) {
-            const db = await idbOpen();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(IDB_STORE, "readwrite");
-                tx.objectStore(IDB_STORE).put(value, key);
-                tx.oncomplete = () => resolve();
-                tx.onerror = () => reject(tx.error);
-            });
-        }
-
-        async function idbGet(key) {
-            const db = await idbOpen();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(IDB_STORE, "readonly");
-                const req = tx.objectStore(IDB_STORE).get(key);
-                req.onsuccess = () => resolve(req.result || null);
-                req.onerror = () => reject(req.error);
-            });
-        }
-
-        async function idbDel(key) {
-            const db = await idbOpen();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(IDB_STORE, "readwrite");
-                tx.objectStore(IDB_STORE).delete(key);
-                tx.oncomplete = () => resolve();
-                tx.onerror = () => reject(tx.error);
-            });
-        }
 
         // ==================== TAB SWITCHING ====================
         function switchTab(tabId) {
@@ -1573,7 +1528,7 @@
             isApplyingState = false;
         }
 
-        // ==================== LOCAL SAVE / LOAD ====================
+        // ==================== KV REMOTE SAVE / LOAD ====================
         function scheduleSave() {
             if (isApplyingState) return;
             if (sessionStorage.getItem('editorUnlocked') !== 'true') return;
@@ -1581,49 +1536,45 @@
             saveTimer = setTimeout(persistState, 400);
         }
 
-        async function persistState() {
-            if (isApplyingState) return;
-            const state = captureState();
-
-            let localOk = false;
+        async function loadState() {
             try {
-                await idbSet(LOCAL_STORAGE_KEY, state);
-                localOk = true;
-            } catch (e) {
-                console.warn('IndexedDB save failed', e);
-                try {
-                    const slim = { ...state, heroBackground: '', roster: (state.roster||[]).map(c => ({...c, image:''})),
-                        tow: (state.tow||[]).map(c => ({...c, image:''})), race: (state.race||[]).map(c => ({...c, image:''})),
-                        portal: (state.portal||[]).map(c => ({...c, image:''})) };
-                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(slim));
-                    localOk = true;
-                } catch (e2) {
-                    console.warn('localStorage fallback failed', e2);
+                const response = await fetch(`${WORKER_URL}/api/data`);
+                if (response.ok) {
+                    const state = await response.json();
+                    if (state && Object.keys(state).length > 0) {
+                        applyState(state);
+                    }
                 }
-            }
-
-            if (localOk) {
-                showSaveNotification();
-            } else {
-                alert('Save failed. Try a smaller background image.');
+            } catch (err) {
+                console.error("Failed to load global state from KV:", err);
             }
         }
 
-        async function loadState() {
-            let state = null;
+        async function persistState() {
+            if (isApplyingState) return;
+            if (sessionStorage.getItem('editorUnlocked') !== 'true') return;
+
+            const state = captureState();
 
             try {
-                state = await idbGet(LOCAL_STORAGE_KEY);
-            } catch (e) { }
+                const response = await fetch(`${WORKER_URL}/api/save`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        pin: STAFF_PIN,
+                        state: state
+                    })
+                });
 
-            if (!state) {
-                try {
-                    const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-                    if (raw) state = JSON.parse(raw);
-                } catch (e) { }
+                if (response.ok) {
+                    showSaveNotification();
+                } else {
+                    alert("Failed to save changes remotely. Check your worker connection.");
+                }
+            } catch (err) {
+                console.error("Error saving to KV store:", err);
+                alert("Network error: Could not reach worker.");
             }
-
-            if (state) applyState(state);
         }
 
         function bindEditListeners() {
@@ -1821,8 +1772,6 @@
 
         async function resetSiteData() {
             if (!confirm("Reset all customizations to default? This cannot be undone.")) return;
-            try { localStorage.removeItem(LOCAL_STORAGE_KEY); } catch (e) {}
-            try { await idbDel(LOCAL_STORAGE_KEY); } catch (e) {}
             window.__heroBackground = '';
             location.reload();
         }

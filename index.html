@@ -993,19 +993,23 @@
             </table>
         </section>
 
-        <!-- 6. DISCOUNTS & MEMBERSHIPS TAB -->
+        <!-- 6. COMMENDATIONS / AWARDS TAB -->
         <section id="tab-memberships" class="tab-content">
             <div class="tab-header">
-                <h2 class="tab-title">COMMENDATIONS & CITIZEN PROGRAMS</h2>
-                <button class="btn edit-control" onclick="addCard('membershipGrid', 'Program Name', 'Status / Honor', 'Perks and requirements...')"><i class="fa-solid fa-plus"></i> Add Entry</button>
+                <h2 class="tab-title">OFFICER COMMENDATIONS</h2>
+                <button class="btn edit-control" onclick="addCard('membershipsGrid', 'Ribbon / Medal Title', 'Recipient Name & Rank', 'Criteria, date awarded, or story details...')"><i class="fa-solid fa-plus"></i> Add Award</button>
             </div>
-            <div class="grid-container" id="membershipGrid">
+            <div class="grid-container" id="membershipsGrid">
                 <div class="card">
                     <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container">
+                        <i class="fa-solid fa-award fa-3x" style="color: #273754;"></i>
+                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                    </div>
                     <div class="card-body">
-                        <div class="card-title edit-protected">Medal of Valor Civilian Award</div>
-                        <div class="card-subtitle edit-protected">Public Merit Recognition</div>
-                        <div class="card-text edit-protected">Awarded to civilians assisting law enforcement in preventing critical offenses or aiding officers in distress.</div>
+                        <div class="card-title edit-protected">Medal of Valor</div>
+                        <div class="card-subtitle edit-protected">Highest Departmental Honor</div>
+                        <div class="card-text edit-protected">Awarded for outstanding bravery in the line of duty under extreme personal danger.</div>
                     </div>
                 </div>
             </div>
@@ -1122,7 +1126,7 @@
         <p>&copy; 2026 Los Angeles Police Department. All rights reserved.</p>
     </footer>
 
-<!-- JAVASCRIPT LOGIC -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         // ==================== CONFIG ====================
         // Command PIN — unlocks full site editing
@@ -1132,7 +1136,7 @@
         const PORTAL_PIN = "2026343pd";
 
         // REPLACE THIS WITH YOUR CLOUDFLARE WORKER URL
-        const WORKER_URL = "[https://lapd-api.tywyv9.workers.dev](https://lapd-api.tywyv9.workers.dev)";
+        const WORKER_URL = "https://lapd-api.tywyv9.workers.dev";
 
         let saveTimer = null;
         let isApplyingState = false;
@@ -1371,7 +1375,7 @@
                 roster: getCardData('rosterGrid'),
                 badges: getBadgeData(),
                 tow: getCardData('towGrid'),
-                memberships: getCardData('membershipGrid'),
+                memberships: getCardData('membershipsGrid'),
                 race: getCardData('raceGrid'),
                 pricing: getPricingData(),
                 portal: getCardData('portalGrid')
@@ -1501,7 +1505,7 @@
             }
 
             ['roster', 'tow', 'memberships', 'race', 'portal'].forEach(key => {
-                const map = { roster: 'rosterGrid', tow: 'towGrid', memberships: 'membershipGrid', race: 'raceGrid', portal: 'portalGrid' };
+                const map = { roster: 'rosterGrid', tow: 'towGrid', memberships: 'membershipsGrid', race: 'raceGrid', portal: 'portalGrid' };
                 const id = map[key];
                 if (Array.isArray(state[key]) && id) {
                     document.getElementById(id).innerHTML = state[key].map(item => buildCardHTML(item, isReadOnly)).join('');

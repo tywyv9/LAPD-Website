@@ -524,7 +524,6 @@
 <body>
     <div id="saveNotification"><i class="fa-solid fa-cloud-arrow-up"></i> Saved for all viewers</div>
     <div id="syncStatus"></div>
-
     <div id="pinModal">
         <div class="pin-box">
             <h3><i class="fa-solid fa-lock"></i> Editor Unlock</h3>
@@ -537,7 +536,6 @@
             </div>
         </div>
     </div>
-
     <header class="hero-banner" id="heroBanner">
         <div class="hero-overlay"></div>
         <div class="hero-content">
@@ -560,7 +558,6 @@
             <input type="file" id="bgUploader" accept="image/*">
         </label>
     </header>
-
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-links" id="navLinks">
@@ -595,7 +592,6 @@
             </div>
         </div>
     </nav>
-
     <main class="main-container">
         <!-- INFORMATION TAB -->
         <section id="tab-information" class="tab-content active">
@@ -625,7 +621,6 @@
                 </div>
             </div>
         </section>
-
         <!-- ROSTER TAB -->
         <section id="tab-roster" class="tab-content">
             <div class="tab-header">
@@ -671,7 +666,6 @@
                 </div>
             </div>
         </section>
-
         <!-- BADGE DATABASE TAB -->
         <section id="tab-badges" class="tab-content">
             <div class="tab-header">
@@ -704,7 +698,6 @@
                                 <span class="edit-protected" contenteditable="false" data-field="hireDateHeader">01/15/2024</span>
                             </div>
                         </div>
-
                         <div class="meta-list">
                             <div style="font-size:0.75rem; font-weight:800; color:var(--accent-gold); text-transform:uppercase; margin-bottom:4px;">Department Assignment</div>
                             <div class="meta-row">
@@ -715,7 +708,6 @@
                                 <span class="meta-label">Division</span>
                                 <span class="meta-value edit-protected" contenteditable="false" data-field="division">Office of the Chief / Central</span>
                             </div>
-
                             <div style="font-size:0.75rem; font-weight:800; color:var(--accent-gold); text-transform:uppercase; margin-top:8px; margin-bottom:4px;">Service Record</div>
                             <div class="meta-row">
                                 <span class="meta-label">Commendations</span>
@@ -725,7 +717,6 @@
                                 <span class="meta-label">Punishments</span>
                                 <span class="meta-value edit-protected" contenteditable="false" data-field="punishments">None</span>
                             </div>
-
                             <div style="font-size:0.75rem; font-weight:800; color:var(--accent-gold); text-transform:uppercase; margin-top:8px; margin-bottom:4px;">Notes</div>
                             <div class="meta-row">
                                 <span class="meta-label">Details</span>
@@ -736,7 +727,6 @@
                 </div>
             </div>
         </section>
-
         <!-- VEHICLES TAB -->
         <section id="tab-vehicles" class="tab-content">
             <div class="tab-header">
@@ -761,7 +751,6 @@
                 </div>
             </div>
         </section>
-
         <!-- UNIFORMS TAB -->
         <section id="tab-uniforms" class="tab-content">
             <div class="tab-header">
@@ -787,18 +776,15 @@
             </div>
         </section>
     </main>
-
     <footer>
         <div class="footer-disclaimer">
             <strong>OFFICIAL DISCLAIMER:</strong> This Los Angeles Police Department website is a virtual entity operating within a Grand Theft Auto V (FiveM) multiplayer roleplay environment. All services, personnel, vehicles, and locations are entirely fictional.
         </div>
         <p>&copy; 2026 Los Angeles Police Department. All rights reserved.</p>
     </footer>
-
 <script>
 (function () {
     'use strict';
-
     // ═══════════════════════════════════════════════════════════
     // WORKER API CONFIGURATION
     // ═══════════════════════════════════════════════════════════
@@ -806,13 +792,43 @@
     var LOCAL_STORAGE_KEY = 'lapd_site_state_v3';
     var EDITOR_PIN = '343pd2026';
     var POLL_INTERVAL_MS = 12000;
-
     var saveTimer = null;
     var pollTimer = null;
     var isApplyingState = false;
     var isUnlocked = false;
     var lastKnownUpdatedAt = 0;
     var isSaving = false;
+
+    // Canvas Compression Helper to reduce payload size below API limits
+    function compressAndConvertImage(file, callback) {
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function (evt) {
+            var img = new Image();
+            img.onload = function () {
+                var canvas = document.createElement('canvas');
+                var ctx = canvas.getContext('2d');
+                var maxDim = 800;
+                var width = img.width;
+                var height = img.height;
+
+                if (width > height && width > maxDim) {
+                    height *= maxDim / width;
+                    width = maxDim;
+                } else if (height > maxDim) {
+                    width *= maxDim / height;
+                    height = maxDim;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+                callback(canvas.toDataURL('image/jpeg', 0.7));
+            };
+            img.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
 
     function switchTab(tabId) {
         if (!tabId) return;
@@ -855,9 +871,11 @@
         document.getElementById('pinModal').classList.add('show');
         setTimeout(function () { document.getElementById('pinInput').focus(); }, 50);
     }
+
     function hidePinModal() {
         document.getElementById('pinModal').classList.remove('show');
     }
+
     function tryUnlock() {
         var val = (document.getElementById('pinInput').value || '').trim();
         if (val === EDITOR_PIN) {
@@ -974,17 +992,21 @@
     function applyState(state) {
         if (!state) return;
         isApplyingState = true;
+
         if (state.updatedAt) lastKnownUpdatedAt = state.updatedAt;
 
         if (state.heroBg !== undefined && state.heroBg !== '') {
             document.getElementById('heroBanner').style.backgroundImage = state.heroBg;
         }
+
         if (state.statusIndicatorClass) {
             document.getElementById('statusIndicator').className = state.statusIndicatorClass;
         }
+
         if (state.statusText) {
             document.getElementById('statusText').textContent = state.statusText;
         }
+
         if (state.homeHtml !== undefined) {
             document.getElementById('homeEditableText').innerHTML = state.homeHtml;
         }
@@ -1141,7 +1163,11 @@
 
     function saveState() {
         var state = serializeState();
-        try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+        try { 
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state)); 
+        } catch (e) {
+            console.warn('LocalStorage limit exceeded:', e);
+        }
 
         if (DATA_API_URL) {
             isSaving = true;
@@ -1155,8 +1181,9 @@
                 isSaving = false;
                 showSaveNotification();
             })
-            .catch(function () {
+            .catch(function (err) {
                 isSaving = false;
+                console.error('Cloud Sync error:', err);
                 showSaveNotification();
             });
         } else {
@@ -1188,6 +1215,7 @@
         stopPolling();
         pollTimer = setInterval(fetchRemoteState, POLL_INTERVAL_MS);
     }
+
     function stopPolling() {
         if (pollTimer) clearInterval(pollTimer);
     }
@@ -1214,24 +1242,26 @@
             input.onchange = function (e) {
                 var file = e.target.files[0];
                 if (!file) return;
-                var reader = new FileReader();
-                reader.onload = function (evt) {
+
+                compressAndConvertImage(file, function (compressedDataUrl) {
                     var container = input.closest('.card-img-container');
-                    container.style.backgroundImage = 'url("' + evt.target.result + '")';
+                    container.style.backgroundImage = 'url("' + compressedDataUrl + '")';
                     var icon = container.querySelector('.fa-3x');
                     if (icon) icon.style.display = 'none';
                     triggerSave();
-                };
-                reader.readAsDataURL(file);
+                });
             };
-        });
-
-        document.querySelectorAll('.edit-protected').forEach(function (el) {
-            el.oninput = triggerSave;
         });
     }
 
     function initEvents() {
+        // Global input listener ensures dynamic fields automatically trigger save
+        document.addEventListener('input', function (e) {
+            if (e.target && e.target.classList && e.target.classList.contains('edit-protected')) {
+                triggerSave();
+            }
+        });
+
         document.getElementById('navLinks').addEventListener('click', function (e) {
             var btn = e.target.closest('.nav-item');
             if (btn) switchTab(btn.getAttribute('data-tab'));
@@ -1241,6 +1271,7 @@
             if (isUnlocked) setUnlocked(false);
             else showPinModal();
         };
+
         document.getElementById('pinSubmitBtn').onclick = tryUnlock;
         document.getElementById('pinCancelBtn').onclick = hidePinModal;
         document.getElementById('pinInput').onkeydown = function (e) {
@@ -1252,27 +1283,28 @@
             document.getElementById('statusText').textContent = 'DEPARTMENT ACTIVE';
             triggerSave();
         };
+
         document.getElementById('statusCallBtn').onclick = function () {
             document.getElementById('statusIndicator').className = 'status-indicator status-call';
             document.getElementById('statusText').textContent = 'LIMITED OPERATIONS';
             triggerSave();
         };
+
         document.getElementById('statusClosedBtn').onclick = function () {
             document.getElementById('statusIndicator').className = 'status-indicator status-closed';
             document.getElementById('statusText').textContent = 'DEPARTMENT OFFLINE';
             triggerSave();
         };
 
-        // Header Background Uploader Fixed Handler
+        // Header Background Upload Handler with canvas compression
         document.getElementById('bgUploader').onchange = function (e) {
             var file = e.target.files[0];
             if (!file) return;
-            var reader = new FileReader();
-            reader.onload = function (evt) {
-                document.getElementById('heroBanner').style.backgroundImage = 'url("' + evt.target.result + '")';
-                triggerSave(); // Immediately fire serialization and cloud sync
-            };
-            reader.readAsDataURL(file);
+
+            compressAndConvertImage(file, function (compressedDataUrl) {
+                document.getElementById('heroBanner').style.backgroundImage = 'url("' + compressedDataUrl + '")';
+                triggerSave();
+            });
         };
 
         document.getElementById('addPartnerBtn').onclick = function () {
@@ -1346,7 +1378,6 @@
 
     // Initialize on Load
     document.addEventListener('DOMContentLoaded', function () {
-        // First check local storage to load background immediately
         try {
             var local = localStorage.getItem(LOCAL_STORAGE_KEY);
             if (local) {

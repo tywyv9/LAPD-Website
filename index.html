@@ -144,6 +144,13 @@
             background: rgba(30, 58, 138, 0.15);
             border-bottom-color: var(--accent-blue);
         }
+        .nav-item.protected-tab {
+            color: #ff9999;
+        }
+        .nav-item.protected-tab:hover,
+        .nav-item.protected-tab.active {
+            color: var(--accent-gold);
+        }
         .nav-item i { pointer-events: none; }
         .nav-right-group {
             display: flex;
@@ -519,6 +526,58 @@
             margin-bottom: 10px;
             display: none;
         }
+        /* Employee Portal Specific Document Card Styles */
+        .doc-card {
+            background: var(--bg-metallic);
+            border: 1px solid var(--border-color);
+            border-left: 4px solid var(--accent-gold);
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .doc-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        .doc-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-gold);
+            letter-spacing: 0.5px;
+        }
+        .doc-category {
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            background: rgba(30, 58, 138, 0.4);
+            border: 1px solid var(--accent-blue);
+            color: var(--accent-cream);
+            padding: 3px 8px;
+            border-radius: 3px;
+        }
+        .doc-body {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .doc-body p { margin-bottom: 10px; }
+        .doc-footer {
+            margin-top: 15px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border-color);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
     </style>
 </head>
 <body>
@@ -527,7 +586,7 @@
     <div id="pinModal">
         <div class="pin-box">
             <h3><i class="fa-solid fa-lock"></i> Editor Unlock</h3>
-            <p style="color:var(--text-muted); margin-bottom:15px; font-size:0.9rem;">Enter PIN to enable editing</p>
+            <p style="color:var(--text-muted); margin-bottom:15px; font-size:0.9rem;">Enter PIN to enable editing and access restricted portals</p>
             <div class="pin-error" id="pinError">Incorrect PIN</div>
             <input type="password" id="pinInput" placeholder="••••" maxlength="12" autocomplete="off">
             <div class="pin-actions">
@@ -575,6 +634,9 @@
                 </button>
                 <button type="button" class="nav-item" data-tab="uniforms">
                     <i class="fa-solid fa-shirt"></i> Uniform Roster
+                </button>
+                <button type="button" class="nav-item protected-tab" data-tab="portal">
+                    <i class="fa-solid fa-user-lock"></i> Employee Portal
                 </button>
             </div>
             <div class="nav-right-group">
@@ -775,6 +837,51 @@
                 </div>
             </div>
         </section>
+        <!-- EMPLOYEE PORTAL TAB (LOCKED INTERNAL PORTAL) -->
+        <section id="tab-portal" class="tab-content">
+            <div class="tab-header">
+                <h2 class="tab-title"><i class="fa-solid fa-folder-closed"></i> EMPLOYEE PORTAL &amp; STANDARD OPERATING PROCEDURES</h2>
+                <button type="button" class="btn edit-only" id="addDocBtn"><i class="fa-solid fa-plus"></i> Add New SOP / Document</button>
+            </div>
+            <div id="portalDocList">
+                <div class="doc-card">
+                    <button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>
+                    <div class="doc-header">
+                        <div>
+                            <div class="doc-title edit-protected" contenteditable="false">SOP-101: Standard Pursuit Protocol</div>
+                            <span class="doc-category edit-protected" contenteditable="false">Field Operations</span>
+                        </div>
+                    </div>
+                    <div class="doc-body edit-protected" contenteditable="false">
+                        <p><strong>1. Initiation:</strong> Officers may initiate a vehicle pursuit when a suspect fails to yield and presents a clear risk to public safety or is suspected of a felony offense.</p>
+                        <p><strong>2. Unit Limits:</strong> Maximum of 3 primary/secondary patrol units permitted in active pursuit unless authorized by a Supervisory Rank.</p>
+                        <p><strong>3. Termination:</strong> Pursuit must be immediately terminated if weather, traffic density, or public hazards exceed reasonable safety margins.</p>
+                    </div>
+                    <div class="doc-footer">
+                        <span>Author: <strong class="edit-protected" contenteditable="false" data-field="docAuthor">Command Staff</strong></span>
+                        <span>Effective Date: <strong class="edit-protected" contenteditable="false" data-field="docDate">01/01/2026</strong></span>
+                        <span>Version: <strong class="edit-protected" contenteditable="false" data-field="docVersion">v2.4</strong></span>
+                    </div>
+                </div>
+                <div class="doc-card">
+                    <button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>
+                    <div class="doc-header">
+                        <div>
+                            <div class="doc-title edit-protected" contenteditable="false">SOP-204: Evidence &amp; Contraband Handling</div>
+                            <span class="doc-category edit-protected" contenteditable="false">Property Division</span>
+                        </div>
+                    </div>
+                    <div class="doc-body edit-protected" contenteditable="false">
+                        <p>All seized items, illegal firearms, narcotics, and personal property recovered during field arrests must be cataloged immediately into the evidence system before end-of-shift logging.</p>
+                    </div>
+                    <div class="doc-footer">
+                        <span>Author: <strong class="edit-protected" contenteditable="false" data-field="docAuthor">Internal Affairs / Detectives</strong></span>
+                        <span>Effective Date: <strong class="edit-protected" contenteditable="false" data-field="docDate">03/10/2026</strong></span>
+                        <span>Version: <strong class="edit-protected" contenteditable="false" data-field="docVersion">v1.1</strong></span>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
     <footer>
         <div class="footer-disclaimer">
@@ -832,6 +939,13 @@
 
     function switchTab(tabId) {
         if (!tabId) return;
+
+        // Protected Portal Gate: Prompt PIN if locked
+        if (tabId === 'portal' && !isUnlocked) {
+            showPinModal();
+            return;
+        }
+
         document.querySelectorAll('.tab-content').forEach(function (t) { t.classList.remove('active'); });
         document.querySelectorAll('.nav-item').forEach(function (n) { n.classList.remove('active'); });
         var target = document.getElementById('tab-' + tabId);
@@ -857,6 +971,12 @@
             document.getElementById('editorLabel').textContent = 'Editor Locked';
             document.getElementById('roleBadge').textContent = 'Locked';
             document.getElementById('roleBadge').classList.add('locked');
+
+            // If user locks editor while on Employee Portal tab, redirect to Information tab
+            var portalTab = document.getElementById('tab-portal');
+            if (portalTab && portalTab.classList.contains('active')) {
+                switchTab('information');
+            }
         }
         document.querySelectorAll('.edit-protected').forEach(function (el) {
             el.setAttribute('contenteditable', unlocked ? 'true' : 'false');
@@ -882,6 +1002,8 @@
             setUnlocked(true);
             hidePinModal();
             try { sessionStorage.setItem('lapd_editor_unlocked', '1'); } catch (e) {}
+            // Automatically switch to Portal tab after unlocking
+            switchTab('portal');
         } else {
             document.getElementById('pinError').style.display = 'block';
             document.getElementById('pinInput').value = '';
@@ -975,6 +1097,25 @@
             });
         });
 
+        var documents = [];
+        document.querySelectorAll('#portalDocList .doc-card').forEach(function (card) {
+            var title = card.querySelector('.doc-title');
+            var category = card.querySelector('.doc-category');
+            var body = card.querySelector('.doc-body');
+            var author = card.querySelector('[data-field="docAuthor"]');
+            var date = card.querySelector('[data-field="docDate"]');
+            var version = card.querySelector('[data-field="docVersion"]');
+
+            documents.push({
+                title: title ? title.innerHTML : '',
+                category: category ? category.innerHTML : '',
+                body: body ? body.innerHTML : '',
+                author: author ? author.innerHTML : '',
+                date: date ? date.innerHTML : '',
+                version: version ? version.innerHTML : ''
+            });
+        });
+
         return {
             updatedAt: Date.now(),
             heroBg: heroBg,
@@ -985,7 +1126,8 @@
             officers: officers,
             badges: badges,
             vehicles: vehicles,
-            uniforms: uniforms
+            uniforms: uniforms,
+            documents: documents
         };
     }
 
@@ -1063,6 +1205,16 @@
             state.uniforms.forEach(function (u) {
                 var card = createStandardCardHtml(u, 'fa-shirt');
                 uniformGrid.appendChild(card);
+            });
+        }
+
+        // Apply Employee Portal Documents (SOPs)
+        if (Array.isArray(state.documents)) {
+            var portalDocList = document.getElementById('portalDocList');
+            portalDocList.innerHTML = '';
+            state.documents.forEach(function (d) {
+                var card = createDocCardHtml(d);
+                portalDocList.appendChild(card);
             });
         }
 
@@ -1152,6 +1304,26 @@
         return card;
     }
 
+    function createDocCardHtml(data) {
+        var card = document.createElement('div');
+        card.className = 'doc-card';
+        card.innerHTML = 
+            '<button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>' +
+            '<div class="doc-header">' +
+                '<div>' +
+                    '<div class="doc-title edit-protected" contenteditable="false">' + (data.title || 'SOP Title') + '</div>' +
+                    '<span class="doc-category edit-protected" contenteditable="false">' + (data.category || 'General Policy') + '</span>' +
+                '</div>' +
+            '</div>' +
+            '<div class="doc-body edit-protected" contenteditable="false">' + (data.body || '<p>Enter procedure details...</p>') + '</div>' +
+            '<div class="doc-footer">' +
+                '<span>Author: <strong class="edit-protected" contenteditable="false" data-field="docAuthor">' + (data.author || 'Command Staff') + '</strong></span>' +
+                '<span>Effective Date: <strong class="edit-protected" contenteditable="false" data-field="docDate">' + (data.date || 'MM/DD/YYYY') + '</strong></span>' +
+                '<span>Version: <strong class="edit-protected" contenteditable="false" data-field="docVersion">' + (data.version || 'v1.0') + '</strong></span>' +
+            '</div>';
+        return card;
+    }
+
     // ═══════════════════════════════════════════════════════════
     // SYNC & PERSISTENCE
     // ═══════════════════════════════════════════════════════════
@@ -1233,7 +1405,7 @@
     function bindDynamicListeners() {
         document.querySelectorAll('.card-delete-btn').forEach(function (btn) {
             btn.onclick = function () {
-                var parent = btn.closest('.card') || btn.closest('.partner-card');
+                var parent = btn.closest('.card') || btn.closest('.partner-card') || btn.closest('.doc-card');
                 if (parent) { parent.remove(); triggerSave(); }
             };
         });
@@ -1363,6 +1535,22 @@
             var grid = document.getElementById('uniformGrid');
             var card = createStandardCardHtml({ title: 'New Uniform', subtitle: 'Class B Duty', text: 'Uniform specification...' }, 'fa-shirt');
             grid.appendChild(card);
+            bindDynamicListeners();
+            setUnlocked(isUnlocked);
+            triggerSave();
+        };
+
+        document.getElementById('addDocBtn').onclick = function () {
+            var docList = document.getElementById('portalDocList');
+            var card = createDocCardHtml({
+                title: 'SOP-XXX: Document Title',
+                category: 'General SOP',
+                body: '<p>Document body and protocol guidelines...</p>',
+                author: 'Command Staff',
+                date: '01/01/2026',
+                version: 'v1.0'
+            });
+            docList.appendChild(card);
             bindDynamicListeners();
             setUnlocked(isUnlocked);
             triggerSave();

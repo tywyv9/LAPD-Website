@@ -289,7 +289,8 @@
         body.read-only .card-delete-btn,
         body.read-only .upload-btn-wrapper,
         body.read-only .status-controls,
-        body.read-only .bg-change-btn {
+        body.read-only .bg-change-btn,
+        body.read-only .item-delete-btn {
             display: none !important;
         }
 
@@ -331,6 +332,105 @@
 
         .btn-danger:hover {
             background: #cc0000;
+        }
+
+        /* CALENDAR STYLES */
+        .calendar-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .calendar-controls h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            color: #fff;
+            min-width: 180px;
+            text-align: center;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .calendar-day-header {
+            background: #111a2e;
+            color: var(--accent-gold);
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .calendar-day {
+            background: var(--bg-metallic);
+            border: 1px solid var(--border-color);
+            min-height: 110px;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            border-radius: 4px;
+
+        }
+
+        .calendar-day.empty {
+            background: rgba(11, 19, 32, 0.3);
+            border-color: transparent;
+        }
+
+        .day-number {
+            font-weight: bold;
+            color: var(--accent-cream);
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+        }
+
+        .calendar-events {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex-grow: 1;
+        }
+
+        .calendar-item {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--accent-gold);
+            border-radius: 3px;
+            padding: 4px 6px;
+            font-size: 0.8rem;
+            position: relative;
+            word-break: break-word;
+        }
+
+        .calendar-item .item-title {
+            font-weight: bold;
+            color: #fff;
+        }
+
+        .calendar-item .item-desc {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+        }
+
+        .item-delete-btn {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            background: rgba(255, 51, 51, 0.8);
+            border: none;
+            color: white;
+            width: 16px;
+            height: 16px;
+            font-size: 0.6rem;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* GRID CARDS */
@@ -797,7 +897,7 @@
                 <li class="nav-item" onclick="switchTab('badges')"><i class="fa-solid fa-id-badge"></i> Badge Database</li>
                 <li class="nav-item" onclick="switchTab('tow')"><i class="fa-solid fa-car-side"></i> Vehicle Fleet</li>
                 <li class="nav-item" onclick="switchTab('pricing')"><i class="fa-solid fa-scale-balanced"></i> Penal Code & Fines</li>
-                <li class="nav-item" onclick="switchTab('memberships')"><i class="fa-solid fa-award"></i> Commendations</li>
+                <li class="nav-item" onclick="switchTab('memberships')"><i class="fa-solid fa-calendar-days"></i> Calendar</li>
                 <li class="nav-item" onclick="switchTab('raceteam')"><i class="fa-solid fa-shield-halved"></i> Specialized Units</li>
                 <li class="nav-item" onclick="switchTab('contact')"><i class="fa-solid fa-location-dot"></i> Precinct Location</li>
                 <li class="nav-item" onclick="switchTab('portal')" style="color: var(--accent-cream);"><i class="fa-solid fa-lock"></i> Officer Portal</li>
@@ -993,22 +1093,29 @@
             </table>
         </section>
 
-        <!-- 6. DISCOUNTS & MEMBERSHIPS TAB -->
+        <!-- 6. CALENDAR TAB -->
         <section id="tab-memberships" class="tab-content">
             <div class="tab-header">
-                <h2 class="tab-title">COMMENDATIONS & CITIZEN PROGRAMS</h2>
-                <button class="btn edit-control" onclick="addCard('membershipGrid', 'Program Name', 'Status / Honor', 'Perks and requirements...')"><i class="fa-solid fa-plus"></i> Add Entry</button>
-            </div>
-            <div class="grid-container" id="membershipGrid">
-                <div class="card">
-                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                    <div class="card-body">
-                        <div class="card-title edit-protected">Medal of Valor Civilian Award</div>
-                        <div class="card-subtitle edit-protected">Public Merit Recognition</div>
-                        <div class="card-text edit-protected">Awarded to civilians assisting law enforcement in preventing critical offenses or aiding officers in distress.</div>
-                    </div>
+                <h2 class="tab-title">DEPARTMENT CALENDAR</h2>
+                <div class="calendar-controls">
+                    <button class="btn btn-secondary" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <h3 id="calendarMonthYear">MONTH YEAR</h3>
+                    <button class="btn btn-secondary" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
                 </div>
             </div>
+            
+            <p style="color: var(--text-muted); margin-bottom: 20px;">Department schedule, tactical drills, shift briefings, and community events.</p>
+
+            <div class="calendar-grid">
+                <div class="calendar-day-header">SUN</div>
+                <div class="calendar-day-header">MON</div>
+                <div class="calendar-day-header">TUE</div>
+                <div class="calendar-day-header">WED</div>
+                <div class="calendar-day-header">THU</div>
+                <div class="calendar-day-header">FRI</div>
+                <div class="calendar-day-header">SAT</div>
+            </div>
+            <div class="calendar-grid" id="calendarDaysGrid"></div>
         </section>
 
         <!-- 7. RACE TEAM INFORMATION TAB -->
@@ -1132,10 +1239,108 @@
         const PORTAL_PIN = "2026343pd";
 
         // REPLACE THIS WITH YOUR CLOUDFLARE WORKER URL
-        const WORKER_URL = "[https://lapd-api.tywyv9.workers.dev](https://lapd-api.tywyv9.workers.dev)";
+        const WORKER_URL = "https://lapd-api.tywyv9.workers.dev";
 
         let saveTimer = null;
         let isApplyingState = false;
+
+        // Calendar State
+        let calendarEvents = {};
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+
+        const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        // ==================== CALENDAR FUNCTIONS ====================
+        function renderCalendar() {
+            const grid = document.getElementById('calendarDaysGrid');
+            const monthYearText = document.getElementById('calendarMonthYear');
+            if (!grid || !monthYearText) return;
+
+            grid.innerHTML = '';
+            monthYearText.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+
+            const firstDay = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            // Empty cells before first day
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day empty';
+                grid.appendChild(emptyCell);
+            }
+
+            const isReadOnly = document.body.classList.contains('read-only');
+
+            // Render days
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayCell = document.createElement('div');
+                dayCell.className = 'calendar-day';
+
+                const dateKey = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                dayCell.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span class="day-number">${day}</span>
+                        <button class="btn btn-secondary edit-control" style="padding:1px 5px; font-size:0.7rem;" onclick="addCalendarItem('${dateKey}')"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <div class="calendar-events" id="events-${dateKey}"></div>
+                `;
+
+                grid.appendChild(dayCell);
+
+                const eventsContainer = dayCell.querySelector(`#events-${dateKey}`);
+                const items = calendarEvents[dateKey] || [];
+
+                items.forEach((item, index) => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'calendar-item';
+                    itemEl.innerHTML = `
+                        <button class="item-delete-btn" onclick="removeCalendarItem('${dateKey}', ${index})"><i class="fa-solid fa-xmark"></i></button>
+                        <div class="item-title edit-protected" contenteditable="${!isReadOnly}" oninput="updateCalendarItem('${dateKey}', ${index}, 'title', this.innerText)">${item.title || 'Event Title'}</div>
+                        <div class="item-desc edit-protected" contenteditable="${!isReadOnly}" oninput="updateCalendarItem('${dateKey}', ${index}, 'desc', this.innerText)">${item.desc || 'Event details...'}</div>
+                    `;
+                    eventsContainer.appendChild(itemEl);
+                });
+            }
+        }
+
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar();
+        }
+
+        function addCalendarItem(dateKey) {
+            if (!calendarEvents[dateKey]) calendarEvents[dateKey] = [];
+            calendarEvents[dateKey].push({ title: 'New Event', desc: '18:00 Patrol Briefing' });
+            renderCalendar();
+            bindEditListeners();
+            scheduleSave();
+        }
+
+        function updateCalendarItem(dateKey, index, key, value) {
+            if (calendarEvents[dateKey] && calendarEvents[dateKey][index]) {
+                calendarEvents[dateKey][index][key] = value;
+                scheduleSave();
+            }
+        }
+
+        function removeCalendarItem(dateKey, index) {
+            if (calendarEvents[dateKey]) {
+                calendarEvents[dateKey].splice(index, 1);
+                if (calendarEvents[dateKey].length === 0) delete calendarEvents[dateKey];
+                renderCalendar();
+                bindEditListeners();
+                scheduleSave();
+            }
+        }
 
         // ==================== TAB SWITCHING ====================
         function switchTab(tabId) {
@@ -1149,6 +1354,8 @@
                 el.getAttribute('onclick') && el.getAttribute('onclick').includes(`'${tabId}'`)
             );
             if (activeNav) activeNav.classList.add('active');
+
+            if (tabId === 'memberships') renderCalendar();
         }
 
         // ==================== PIN LOCK SYSTEM ====================
@@ -1240,6 +1447,7 @@
             setReadOnlyMode(false);
             renderEditorBadge();
             showPortalContent();
+            renderCalendar();
             bindEditListeners();
         }
 
@@ -1247,6 +1455,7 @@
             sessionStorage.removeItem('editorUnlocked');
             setReadOnlyMode(true);
             renderEditorBadge();
+            renderCalendar();
             if (sessionStorage.getItem('portalUnlocked') === 'true') {
                 showPortalContent();
             } else {
@@ -1371,7 +1580,7 @@
                 roster: getCardData('rosterGrid'),
                 badges: getBadgeData(),
                 tow: getCardData('towGrid'),
-                memberships: getCardData('membershipGrid'),
+                calendarEvents: calendarEvents,
                 race: getCardData('raceGrid'),
                 pricing: getPricingData(),
                 portal: getCardData('portalGrid')
@@ -1500,8 +1709,13 @@
                 container.innerHTML = state.badges.map(b => buildBadgeCardHTML(b, isReadOnly)).join('');
             }
 
-            ['roster', 'tow', 'memberships', 'race', 'portal'].forEach(key => {
-                const map = { roster: 'rosterGrid', tow: 'towGrid', memberships: 'membershipGrid', race: 'raceGrid', portal: 'portalGrid' };
+            if (state.calendarEvents) {
+                calendarEvents = state.calendarEvents;
+                renderCalendar();
+            }
+
+            ['roster', 'tow', 'race', 'portal'].forEach(key => {
+                const map = { roster: 'rosterGrid', tow: 'towGrid', race: 'raceGrid', portal: 'portalGrid' };
                 const id = map[key];
                 if (Array.isArray(state[key]) && id) {
                     document.getElementById(id).innerHTML = state[key].map(item => buildCardHTML(item, isReadOnly)).join('');
@@ -1778,6 +1992,7 @@
 
         // ==================== INIT ====================
         window.addEventListener('DOMContentLoaded', async function() {
+            renderCalendar();
             await loadState();
 
             if (sessionStorage.getItem('editorUnlocked') === 'true') {

@@ -1131,9 +1131,6 @@
         // Officer Portal PIN — view-only access to internal documents.
         const PORTAL_PIN = "2026343pd";
 
-        // Remote shared storage endpoint
-        const DATA_API_URL = "https://lapd-site-data.tywyv9.workers.dev/";
-
         const LOCAL_STORAGE_KEY = "lapd_site_state_v1";
         const IDB_NAME = "lapd_department";
         const IDB_STORE = "site_state";
@@ -1576,7 +1573,7 @@
             isApplyingState = false;
         }
 
-        // ==================== SAVE / LOAD ====================
+        // ==================== LOCAL SAVE / LOAD ====================
         function scheduleSave() {
             if (isApplyingState) return;
             if (sessionStorage.getItem('editorUnlocked') !== 'true') return;
@@ -1587,7 +1584,6 @@
         async function persistState() {
             if (isApplyingState) return;
             const state = captureState();
-            const payload = JSON.stringify(state);
 
             let localOk = false;
             try {
@@ -1606,21 +1602,7 @@
                 }
             }
 
-            let remoteOk = !DATA_API_URL;
-            if (DATA_API_URL) {
-                try {
-                    const res = await fetch(DATA_API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: payload
-                    });
-                    remoteOk = res.ok;
-                } catch (e) {
-                    console.warn('Remote save failed', e);
-                }
-            }
-
-            if (localOk || remoteOk) {
+            if (localOk) {
                 showSaveNotification();
             } else {
                 alert('Save failed. Try a smaller background image.');
@@ -1630,23 +1612,10 @@
         async function loadState() {
             let state = null;
 
-            if (DATA_API_URL) {
-                try {
-                    const res = await fetch(DATA_API_URL + (DATA_API_URL.includes('?') ? '&' : '?') + 't=' + Date.now());
-                    if (res.ok) {
-                        const data = await res.json();
-                        if (data && data.version && !data.reset) state = data;
-                    }
-                } catch (e) {
-                    console.warn('Remote load failed, using local fallback', e);
-                }
-            }
+            try {
+                state = await idbGet(LOCAL_STORAGE_KEY);
+            } catch (e) { }
 
-            if (!state) {
-                try {
-                    state = await idbGet(LOCAL_STORAGE_KEY);
-                } catch (e) { }
-            }
             if (!state) {
                 try {
                     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
@@ -1855,15 +1824,6 @@
             try { localStorage.removeItem(LOCAL_STORAGE_KEY); } catch (e) {}
             try { await idbDel(LOCAL_STORAGE_KEY); } catch (e) {}
             window.__heroBackground = '';
-            if (DATA_API_URL) {
-                try {
-                    await fetch(DATA_API_URL, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ version: 1, reset: true })
-                    });
-                } catch (e) {}
-            }
             location.reload();
         }
 

@@ -656,6 +656,16 @@
             display: inline-block;
         }
 
+        /* CALENDAR */
+        .calendar-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
         /* PIN MODAL */
         .pin-modal-overlay {
             position: fixed;
@@ -797,8 +807,9 @@
                 <li class="nav-item" onclick="switchTab('badges')"><i class="fa-solid fa-id-badge"></i> Badge Database</li>
                 <li class="nav-item" onclick="switchTab('tow')"><i class="fa-solid fa-car-side"></i> Vehicle Fleet</li>
                 <li class="nav-item" onclick="switchTab('pricing')"><i class="fa-solid fa-scale-balanced"></i> Penal Code & Fines</li>
-                <li class="nav-item" onclick="switchTab('memberships')"><i class="fa-solid fa-award"></i> Commendations</li>
+                <li class="nav-item" onclick="switchTab('awards')"><i class="fa-solid fa-award"></i> Awards</li>
                 <li class="nav-item" onclick="switchTab('raceteam')"><i class="fa-solid fa-shield-halved"></i> Specialized Units</li>
+                <li class="nav-item" onclick="switchTab('calendar')"><i class="fa-solid fa-calendar-days"></i> Calendar</li>
                 <li class="nav-item" onclick="switchTab('contact')"><i class="fa-solid fa-location-dot"></i> Precinct Location</li>
                 <li class="nav-item" onclick="switchTab('portal')" style="color: var(--accent-cream);"><i class="fa-solid fa-lock"></i> Officer Portal</li>
             </ul>
@@ -993,13 +1004,13 @@
             </table>
         </section>
 
-        <!-- 6. COMMENDATIONS / AWARDS TAB -->
-        <section id="tab-memberships" class="tab-content">
+        <!-- 6. AWARDS TAB -->
+        <section id="tab-awards" class="tab-content">
             <div class="tab-header">
-                <h2 class="tab-title">OFFICER COMMENDATIONS</h2>
-                <button class="btn edit-control" onclick="addCard('membershipsGrid', 'Ribbon / Medal Title', 'Recipient Name & Rank', 'Criteria, date awarded, or story details...')"><i class="fa-solid fa-plus"></i> Add Award</button>
+                <h2 class="tab-title">OFFICER AWARDS</h2>
+                <button class="btn edit-control" onclick="addCard('awardsGrid', 'Ribbon / Medal Title', 'Recipient Name & Rank', 'Criteria, date awarded, or story details...')"><i class="fa-solid fa-plus"></i> Add Award</button>
             </div>
-            <div class="grid-container" id="membershipsGrid">
+            <div class="grid-container" id="awardsGrid">
                 <div class="card">
                     <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                     <div class="card-img-container">
@@ -1038,7 +1049,42 @@
             </div>
         </section>
 
-        <!-- 8. LOCATION & CONTACT TAB -->
+        <!-- 8. CALENDAR TAB -->
+        <section id="tab-calendar" class="tab-content">
+            <div class="tab-header">
+                <h2 class="tab-title"><i class="fa-solid fa-calendar-days"></i> DEPARTMENT CALENDAR</h2>
+                <button class="btn edit-control" onclick="addCard('calendarGrid', 'Event Title', 'Date & Time', 'Location, briefing details, or RSVP info...')"><i class="fa-solid fa-plus"></i> Add Event</button>
+            </div>
+            <p style="color: var(--text-muted); margin-bottom: 10px;">Upcoming roll calls, trainings, ride-alongs, and department events. Admins can add, edit, or remove entries.</p>
+            <div class="grid-container" id="calendarGrid">
+                <div class="card">
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container">
+                        <i class="fa-solid fa-calendar-day fa-3x" style="color: #273754;"></i>
+                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title edit-protected">Academy Recruit Graduation</div>
+                        <div class="card-subtitle edit-protected">Sat, Aug 15 &bull; 10:00 AM</div>
+                        <div class="card-text edit-protected">Mission Row HQ, Main Courtyard. Formal dress uniform required for all attending command staff.</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container">
+                        <i class="fa-solid fa-calendar-day fa-3x" style="color: #273754;"></i>
+                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title edit-protected">Public Ride-Along Night</div>
+                        <div class="card-subtitle edit-protected">Fri, Aug 21 &bull; 7:00 PM</div>
+                        <div class="card-text edit-protected">Open to Discord members. Sign up in #ride-along-signups. Meet at the front desk 15 minutes early.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. LOCATION & CONTACT TAB -->
         <section id="tab-contact" class="tab-content">
             <div class="tab-header">
                 <h2 class="tab-title">PRECINCT & CONTACT INFO</h2>
@@ -1060,7 +1106,7 @@
             </div>
         </section>
 
-        <!-- 9. RESTRICTED EMPLOYEE PORTAL -->
+        <!-- 10. RESTRICTED EMPLOYEE PORTAL -->
         <section id="tab-portal" class="tab-content">
             <div class="tab-header">
                 <h2 class="tab-title"><i class="fa-solid fa-user-shield"></i> RESTRICTED OFFICER PORTAL</h2>
@@ -1375,8 +1421,9 @@
                 roster: getCardData('rosterGrid'),
                 badges: getBadgeData(),
                 tow: getCardData('towGrid'),
-                memberships: getCardData('membershipsGrid'),
+                awards: getCardData('awardsGrid'),
                 race: getCardData('raceGrid'),
+                calendar: getCardData('calendarGrid'),
                 pricing: getPricingData(),
                 portal: getCardData('portalGrid')
             };
@@ -1504,8 +1551,8 @@
                 container.innerHTML = state.badges.map(b => buildBadgeCardHTML(b, isReadOnly)).join('');
             }
 
-            ['roster', 'tow', 'memberships', 'race', 'portal'].forEach(key => {
-                const map = { roster: 'rosterGrid', tow: 'towGrid', memberships: 'membershipsGrid', race: 'raceGrid', portal: 'portalGrid' };
+            ['roster', 'tow', 'awards', 'race', 'calendar', 'portal'].forEach(key => {
+                const map = { roster: 'rosterGrid', tow: 'towGrid', awards: 'awardsGrid', race: 'raceGrid', calendar: 'calendarGrid', portal: 'portalGrid' };
                 const id = map[key];
                 if (Array.isArray(state[key]) && id) {
                     document.getElementById(id).innerHTML = state[key].map(item => buildCardHTML(item, isReadOnly)).join('');

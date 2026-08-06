@@ -422,6 +422,114 @@
             z-index: 5;
         }
 
+        /* BADGE DATABASE SPECIFIC STYLES */
+        .badge-card {
+            background: var(--bg-metallic);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 25px;
+            position: relative;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .badge-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 15px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .badge-info-main {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .badge-icon-box {
+            width: 50px;
+            height: 50px;
+            background: var(--bg-matte);
+            border: 1px solid var(--accent-gold);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .badge-assignments-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            background: rgba(11, 19, 32, 0.5);
+            padding: 12px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+
+        .assignment-box {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .assignment-label {
+            font-size: 0.75rem;
+            color: var(--accent-gold);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .badge-service-record {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .badge-service-record {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .record-section {
+            background: rgba(11, 19, 32, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 12px;
+        }
+
+        .record-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .record-title.commendation { color: #00ff66; }
+        .record-title.punishment { color: #ff5555; }
+        .record-title.notes { color: var(--accent-gold); }
+
+        .notes-section {
+            background: rgba(11, 19, 32, 0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 12px;
+        }
+
         /* TABLES */
         .data-table {
             width: 100%;
@@ -686,6 +794,7 @@
             <ul class="nav-links">
                 <li class="nav-item active" onclick="switchTab('home')"><i class="fa-solid fa-house-shield"></i> Home</li>
                 <li class="nav-item" onclick="switchTab('roster')"><i class="fa-solid fa-users"></i> Staff Roster</li>
+                <li class="nav-item" onclick="switchTab('badges')"><i class="fa-solid fa-id-badge"></i> Badge Database</li>
                 <li class="nav-item" onclick="switchTab('tow')"><i class="fa-solid fa-car-side"></i> Vehicle Fleet</li>
                 <li class="nav-item" onclick="switchTab('pricing')"><i class="fa-solid fa-scale-balanced"></i> Penal Code & Fines</li>
                 <li class="nav-item" onclick="switchTab('memberships')"><i class="fa-solid fa-award"></i> Commendations</li>
@@ -725,7 +834,7 @@
             </div>
 
             <div class="partners-section">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="display:flex; justify-content:space-between; align-align:center;">
                     <h3 style="font-family: 'Bebas Neue'; font-size: 1.8rem; color: var(--accent-cream);">ALLIED AGENCIES & PARTNERS</h3>
                     <button class="btn btn-secondary edit-control" onclick="addPartner()"><i class="fa-solid fa-plus"></i> Add Partner Agency</button>
                 </div>
@@ -766,7 +875,70 @@
             </div>
         </section>
 
-        <!-- 3. TOW INFORMATION TAB -->
+        <!-- 3. BADGE DATABASE TAB -->
+        <section id="tab-badges" class="tab-content">
+            <div class="tab-header">
+                <h2 class="tab-title"><i class="fa-solid fa-id-badge"></i> OFFICER BADGE DATABASE</h2>
+                <button class="btn edit-control" onclick="addBadgeCard()"><i class="fa-solid fa-plus"></i> Add Badge Record</button>
+            </div>
+            
+            <div id="badgeContainer">
+                <div class="badge-card">
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    
+                    <div class="badge-header">
+                        <div class="badge-info-main">
+                            <div class="badge-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div>
+                                <h3 class="edit-protected" style="font-family: 'Bebas Neue'; font-size: 1.8rem; color: #fff;">Officer John Doe</h3>
+                                <p style="color: var(--accent-gold); font-size: 0.85rem; font-weight: bold;">OFFICIAL SERVICE RECORD</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="badge-assignments-grid">
+                        <div class="assignment-box">
+                            <span class="assignment-label">Badge Number</span>
+                            <div class="edit-protected" style="font-weight: 600;">#4021</div>
+                        </div>
+                        <div class="assignment-box">
+                            <span class="assignment-label">Rank</span>
+                            <div class="edit-protected" style="font-weight: 600;">Sergeant II</div>
+                        </div>
+                        <div class="assignment-box">
+                            <span class="assignment-label">Division Assignment</span>
+                            <div class="edit-protected" style="font-weight: 600;">Metropolitan Division</div>
+                        </div>
+                    </div>
+
+                    <div class="badge-service-record">
+                        <div class="record-section">
+                            <div class="record-title commendation"><i class="fa-solid fa-award"></i> Commendations</div>
+                            <div class="edit-protected" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">
+                                • Medal of Valor (2025) - High-risk hostage resolution.<br>
+                                • Life Saving Medal (2024) - Provided emergency first aid under fire.
+                            </div>
+                        </div>
+                        <div class="record-section">
+                            <div class="record-title punishment"><i class="fa-solid fa-triangle-exclamation"></i> Disciplinary Actions / Punishments</div>
+                            <div class="edit-protected" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">
+                                • Written Reprimand (10/2024) - Minor patrol vehicle damage.<br>
+                                • None active.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="notes-section">
+                        <div class="record-title notes"><i class="fa-solid fa-clipboard-list"></i> Command Notes & Remarks</div>
+                        <div class="edit-protected" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">
+                            Certified Field Training Officer (FTO). Authorized for SWAT heavy transport unit operation.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. TOW INFORMATION TAB -->
         <section id="tab-tow" class="tab-content">
             <div class="tab-header">
                 <h2 class="tab-title">FLEET & EQUIPMENT</h2>
@@ -788,7 +960,7 @@
             </div>
         </section>
 
-        <!-- 4. PRICING TAB -->
+        <!-- 5. PRICING TAB -->
         <section id="tab-pricing" class="tab-content">
             <div class="tab-header">
                 <h2 class="tab-title">PENAL CODE FINES & BAIL SCHEDULE</h2>
@@ -821,7 +993,7 @@
             </table>
         </section>
 
-        <!-- 5. DISCOUNTS & MEMBERSHIPS TAB -->
+        <!-- 6. DISCOUNTS & MEMBERSHIPS TAB -->
         <section id="tab-memberships" class="tab-content">
             <div class="tab-header">
                 <h2 class="tab-title">COMMENDATIONS & CITIZEN PROGRAMS</h2>
@@ -839,7 +1011,7 @@
             </div>
         </section>
 
-        <!-- 6. RACE TEAM INFORMATION TAB -->
+        <!-- 7. RACE TEAM INFORMATION TAB -->
         <section id="tab-raceteam" class="tab-content">
             <div class="tab-header">
                 <h2 class="tab-title">SPECIALIZED DIVISIONS</h2>
@@ -862,7 +1034,7 @@
             </div>
         </section>
 
-        <!-- 7. LOCATION & CONTACT TAB -->
+        <!-- 8. LOCATION & CONTACT TAB -->
         <section id="tab-contact" class="tab-content">
             <div class="tab-header">
                 <h2 class="tab-title">PRECINCT & CONTACT INFO</h2>
@@ -884,7 +1056,7 @@
             </div>
         </section>
 
-        <!-- 8. RESTRICTED EMPLOYEE PORTAL -->
+        <!-- 9. RESTRICTED EMPLOYEE PORTAL -->
         <section id="tab-portal" class="tab-content">
             <div class="tab-header">
                 <h2 class="tab-title"><i class="fa-solid fa-user-shield"></i> RESTRICTED OFFICER PORTAL</h2>
@@ -1184,6 +1356,23 @@
             });
         }
 
+        function getBadgeData() {
+            const container = document.getElementById('badgeContainer');
+            if (!container) return [];
+            return Array.from(container.querySelectorAll('.badge-card')).map(card => {
+                const fields = card.querySelectorAll('.edit-protected');
+                return {
+                    name: fields[0]?.innerHTML || '',
+                    badgeNum: fields[1]?.innerHTML || '',
+                    rank: fields[2]?.innerHTML || '',
+                    division: fields[3]?.innerHTML || '',
+                    commendations: fields[4]?.innerHTML || '',
+                    punishments: fields[5]?.innerHTML || '',
+                    notes: fields[6]?.innerHTML || ''
+                };
+            });
+        }
+
         function getPartnerData() {
             const grid = document.getElementById('partnersGrid');
             if (!grid) return [];
@@ -1228,6 +1417,7 @@
                 contactText: document.getElementById('contactEditableText')?.innerHTML || '',
                 partners: getPartnerData(),
                 roster: getCardData('rosterGrid'),
+                badges: getBadgeData(),
                 tow: getCardData('towGrid'),
                 memberships: getCardData('membershipGrid'),
                 race: getCardData('raceGrid'),
@@ -1254,6 +1444,61 @@
                         <div class="card-title edit-protected" contenteditable="${!isReadOnly}">${item.title || ''}</div>
                         <div class="card-subtitle edit-protected" contenteditable="${!isReadOnly}">${item.subtitle || ''}</div>
                         <div class="card-text edit-protected" contenteditable="${!isReadOnly}">${item.text || ''}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function buildBadgeCardHTML(item, isReadOnly) {
+            return `
+                <div class="badge-card">
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    
+                    <div class="badge-header">
+                        <div class="badge-info-main">
+                            <div class="badge-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                            <div>
+                                <h3 class="edit-protected" contenteditable="${!isReadOnly}" style="font-family: 'Bebas Neue'; font-size: 1.8rem; color: #fff;">${item.name || 'Officer Name'}</h3>
+                                <p style="color: var(--accent-gold); font-size: 0.85rem; font-weight: bold;">OFFICIAL SERVICE RECORD</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="badge-assignments-grid">
+                        <div class="assignment-box">
+                            <span class="assignment-label">Badge Number</span>
+                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight: 600;">${item.badgeNum || '#0000'}</div>
+                        </div>
+                        <div class="assignment-box">
+                            <span class="assignment-label">Rank</span>
+                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight: 600;">${item.rank || 'Officer'}</div>
+                        </div>
+                        <div class="assignment-box">
+                            <span class="assignment-label">Division Assignment</span>
+                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight: 600;">${item.division || 'Patrol Division'}</div>
+                        </div>
+                    </div>
+
+                    <div class="badge-service-record">
+                        <div class="record-section">
+                            <div class="record-title commendation"><i class="fa-solid fa-award"></i> Commendations</div>
+                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">
+                                ${item.commendations || '• None recorded.'}
+                            </div>
+                        </div>
+                        <div class="record-section">
+                            <div class="record-title punishment"><i class="fa-solid fa-triangle-exclamation"></i> Disciplinary Actions / Punishments</div>
+                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">
+                                ${item.punishments || '• None recorded.'}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="notes-section">
+                        <div class="record-title notes"><i class="fa-solid fa-clipboard-list"></i> Command Notes & Remarks</div>
+                        <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">
+                            ${item.notes || 'No active notes.'}
+                        </div>
                     </div>
                 </div>
             `;
@@ -1296,6 +1541,11 @@
                         <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size:0.8rem; color:var(--text-muted);">${p.desc || ''}</div>
                     </div>
                 `).join('');
+            }
+
+            if (Array.isArray(state.badges)) {
+                const container = document.getElementById('badgeContainer');
+                container.innerHTML = state.badges.map(b => buildBadgeCardHTML(b, isReadOnly)).join('');
             }
 
             ['roster', 'tow', 'memberships', 'race', 'portal'].forEach(key => {
@@ -1434,6 +1684,28 @@
         }
 
         // ==================== DYNAMIC CARDS ====================
+        function addBadgeCard() {
+            const container = document.getElementById('badgeContainer');
+            if (!container) return;
+            const isReadOnly = document.body.classList.contains('read-only');
+
+            const item = {
+                name: 'Officer Name',
+                badgeNum: '#0000',
+                rank: 'Officer',
+                division: 'Patrol Division',
+                commendations: '• Add commendation...',
+                punishments: '• Add punishment or disciplinary note...',
+                notes: 'Add general remarks or certifications...'
+            };
+
+            const div = document.createElement('div');
+            div.innerHTML = buildBadgeCardHTML(item, isReadOnly);
+            container.appendChild(div.firstElementChild);
+            bindEditListeners();
+            scheduleSave();
+        }
+
         function addCard(containerId, titlePlaceholder, subtitlePlaceholder, textPlaceholder) {
             const container = document.getElementById(containerId);
             if (!container) return;
@@ -1494,7 +1766,7 @@
         }
 
         function removeCard(btn) {
-            btn.closest('.card, .partner-card').remove();
+            btn.closest('.card, .partner-card, .badge-card').remove();
             scheduleSave();
         }
 
@@ -1566,7 +1838,7 @@
                     clearTimeout(saveTimer);
                     persistState();
                 };
-                img.src = event.target.result;
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         });

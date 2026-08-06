@@ -889,22 +889,29 @@
         </div>
         <p>&copy; 2026 Los Angeles Police Department. All rights reserved.</p>
     </footer>
-<script>
-(function () {
-    'use strict';
-    // ═══════════════════════════════════════════════════════════
-    // WORKER API CONFIGURATION
-    // ═══════════════════════════════════════════════════════════
-    var DATA_API_URL = 'https://lapd-data.tywyv9.workers.dev/';
-    var LOCAL_STORAGE_KEY = 'lapd_site_state_v3';
-    var EDITOR_PIN = '343pd2026';
-    var POLL_INTERVAL_MS = 12000;
-    var saveTimer = null;
-    var pollTimer = null;
-    var isApplyingState = false;
-    var isUnlocked = false;
-    var lastKnownUpdatedAt = 0;
-    var isSaving = false;
+    
+<!-- JAVASCRIPT LOGIC -->
+    <script>
+        // ==================== CONFIG ====================
+        // Editor PIN — unlocks full site editing (add/edit/delete everywhere, including the portal)
+        const STAFF_PIN = "343pd2026";
+
+        // Employee Portal PIN — view-only access to the portal's internal documents.
+        // Does NOT grant editing rights; only the editor PIN above can add/edit/delete documents.
+        const PORTAL_PIN = "6573";
+
+        // Remote shared storage (Cloudflare Worker + KV recommended).
+        // Leave empty to use localStorage only (per-browser).
+        // When set, every visitor loads the same saved state and edits
+        // made while unlocked are pushed so everyone sees them.
+        // Example: "https://lapd-site-data.yourname.workers.dev"
+        const DATA_API_URL = "https://lapd-site-data.tywyv9.workers.dev//";
+
+        const LOCAL_STORAGE_KEY = "lapd_site_state_v3";
+        const IDB_NAME = "lapd_website";
+        const IDB_STORE = "site_state";
+        let saveTimer = null;
+        let isApplyingState = false;
 
     // Canvas Compression Helper to reduce payload size below API limits
     function compressAndConvertImage(file, callback) {

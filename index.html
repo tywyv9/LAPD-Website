@@ -289,7 +289,8 @@
         body.read-only .card-delete-btn,
         body.read-only .upload-btn-wrapper,
         body.read-only .status-controls,
-        body.read-only .bg-change-btn {
+        body.read-only .bg-change-btn,
+        body.read-only .card-drag-handle {
             display: none !important;
         }
 
@@ -349,6 +350,25 @@
             display: flex;
             flex-direction: column;
             position: relative;
+            transition: transform 0.15s ease, opacity 0.15s ease;
+        }
+
+        .card.dragging {
+            opacity: 0.4;
+            transform: scale(0.98);
+        }
+
+        .card-drag-handle {
+            position: absolute;
+            top: 10px;
+            right: 45px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 4px 8px;
+            border-radius: 3px;
+            cursor: grab;
+            z-index: 5;
+            font-size: 0.8rem;
         }
 
         .card-img-container {
@@ -366,13 +386,15 @@
         .card-body {
             padding: 15px;
             flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .card-title {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.5rem;
             color: #fff;
-            margin-bottom: 5px;
         }
 
         .card-subtitle {
@@ -380,13 +402,85 @@
             font-size: 0.85rem;
             font-weight: 600;
             text-transform: uppercase;
-            margin-bottom: 10px;
         }
 
         .card-text {
             color: var(--text-muted);
             font-size: 0.9rem;
             line-height: 1.4;
+        }
+
+        /* EMPLOYEE STATUS & NOTES STYLES */
+        .employee-status-container {
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .employee-status-label {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: var(--accent-cream);
+            text-transform: uppercase;
+        }
+
+        .employee-status-select {
+            background: var(--bg-matte);
+            border: 1px solid var(--border-color);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 4px 8px;
+            border-radius: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .employee-status-select.status-active {
+            color: #00ff66;
+            border-color: #00ff66;
+        }
+
+        .employee-status-select.status-loa {
+            color: #ffcc00;
+            border-color: #ffcc00;
+        }
+
+        .employee-status-select.status-inactive {
+            color: #ff3333;
+            border-color: #ff3333;
+        }
+
+        body.read-only .employee-status-select {
+            pointer-events: none;
+            appearance: none;
+            -webkit-appearance: none;
+            background: transparent;
+            padding: 2px 0;
+            border: none;
+        }
+
+        .card-notes-container {
+            margin-top: 6px;
+            background: rgba(11, 19, 32, 0.5);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 8px;
+        }
+
+        .card-notes-title {
+            font-size: 0.7rem;
+            color: var(--accent-gold);
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .card-notes-text {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            min-height: 20px;
         }
 
         .upload-btn-wrapper {
@@ -656,16 +750,6 @@
             display: inline-block;
         }
 
-        /* CALENDAR */
-        .calendar-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
         /* PIN MODAL */
         .pin-modal-overlay {
             position: fixed;
@@ -868,10 +952,11 @@
         <section id="tab-roster" class="tab-content">
             <div class="tab-header">
                 <h2 class="tab-title">DEPARTMENT ROSTER</h2>
-                <button class="btn edit-control" onclick="addCard('rosterGrid', 'Officer Name', 'Rank / Call sign', 'Division or contact details...')"><i class="fa-solid fa-plus"></i> Add Personnel</button>
+                <button class="btn edit-control" onclick="addEmployeeCard()"><i class="fa-solid fa-plus"></i> Add Personnel</button>
             </div>
             <div class="grid-container" id="rosterGrid">
                 <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                     <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                     <div class="card-img-container">
                         <i class="fa-solid fa-user-shield fa-3x" style="color: #273754;"></i>
@@ -881,6 +966,18 @@
                         <div class="card-title edit-protected">Chief of Police J. Miller</div>
                         <div class="card-subtitle edit-protected">Executive Command | Badge #101</div>
                         <div class="card-text edit-protected">Oversees all department operations and division logistics. Contact via Command Secretariat.</div>
+                        <div class="employee-status-container">
+                            <span class="employee-status-label">Status:</span>
+                            <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
+                                <option value="active" selected>Active</option>
+                                <option value="loa">LOA</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                        <div class="card-notes-container">
+                            <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Notes</div>
+                            <div class="card-notes-text edit-protected">High-command authorization active. Contact for administrative escalation.</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -957,6 +1054,7 @@
             </div>
             <div class="grid-container" id="towGrid">
                 <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                     <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                     <div class="card-img-container">
                         <i class="fa-solid fa-car-on fa-3x" style="color: #273754;"></i>
@@ -1012,6 +1110,7 @@
             </div>
             <div class="grid-container" id="awardsGrid">
                 <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                     <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                     <div class="card-img-container">
                         <i class="fa-solid fa-award fa-3x" style="color: #273754;"></i>
@@ -1035,6 +1134,7 @@
             <p id="raceEditableText" class="edit-protected" style="margin-bottom: 20px;">The LAPD operates tactical and technical tactical divisions capable of responding to high-risk situations across the city.</p>
             <div class="grid-container" id="raceGrid">
                 <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                     <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                     <div class="card-img-container">
                         <i class="fa-solid fa-shield-cat fa-3x" style="color: #273754;"></i>
@@ -1058,6 +1158,7 @@
             <p style="color: var(--text-muted); margin-bottom: 10px;">Upcoming roll calls, trainings, ride-alongs, and department events. Admins can add, edit, or remove entries.</p>
             <div class="grid-container" id="calendarGrid">
                 <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                     <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                     <div class="card-img-container">
                         <i class="fa-solid fa-calendar-day fa-3x" style="color: #273754;"></i>
@@ -1070,6 +1171,7 @@
                     </div>
                 </div>
                 <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                     <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                     <div class="card-img-container">
                         <i class="fa-solid fa-calendar-day fa-3x" style="color: #273754;"></i>
@@ -1135,6 +1237,7 @@
                 
                 <div class="grid-container" id="portalGrid">
                     <div class="card">
+                        <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                         <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                         <div class="card-img-container">
                             <i class="fa-solid fa-file-shield fa-3x" style="color: #273754;"></i>
@@ -1147,6 +1250,7 @@
                         </div>
                     </div>
                     <div class="card">
+                        <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                         <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                         <div class="card-img-container">
                             <i class="fa-solid fa-file-invoice-dollar fa-3x" style="color: #273754;"></i>
@@ -1175,17 +1279,13 @@
     <!-- JAVASCRIPT LOGIC -->
     <script>
         // ==================== CONFIG ====================
-        // Command PIN — unlocks full site editing
         const STAFF_PIN = "343pd2026";
-
-        // Officer Portal PIN — view-only access to internal documents.
         const PORTAL_PIN = "2026343pd";
-
-        // REPLACE THIS WITH YOUR CLOUDFLARE WORKER URL
         const WORKER_URL = "https://lapd-api.tywyv9.workers.dev";
 
         let saveTimer = null;
         let isApplyingState = false;
+        let draggedCard = null;
 
         // ==================== TAB SWITCHING ====================
         function switchTab(tabId) {
@@ -1199,6 +1299,15 @@
                 el.getAttribute('onclick') && el.getAttribute('onclick').includes(`'${tabId}'`)
             );
             if (activeNav) activeNav.classList.add('active');
+        }
+
+        // ==================== STATUS DROPDOWN COLOR UPDATER ====================
+        function updateStatusColor(selectEl) {
+            selectEl.classList.remove('status-active', 'status-loa', 'status-inactive');
+            const val = selectEl.value;
+            if (val === 'active') selectEl.classList.add('status-active');
+            else if (val === 'loa') selectEl.classList.add('status-loa');
+            else if (val === 'inactive') selectEl.classList.add('status-inactive');
         }
 
         // ==================== PIN LOCK SYSTEM ====================
@@ -1334,6 +1443,61 @@
                 document.body.classList.remove('read-only');
                 document.querySelectorAll('.edit-protected').forEach(el => el.setAttribute('contenteditable', 'true'));
             }
+            initDragAndDrop();
+        }
+
+        // ==================== DRAG AND DROP REORDERING ====================
+        function initDragAndDrop() {
+            const isReadOnly = document.body.classList.contains('read-only');
+            const cards = document.querySelectorAll('.grid-container .card');
+            
+            cards.forEach(card => {
+                if (isReadOnly) {
+                    card.removeAttribute('draggable');
+                    card.ondragstart = null;
+                    card.ondragend = null;
+                } else {
+                    card.setAttribute('draggable', 'true');
+                    card.ondragstart = (e) => {
+                        draggedCard = card;
+                        card.classList.add('dragging');
+                        e.dataTransfer.effectAllowed = 'move';
+                    };
+                    card.ondragend = () => {
+                        draggedCard = null;
+                        card.classList.remove('dragging');
+                        scheduleSave();
+                    };
+                }
+            });
+
+            document.querySelectorAll('.grid-container').forEach(grid => {
+                grid.ondragover = (e) => {
+                    e.preventDefault();
+                    if (!draggedCard || isReadOnly) return;
+                    const afterElement = getDragAfterElement(grid, e.clientX, e.clientY);
+                    if (afterElement == null) {
+                        grid.appendChild(draggedCard);
+                    } else {
+                        grid.insertBefore(draggedCard, afterElement);
+                    }
+                };
+            });
+        }
+
+        function getDragAfterElement(container, x, y) {
+            const draggableElements = [...container.querySelectorAll('.card:not(.dragging)')];
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offsetX = x - box.left - box.width / 2;
+                const offsetY = y - box.top - box.height / 2;
+                const distance = Math.hypot(offsetX, offsetY);
+                if (distance < closest.distance) {
+                    return { distance: distance, element: child };
+                } else {
+                    return closest;
+                }
+            }, { distance: Number.POSITIVE_INFINITY }).element;
         }
 
         // ==================== STATE CAPTURE / APPLY ====================
@@ -1353,6 +1517,24 @@
                     title: card.querySelector('.card-title')?.innerHTML || '',
                     subtitle: card.querySelector('.card-subtitle')?.innerHTML || '',
                     text: card.querySelector('.card-text')?.innerHTML || '',
+                    image: imgUrl
+                };
+            });
+        }
+
+        function getRosterCardData() {
+            const container = document.getElementById('rosterGrid');
+            if (!container) return [];
+            return Array.from(container.querySelectorAll('.card')).map(card => {
+                const imgEl = card.querySelector('.card-img-container');
+                const imgUrl = imgEl ? extractBgUrl(imgEl.style.backgroundImage) : '';
+                const statusSelect = card.querySelector('.employee-status-select');
+                return {
+                    title: card.querySelector('.card-title')?.innerHTML || '',
+                    subtitle: card.querySelector('.card-subtitle')?.innerHTML || '',
+                    text: card.querySelector('.card-text')?.innerHTML || '',
+                    notes: card.querySelector('.card-notes-text')?.innerHTML || '',
+                    status: statusSelect ? statusSelect.value : 'active',
                     image: imgUrl
                 };
             });
@@ -1418,7 +1600,7 @@
                 raceText: document.getElementById('raceEditableText')?.innerHTML || '',
                 contactText: document.getElementById('contactEditableText')?.innerHTML || '',
                 partners: getPartnerData(),
-                roster: getCardData('rosterGrid'),
+                roster: getRosterCardData(),
                 badges: getBadgeData(),
                 tow: getCardData('towGrid'),
                 awards: getCardData('awardsGrid'),
@@ -1435,6 +1617,7 @@
             const iconDisplay = hasImg ? 'display:none;' : '';
             return `
                 <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                     <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                     <div class="card-img-container" ${bgStyle}>
                         <i class="fa-solid fa-image fa-3x" style="color:#273754;${iconDisplay}"></i>
@@ -1447,6 +1630,45 @@
                         <div class="card-title edit-protected" contenteditable="${!isReadOnly}">${item.title || ''}</div>
                         <div class="card-subtitle edit-protected" contenteditable="${!isReadOnly}">${item.subtitle || ''}</div>
                         <div class="card-text edit-protected" contenteditable="${!isReadOnly}">${item.text || ''}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function buildEmployeeCardHTML(item, isReadOnly) {
+            const hasImg = item.image && item.image.length > 10;
+            const bgStyle = hasImg ? `style="background-image:url('${item.image}')"` : '';
+            const iconDisplay = hasImg ? 'display:none;' : '';
+            const statusVal = item.status || 'active';
+            const statusClass = statusVal === 'loa' ? 'status-loa' : (statusVal === 'inactive' ? 'status-inactive' : 'status-active');
+
+            return `
+                <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container" ${bgStyle}>
+                        <i class="fa-solid fa-user-shield fa-3x" style="color:#273754;${iconDisplay}"></i>
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>
+                            <input type="file" accept="image/*" onchange="uploadImage(event, this)">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title edit-protected" contenteditable="${!isReadOnly}">${item.title || 'Officer Name'}</div>
+                        <div class="card-subtitle edit-protected" contenteditable="${!isReadOnly}">${item.subtitle || 'Rank / Badge #'}</div>
+                        <div class="card-text edit-protected" contenteditable="${!isReadOnly}">${item.text || 'Assignment or details...'}</div>
+                        <div class="employee-status-container">
+                            <span class="employee-status-label">Status:</span>
+                            <select class="employee-status-select ${statusClass}" onchange="updateStatusColor(this); scheduleSave();">
+                                <option value="active" ${statusVal === 'active' ? 'selected' : ''}>Active</option>
+                                <option value="loa" ${statusVal === 'loa' ? 'selected' : ''}>LOA</option>
+                                <option value="inactive" ${statusVal === 'inactive' ? 'selected' : ''}>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="card-notes-container">
+                            <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Notes</div>
+                            <div class="card-notes-text edit-protected" contenteditable="${!isReadOnly}">${item.notes || 'Add notes...'}</div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1546,13 +1768,18 @@
                 `).join('');
             }
 
+            if (Array.isArray(state.roster)) {
+                const grid = document.getElementById('rosterGrid');
+                grid.innerHTML = state.roster.map(item => buildEmployeeCardHTML(item, isReadOnly)).join('');
+            }
+
             if (Array.isArray(state.badges)) {
                 const container = document.getElementById('badgeContainer');
                 container.innerHTML = state.badges.map(b => buildBadgeCardHTML(b, isReadOnly)).join('');
             }
 
-            ['roster', 'tow', 'awards', 'race', 'calendar', 'portal'].forEach(key => {
-                const map = { roster: 'rosterGrid', tow: 'towGrid', awards: 'awardsGrid', race: 'raceGrid', calendar: 'calendarGrid', portal: 'portalGrid' };
+            ['tow', 'awards', 'race', 'calendar', 'portal'].forEach(key => {
+                const map = { tow: 'towGrid', awards: 'awardsGrid', race: 'raceGrid', calendar: 'calendarGrid', portal: 'portalGrid' };
                 const id = map[key];
                 if (Array.isArray(state[key]) && id) {
                     document.getElementById(id).innerHTML = state[key].map(item => buildCardHTML(item, isReadOnly)).join('');
@@ -1576,6 +1803,7 @@
                 bindEditListeners();
             }
 
+            initDragAndDrop();
             isApplyingState = false;
         }
 
@@ -1655,6 +1883,26 @@
         }
 
         // ==================== DYNAMIC CARDS ====================
+        function addEmployeeCard() {
+            const container = document.getElementById('rosterGrid');
+            if (!container) return;
+
+            const isReadOnly = document.body.classList.contains('read-only');
+            const div = document.createElement('div');
+            div.innerHTML = buildEmployeeCardHTML({
+                title: 'Officer Name',
+                subtitle: 'Rank / Call sign',
+                text: 'Division or contact details...',
+                notes: 'Add notes...',
+                status: 'active'
+            }, isReadOnly);
+
+            container.appendChild(div.firstElementChild);
+            bindEditListeners();
+            initDragAndDrop();
+            scheduleSave();
+        }
+
         function addBadgeCard() {
             const container = document.getElementById('badgeContainer');
             if (!container) return;
@@ -1682,25 +1930,16 @@
             if (!container) return;
 
             const isReadOnly = document.body.classList.contains('read-only');
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                <div class="card-img-container">
-                    <i class="fa-solid fa-image fa-3x" style="color: #273754;"></i>
-                    <div class="upload-btn-wrapper">
-                        <button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>
-                        <input type="file" accept="image/*" onchange="uploadImage(event, this)">
-                    </div>
-                </div>
-                <div class="card-body">
-                    <div class="card-title edit-protected" contenteditable="${!isReadOnly}">${titlePlaceholder}</div>
-                    <div class="card-subtitle edit-protected" contenteditable="${!isReadOnly}">${subtitlePlaceholder}</div>
-                    <div class="card-text edit-protected" contenteditable="${!isReadOnly}">${textPlaceholder}</div>
-                </div>
-            `;
-            container.appendChild(card);
+            const div = document.createElement('div');
+            div.innerHTML = buildCardHTML({
+                title: titlePlaceholder,
+                subtitle: subtitlePlaceholder,
+                text: textPlaceholder
+            }, isReadOnly);
+
+            container.appendChild(div.firstElementChild);
             bindEditListeners();
+            initDragAndDrop();
             scheduleSave();
         }
 

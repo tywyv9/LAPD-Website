@@ -976,7 +976,7 @@
         isApplyingState = true;
         if (state.updatedAt) lastKnownUpdatedAt = state.updatedAt;
 
-        if (state.heroBg !== undefined) {
+        if (state.heroBg !== undefined && state.heroBg !== '') {
             document.getElementById('heroBanner').style.backgroundImage = state.heroBg;
         }
         if (state.statusIndicatorClass) {
@@ -1136,7 +1136,7 @@
     function triggerSave() {
         if (isApplyingState || !isUnlocked) return;
         clearTimeout(saveTimer);
-        saveTimer = setTimeout(saveState, 500);
+        saveTimer = setTimeout(saveState, 300);
     }
 
     function saveState() {
@@ -1151,11 +1151,11 @@
                 body: JSON.stringify(state)
             })
             .then(function (res) { return res.json(); })
-            .then(function (data) {
+            .then(function () {
                 isSaving = false;
                 showSaveNotification();
             })
-            .catch(function (err) {
+            .catch(function () {
                 isSaving = false;
                 showSaveNotification();
             });
@@ -1203,7 +1203,6 @@
     // EVENT BINDINGS
     // ═══════════════════════════════════════════════════════════
     function bindDynamicListeners() {
-        // Delete buttons
         document.querySelectorAll('.card-delete-btn').forEach(function (btn) {
             btn.onclick = function () {
                 var parent = btn.closest('.card') || btn.closest('.partner-card');
@@ -1211,7 +1210,6 @@
             };
         });
 
-        // Image uploads on cards
         document.querySelectorAll('.card-img-container input[type="file"]').forEach(function (input) {
             input.onchange = function (e) {
                 var file = e.target.files[0];
@@ -1228,20 +1226,17 @@
             };
         });
 
-        // Editable inputs
         document.querySelectorAll('.edit-protected').forEach(function (el) {
             el.oninput = triggerSave;
         });
     }
 
     function initEvents() {
-        // Navigation Tabs
         document.getElementById('navLinks').addEventListener('click', function (e) {
             var btn = e.target.closest('.nav-item');
             if (btn) switchTab(btn.getAttribute('data-tab'));
         });
 
-        // Editor Toggle & PIN Modal
         document.getElementById('editorToggle').onclick = function () {
             if (isUnlocked) setUnlocked(false);
             else showPinModal();
@@ -1252,7 +1247,6 @@
             if (e.key === 'Enter') tryUnlock();
         };
 
-        // Status Banner Controls
         document.getElementById('statusOpenBtn').onclick = function () {
             document.getElementById('statusIndicator').className = 'status-indicator status-open';
             document.getElementById('statusText').textContent = 'DEPARTMENT ACTIVE';
@@ -1269,19 +1263,18 @@
             triggerSave();
         };
 
-        // Header Background Uploader
+        // Header Background Uploader Fixed Handler
         document.getElementById('bgUploader').onchange = function (e) {
             var file = e.target.files[0];
             if (!file) return;
             var reader = new FileReader();
             reader.onload = function (evt) {
                 document.getElementById('heroBanner').style.backgroundImage = 'url("' + evt.target.result + '")';
-                triggerSave();
+                triggerSave(); // Immediately fire serialization and cloud sync
             };
             reader.readAsDataURL(file);
         };
 
-        // Add Card Buttons
         document.getElementById('addPartnerBtn').onclick = function () {
             var grid = document.getElementById('partnersGrid');
             var card = document.createElement('div');
@@ -1343,7 +1336,6 @@
             triggerSave();
         };
 
-        // Reset Button
         document.getElementById('resetBtn').onclick = function () {
             if (confirm('Are you sure you want to reset all modifications to default?')) {
                 try { localStorage.removeItem(LOCAL_STORAGE_KEY); } catch (e) {}
@@ -1352,11 +1344,21 @@
         };
     }
 
-    // Initialize
+    // Initialize on Load
     document.addEventListener('DOMContentLoaded', function () {
+        // First check local storage to load background immediately
+        try {
+            var local = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (local) {
+                var parsed = JSON.parse(local);
+                if (parsed && parsed.heroBg) {
+                    document.getElementById('heroBanner').style.backgroundImage = parsed.heroBg;
+                }
+            }
+        } catch (e) {}
+
         initEvents();
         
-        // Auto unlock if unlocked in session
         try {
             if (sessionStorage.getItem('lapd_editor_unlocked') === '1') setUnlocked(true);
         } catch (e) {}

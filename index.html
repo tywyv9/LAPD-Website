@@ -1226,31 +1226,6 @@
         el.style.display = 'block';
         setTimeout(function () { el.style.display = 'none'; }, 2000);
     }
-    // 1. Target your specific input element by its ID or class
-      const textInput = document.getElementById('myTextInput');
-
-      // 2. Debounce function to delay saving until typing pauses
-      function debounce(func, delay = 500) {
-        let timeout;
-        return (...args) => {
-          clearTimeout(timeout);
-          timeout = setTimeout(() => func.apply(this, args), delay);
-        };
-      }
-
-      // 3. Trigger save while typing (500ms after last keystroke)
-      if (textInput) {
-        textInput.addEventListener('input', debounce((event) => {
-          saveData({ textContent: event.target.value }); // Replace with your actual save function
-        }, 500));
-      }
-
-      // 4. Force save if the user refreshes while actively focused in an input box
-      window.addEventListener('beforeunload', () => {
-        const activeElement = document.activeElement;
-        if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
-          saveData({ textContent: activeElement.value }); // Replace with your actual save function
-      }    
 
     // ═══════════════════════════════════════════════════════════
     // EVENT BINDINGS

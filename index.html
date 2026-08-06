@@ -757,20 +757,6 @@
                         <div class="card-title edit-protected" contenteditable="false">Unit 1-Adam-12</div>
                         <div class="card-subtitle edit-protected" contenteditable="false">Patrol Cruiser</div>
                         <div class="card-text edit-protected" contenteditable="false">Standard marked patrol unit. Assigned to Central Division.</div>
-                        <div class="meta-list">
-                            <div class="meta-row">
-                                <span class="meta-label">Vehicle Type</span>
-                                <span class="meta-value edit-protected" contenteditable="false">Vapid Stanier II</span>
-                            </div>
-                            <div class="meta-row">
-                                <span class="meta-label">Livery / Class</span>
-                                <span class="meta-value edit-protected" contenteditable="false">Class A Patrol</span>
-                            </div>
-                            <div class="meta-row">
-                                <span class="meta-label">Status</span>
-                                <span class="meta-value edit-protected" contenteditable="false">In Service</span>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -779,7 +765,7 @@
         <!-- UNIFORMS TAB -->
         <section id="tab-uniforms" class="tab-content">
             <div class="tab-header">
-                <h2 class="tab-title">UNIFORM STANDARDS</h2>
+                <h2 class="tab-title">UNIFORM ROSTER</h2>
                 <button type="button" class="btn edit-only" id="addUniformBtn"><i class="fa-solid fa-plus"></i> Add Uniform</button>
             </div>
             <div class="grid-container" id="uniformGrid">
@@ -793,19 +779,9 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="card-title edit-protected" contenteditable="false">Class A Patrol Uniform</div>
-                        <div class="card-subtitle edit-protected" contenteditable="false">Standard Duty Attire</div>
-                        <div class="card-text edit-protected" contenteditable="false">Required for standard patrol duty. Long sleeve navy shirt, ties, badge, and duty belt.</div>
-                        <div class="meta-list">
-                            <div class="meta-row">
-                                <span class="meta-label">Division</span>
-                                <span class="meta-value edit-protected" contenteditable="false">Patrol Division</span>
-                            </div>
-                            <div class="meta-row">
-                                <span class="meta-label">Authorized Ranks</span>
-                                <span class="meta-value edit-protected" contenteditable="false">Officer I to Chief</span>
-                            </div>
-                        </div>
+                        <div class="card-title edit-protected" contenteditable="false">Class A Dress Uniform</div>
+                        <div class="card-subtitle edit-protected" contenteditable="false">Formal / Ceremonial</div>
+                        <div class="card-text edit-protected" contenteditable="false">Full dress uniform for ceremonies, funerals, and formal events. Includes badge, medals, and service stripes.</div>
                     </div>
                 </div>
             </div>
@@ -814,341 +790,583 @@
 
     <footer>
         <div class="footer-disclaimer">
-            <strong>OFFICIAL ROLEPLAY DOCUMENTATION</strong><br>
-            This website is intended for virtual roleplay communities and simulated operations only. Not affiliated with any real-world law enforcement agency.
+            <strong>OFFICIAL DISCLAIMER:</strong> This Los Angeles Police Department website is a virtual entity operating within a Grand Theft Auto V (FiveM) multiplayer roleplay environment. All services, personnel, vehicles, and locations are entirely fictional.
         </div>
-        <p>&copy; Los Angeles Police Department Roleplay. All rights reserved.</p>
+        <p>&copy; 2026 Los Angeles Police Department. All rights reserved.</p>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const ADMIN_PIN = "1234"; // Default PIN to unlock editor mode
+<script>
+(function () {
+    'use strict';
 
-            // --- TAB NAVIGATION ---
-            const navItems = document.querySelectorAll('.nav-item');
-            const tabContents = document.querySelectorAll('.tab-content');
+    // ═══════════════════════════════════════════════════════════
+    // WORKER API CONFIGURATION
+    // ═══════════════════════════════════════════════════════════
+    var DATA_API_URL = 'https://lapd-data.tywyv9.workers.dev/';
+    var LOCAL_STORAGE_KEY = 'lapd_site_state_v3';
+    var EDITOR_PIN = '343pd2026';
+    var POLL_INTERVAL_MS = 12000;
 
-            navItems.forEach(item => {
-                item.addEventListener('click', () => {
-                    const targetTab = item.getAttribute('data-tab');
-                    
-                    navItems.forEach(nav => nav.classList.remove('active'));
-                    tabContents.forEach(tab => tab.classList.remove('active'));
+    var saveTimer = null;
+    var pollTimer = null;
+    var isApplyingState = false;
+    var isUnlocked = false;
+    var lastKnownUpdatedAt = 0;
+    var isSaving = false;
 
-                    item.classList.add('active');
-                    const activeContent = document.getElementById(`tab-${targetTab}`);
-                    if (activeContent) activeContent.classList.add('active');
-                });
-            });
+    function switchTab(tabId) {
+        if (!tabId) return;
+        document.querySelectorAll('.tab-content').forEach(function (t) { t.classList.remove('active'); });
+        document.querySelectorAll('.nav-item').forEach(function (n) { n.classList.remove('active'); });
+        var target = document.getElementById('tab-' + tabId);
+        if (target) target.classList.add('active');
+        var nav = document.querySelector('.nav-item[data-tab="' + tabId + '"]');
+        if (nav) nav.classList.add('active');
+    }
+    window.switchTab = switchTab;
 
-            // --- EDITOR LOCK / UNLOCK (PIN SYSTEM) ---
-            const editorToggle = document.getElementById('editorToggle');
-            const pinModal = document.getElementById('pinModal');
-            const pinInput = document.getElementById('pinInput');
-            const pinSubmitBtn = document.getElementById('pinSubmitBtn');
-            const pinCancelBtn = document.getElementById('pinCancelBtn');
-            const pinError = document.getElementById('pinError');
-            const editorIcon = document.getElementById('editorIcon');
-            const editorLabel = document.getElementById('editorLabel');
-            const roleBadge = document.getElementById('roleBadge');
-
-            function unlockEditor() {
-                document.body.classList.add('unlocked');
-                document.querySelectorAll('.edit-protected').forEach(el => el.setAttribute('contenteditable', 'true'));
-                editorIcon.className = 'fa-solid fa-lock-open';
-                editorIcon.style.color = '#00ff66';
-                editorLabel.textContent = 'Editor Unlocked';
-                roleBadge.textContent = 'Admin';
-                roleBadge.classList.remove('locked');
-            }
-
-            function lockEditor() {
-                document.body.classList.remove('unlocked');
-                document.querySelectorAll('.edit-protected').forEach(el => el.setAttribute('contenteditable', 'false'));
-                editorIcon.className = 'fa-solid fa-lock';
-                editorIcon.style.color = '#ff6666';
-                editorLabel.textContent = 'Editor Locked';
-                roleBadge.textContent = 'Locked';
-                roleBadge.classList.add('locked');
-            }
-
-            editorToggle.addEventListener('click', () => {
-                if (document.body.classList.contains('unlocked')) {
-                    lockEditor();
-                } else {
-                    pinModal.classList.add('show');
-                    pinInput.value = '';
-                    pinError.style.display = 'none';
-                    pinInput.focus();
-                }
-            });
-
-            function handlePinSubmit() {
-                if (pinInput.value === ADMIN_PIN) {
-                    unlockEditor();
-                    pinModal.classList.remove('show');
-                } else {
-                    pinError.style.display = 'block';
-                }
-            }
-
-            pinSubmitBtn.addEventListener('click', handlePinSubmit);
-            pinInput.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') handlePinSubmit();
-            });
-
-            pinCancelBtn.addEventListener('click', () => {
-                pinModal.classList.remove('show');
-            });
-
-            // --- DEPARTMENT STATUS CONTROLS ---
-            const statusIndicator = document.getElementById('statusIndicator');
-            const statusText = document.getElementById('statusText');
-
-            document.getElementById('statusOpenBtn')?.addEventListener('click', () => {
-                statusIndicator.className = 'status-indicator status-open';
-                statusText.textContent = 'DEPARTMENT ACTIVE';
-                saveState();
-            });
-
-            document.getElementById('statusCallBtn')?.addEventListener('click', () => {
-                statusIndicator.className = 'status-indicator status-call';
-                statusText.textContent = 'CALLS ONLY / LIMITED';
-                saveState();
-            });
-
-            document.getElementById('statusClosedBtn')?.addEventListener('click', () => {
-                statusIndicator.className = 'status-indicator status-closed';
-                statusText.textContent = 'DEPARTMENT OFFLINE';
-                saveState();
-            });
-
-            // --- HEADER BG UPLOADER ---
-            const bgUploader = document.getElementById('bgUploader');
-            const heroBanner = document.getElementById('heroBanner');
-
-            bgUploader?.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(evt) {
-                        heroBanner.style.backgroundImage = `url('${evt.target.result}')`;
-                        saveState();
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-
-            // --- CARD IMAGE UPLOADER DELEGATION ---
-            document.addEventListener('change', (e) => {
-                if (e.target && e.target.matches('.upload-btn-wrapper input[type="file"]')) {
-                    const file = e.target.files[0];
-                    if (file) {
-                        const reader = new FileReader();
-                        const cardImgContainer = e.target.closest('.card-img-container');
-                        reader.onload = function(evt) {
-                            if (cardImgContainer) {
-                                cardImgContainer.style.backgroundImage = `url('${evt.target.result}')`;
-                                const icon = cardImgContainer.querySelector('.fa-3x');
-                                if (icon) icon.style.display = 'none';
-                                saveState();
-                            }
-                        };
-                        reader.readAsDataURL(file);
-                    }
-                }
-            });
-
-            // --- CARD DELETION DELEGATION ---
-            document.addEventListener('click', (e) => {
-                const deleteBtn = e.target.closest('.card-delete-btn');
-                if (deleteBtn) {
-                    const targetCard = deleteBtn.closest('.card') || deleteBtn.closest('.partner-card');
-                    if (targetCard && confirm('Are you sure you want to delete this entry?')) {
-                        targetCard.remove();
-                        saveState();
-                    }
-                }
-            });
-
-            // --- DYNAMIC CARD ADDITION ---
-            const isEditable = () => document.body.classList.contains('unlocked');
-
-            document.getElementById('addPartnerBtn')?.addEventListener('click', () => {
-                const container = document.getElementById('partnersGrid');
-                const div = document.createElement('div');
-                div.className = 'partner-card';
-                div.innerHTML = `
-                    <button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>
-                    <div class="edit-protected" contenteditable="${isEditable()}" style="font-weight:bold;">New Partner</div>
-                    <div class="edit-protected" contenteditable="${isEditable()}" style="font-size:0.8rem; color:var(--text-muted);">Partner Description</div>
-                `;
-                container.appendChild(div);
-                saveState();
-            });
-
-            document.getElementById('addOfficerBtn')?.addEventListener('click', () => {
-                const container = document.getElementById('rosterGrid');
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.innerHTML = `
-                    <button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>
-                    <div class="card-img-container">
-                        <i class="fa-solid fa-user-shield fa-3x" style="color:#333;"></i>
-                        <div class="upload-btn-wrapper edit-only">
-                            <button type="button" class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>
-                            <input type="file" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title edit-protected" contenteditable="${isEditable()}">Officer Name</div>
-                        <div class="card-subtitle edit-protected" contenteditable="${isEditable()}">Rank / #Badge</div>
-                        <div class="meta-list">
-                            <div class="meta-row"><span class="meta-label">Hire Date</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">01/01/2026</span></div>
-                            <div class="meta-row"><span class="meta-label">Promotion</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">--/--/----</span></div>
-                            <div class="meta-row"><span class="meta-label">Awards / Certs</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">None</span></div>
-                            <div class="meta-row"><span class="meta-label">Strikes</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">0</span></div>
-                            <div class="meta-row"><span class="meta-label">Notes</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">Active service.</span></div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(div);
-                saveState();
-            });
-
-            document.getElementById('addBadgeBtn')?.addEventListener('click', () => {
-                const container = document.getElementById('badgeGrid');
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.innerHTML = `
-                    <button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>
-                    <div class="card-img-container">
-                        <i class="fa-solid fa-id-badge fa-3x" style="color:#333;"></i>
-                        <div class="upload-btn-wrapper edit-only">
-                            <button type="button" class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>
-                            <input type="file" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title edit-protected" contenteditable="${isEditable()}">Officer Name</div>
-                        <div class="badge-header-info">
-                            <div class="badge-header-row"><span class="badge-header-tag">Badge #</span><span class="edit-protected" contenteditable="${isEditable()}">#000</span></div>
-                            <div class="badge-header-row"><span class="badge-header-tag">Division</span><span class="edit-protected" contenteditable="${isEditable()}">Patrol Division</span></div>
-                            <div class="badge-header-row"><span class="badge-header-tag">Hired Date</span><span class="edit-protected" contenteditable="${isEditable()}">01/01/2026</span></div>
-                        </div>
-                        <div class="meta-list">
-                            <div class="meta-row"><span class="meta-label">Rank</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">Police Officer</span></div>
-                            <div class="meta-row"><span class="meta-label">Commendations</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">None</span></div>
-                            <div class="meta-row"><span class="meta-label">Punishments</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">None</span></div>
-                            <div class="meta-row"><span class="meta-label">Details</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">Personnel record entries.</span></div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(div);
-                saveState();
-            });
-
-            document.getElementById('addVehicleBtn')?.addEventListener('click', () => {
-                const container = document.getElementById('vehicleGrid');
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.innerHTML = `
-                    <button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>
-                    <div class="card-img-container">
-                        <i class="fa-solid fa-car-side fa-3x" style="color:#333;"></i>
-                        <div class="upload-btn-wrapper edit-only">
-                            <button type="button" class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>
-                            <input type="file" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title edit-protected" contenteditable="${isEditable()}">Unit Designation</div>
-                        <div class="card-subtitle edit-protected" contenteditable="${isEditable()}">Vehicle Type</div>
-                        <div class="card-text edit-protected" contenteditable="${isEditable()}">Vehicle details and division assignment.</div>
-                        <div class="meta-list">
-                            <div class="meta-row"><span class="meta-label">Vehicle Type</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">Patrol Vehicle</span></div>
-                            <div class="meta-row"><span class="meta-label">Livery / Class</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">Class A</span></div>
-                            <div class="meta-row"><span class="meta-label">Status</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">In Service</span></div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(div);
-                saveState();
-            });
-
-            document.getElementById('addUniformBtn')?.addEventListener('click', () => {
-                const container = document.getElementById('uniformGrid');
-                const div = document.createElement('div');
-                div.className = 'card';
-                div.innerHTML = `
-                    <button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>
-                    <div class="card-img-container">
-                        <i class="fa-solid fa-shirt fa-3x" style="color:#333;"></i>
-                        <div class="upload-btn-wrapper edit-only">
-                            <button type="button" class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>
-                            <input type="file" accept="image/*">
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title edit-protected" contenteditable="${isEditable()}">Uniform Name</div>
-                        <div class="card-subtitle edit-protected" contenteditable="${isEditable()}">Classification</div>
-                        <div class="card-text edit-protected" contenteditable="${isEditable()}">Description and equipment requirements.</div>
-                        <div class="meta-list">
-                            <div class="meta-row"><span class="meta-label">Division</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">All Divisions</span></div>
-                            <div class="meta-row"><span class="meta-label">Authorized Ranks</span><span class="meta-value edit-protected" contenteditable="${isEditable()}">All Ranks</span></div>
-                        </div>
-                    </div>
-                `;
-                container.appendChild(div);
-                saveState();
-            });
-
-            // --- LOCAL STORAGE STATE SAVE & RESET ---
-            const saveNotification = document.getElementById('saveNotification');
-
-            function saveState() {
-                const data = {
-                    statusText: statusText.textContent,
-                    statusClass: statusIndicator.className,
-                    heroBg: heroBanner.style.backgroundImage,
-                    mainHTML: document.querySelector('main').innerHTML
-                };
-                localStorage.setItem('lapd_roster_data', JSON.stringify(data));
-                
-                saveNotification.style.display = 'block';
-                setTimeout(() => { saveNotification.style.display = 'none'; }, 2000);
-            }
-
-            function loadState() {
-                const saved = localStorage.getItem('lapd_roster_data');
-                if (saved) {
-                    try {
-                        const data = JSON.parse(saved);
-                        if (data.statusText) statusText.textContent = data.statusText;
-                        if (data.statusClass) statusIndicator.className = data.statusClass;
-                        if (data.heroBg) heroBanner.style.backgroundImage = data.heroBg;
-                        if (data.mainHTML) document.querySelector('main').innerHTML = data.mainHTML;
-                    } catch(e) {
-                        console.error('Failed to parse saved state:', e);
-                    }
-                }
-            }
-
-            document.addEventListener('input', (e) => {
-                if (e.target.classList.contains('edit-protected')) {
-                    saveState();
-                }
-            });
-
-            document.getElementById('resetBtn')?.addEventListener('click', () => {
-                if (confirm('Are you sure you want to reset all modifications to default?')) {
-                    localStorage.removeItem('lapd_roster_data');
-                    location.reload();
-                }
-            });
-
-            loadState();
+    function setUnlocked(unlocked) {
+        isUnlocked = unlocked;
+        if (unlocked) {
+            document.body.classList.add('unlocked');
+            document.getElementById('editorIcon').className = 'fa-solid fa-unlock';
+            document.getElementById('editorIcon').style.color = 'var(--accent-gold)';
+            document.getElementById('editorLabel').textContent = 'Editor Mode';
+            document.getElementById('roleBadge').textContent = 'Active';
+            document.getElementById('roleBadge').classList.remove('locked');
+        } else {
+            document.body.classList.remove('unlocked');
+            document.getElementById('editorIcon').className = 'fa-solid fa-lock';
+            document.getElementById('editorIcon').style.color = '#ff6666';
+            document.getElementById('editorLabel').textContent = 'Editor Locked';
+            document.getElementById('roleBadge').textContent = 'Locked';
+            document.getElementById('roleBadge').classList.add('locked');
+        }
+        document.querySelectorAll('.edit-protected').forEach(function (el) {
+            el.setAttribute('contenteditable', unlocked ? 'true' : 'false');
         });
-    </script>
+        if (!unlocked) startPolling();
+        else stopPolling();
+    }
+
+    function showPinModal() {
+        document.getElementById('pinError').style.display = 'none';
+        document.getElementById('pinInput').value = '';
+        document.getElementById('pinModal').classList.add('show');
+        setTimeout(function () { document.getElementById('pinInput').focus(); }, 50);
+    }
+    function hidePinModal() {
+        document.getElementById('pinModal').classList.remove('show');
+    }
+    function tryUnlock() {
+        var val = (document.getElementById('pinInput').value || '').trim();
+        if (val === EDITOR_PIN) {
+            setUnlocked(true);
+            hidePinModal();
+            try { sessionStorage.setItem('lapd_editor_unlocked', '1'); } catch (e) {}
+        } else {
+            document.getElementById('pinError').style.display = 'block';
+            document.getElementById('pinInput').value = '';
+            document.getElementById('pinInput').focus();
+        }
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // STATE SERIALIZATION & DESERIALIZATION
+    // ═══════════════════════════════════════════════════════════
+    function serializeState() {
+        var heroBg = document.getElementById('heroBanner').style.backgroundImage || '';
+        var statusIndicatorClass = document.getElementById('statusIndicator').className;
+        var statusText = document.getElementById('statusText').textContent;
+        var homeHtml = document.getElementById('homeEditableText').innerHTML;
+
+        var partners = [];
+        document.querySelectorAll('#partnersGrid .partner-card').forEach(function (card) {
+            var divs = card.querySelectorAll('.edit-protected');
+            partners.push({
+                name: divs[0] ? divs[0].innerHTML : '',
+                desc: divs[1] ? divs[1].innerHTML : ''
+            });
+        });
+
+        var officers = [];
+        document.querySelectorAll('#rosterGrid .card').forEach(function (card) {
+            var title = card.querySelector('.card-title');
+            var subtitle = card.querySelector('.card-subtitle');
+            var imgContainer = card.querySelector('.card-img-container');
+            var bgImg = imgContainer ? imgContainer.style.backgroundImage : '';
+            
+            var meta = {};
+            card.querySelectorAll('.meta-value').forEach(function (valEl) {
+                var field = valEl.getAttribute('data-field');
+                if (field) meta[field] = valEl.innerHTML;
+            });
+
+            officers.push({
+                title: title ? title.innerHTML : '',
+                subtitle: subtitle ? subtitle.innerHTML : '',
+                bgImg: bgImg,
+                meta: meta
+            });
+        });
+
+        var badges = [];
+        document.querySelectorAll('#badgeGrid .card').forEach(function (card) {
+            var title = card.querySelector('.card-title');
+            var imgContainer = card.querySelector('.card-img-container');
+            var bgImg = imgContainer ? imgContainer.style.backgroundImage : '';
+            
+            var meta = {};
+            card.querySelectorAll('[data-field]').forEach(function (valEl) {
+                var field = valEl.getAttribute('data-field');
+                if (field) meta[field] = valEl.innerHTML;
+            });
+
+            badges.push({
+                title: title ? title.innerHTML : '',
+                bgImg: bgImg,
+                meta: meta
+            });
+        });
+
+        var vehicles = [];
+        document.querySelectorAll('#vehicleGrid .card').forEach(function (card) {
+            var title = card.querySelector('.card-title');
+            var subtitle = card.querySelector('.card-subtitle');
+            var text = card.querySelector('.card-text');
+            var imgContainer = card.querySelector('.card-img-container');
+            vehicles.push({
+                title: title ? title.innerHTML : '',
+                subtitle: subtitle ? subtitle.innerHTML : '',
+                text: text ? text.innerHTML : '',
+                bgImg: imgContainer ? imgContainer.style.backgroundImage : ''
+            });
+        });
+
+        var uniforms = [];
+        document.querySelectorAll('#uniformGrid .card').forEach(function (card) {
+            var title = card.querySelector('.card-title');
+            var subtitle = card.querySelector('.card-subtitle');
+            var text = card.querySelector('.card-text');
+            var imgContainer = card.querySelector('.card-img-container');
+            uniforms.push({
+                title: title ? title.innerHTML : '',
+                subtitle: subtitle ? subtitle.innerHTML : '',
+                text: text ? text.innerHTML : '',
+                bgImg: imgContainer ? imgContainer.style.backgroundImage : ''
+            });
+        });
+
+        return {
+            updatedAt: Date.now(),
+            heroBg: heroBg,
+            statusIndicatorClass: statusIndicatorClass,
+            statusText: statusText,
+            homeHtml: homeHtml,
+            partners: partners,
+            officers: officers,
+            badges: badges,
+            vehicles: vehicles,
+            uniforms: uniforms
+        };
+    }
+
+    function applyState(state) {
+        if (!state) return;
+        isApplyingState = true;
+        if (state.updatedAt) lastKnownUpdatedAt = state.updatedAt;
+
+        if (state.heroBg !== undefined && state.heroBg !== '') {
+            document.getElementById('heroBanner').style.backgroundImage = state.heroBg;
+        }
+        if (state.statusIndicatorClass) {
+            document.getElementById('statusIndicator').className = state.statusIndicatorClass;
+        }
+        if (state.statusText) {
+            document.getElementById('statusText').textContent = state.statusText;
+        }
+        if (state.homeHtml !== undefined) {
+            document.getElementById('homeEditableText').innerHTML = state.homeHtml;
+        }
+
+        // Apply Partners
+        if (Array.isArray(state.partners)) {
+            var partnersGrid = document.getElementById('partnersGrid');
+            partnersGrid.innerHTML = '';
+            state.partners.forEach(function (p) {
+                var card = document.createElement('div');
+                card.className = 'partner-card';
+                card.innerHTML = 
+                    '<button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>' +
+                    '<div class="edit-protected" contenteditable="' + (isUnlocked ? 'true' : 'false') + '" style="font-weight:bold;">' + (p.name || '') + '</div>' +
+                    '<div class="edit-protected" contenteditable="' + (isUnlocked ? 'true' : 'false') + '" style="font-size:0.8rem; color:var(--text-muted);">' + (p.desc || '') + '</div>';
+                partnersGrid.appendChild(card);
+            });
+        }
+
+        // Apply Officers
+        if (Array.isArray(state.officers)) {
+            var rosterGrid = document.getElementById('rosterGrid');
+            rosterGrid.innerHTML = '';
+            state.officers.forEach(function (off) {
+                var card = createOfficerCardHtml(off);
+                rosterGrid.appendChild(card);
+            });
+        }
+
+        // Apply Badge Personnel Files
+        if (Array.isArray(state.badges)) {
+            var badgeGrid = document.getElementById('badgeGrid');
+            badgeGrid.innerHTML = '';
+            state.badges.forEach(function (b) {
+                var card = createBadgeCardHtml(b);
+                badgeGrid.appendChild(card);
+            });
+        }
+
+        // Apply Vehicles
+        if (Array.isArray(state.vehicles)) {
+            var vehicleGrid = document.getElementById('vehicleGrid');
+            vehicleGrid.innerHTML = '';
+            state.vehicles.forEach(function (v) {
+                var card = createStandardCardHtml(v, 'fa-car-side');
+                vehicleGrid.appendChild(card);
+            });
+        }
+
+        // Apply Uniforms
+        if (Array.isArray(state.uniforms)) {
+            var uniformGrid = document.getElementById('uniformGrid');
+            uniformGrid.innerHTML = '';
+            state.uniforms.forEach(function (u) {
+                var card = createStandardCardHtml(u, 'fa-shirt');
+                uniformGrid.appendChild(card);
+            });
+        }
+
+        bindDynamicListeners();
+        setUnlocked(isUnlocked);
+        isApplyingState = false;
+    }
+
+    function createOfficerCardHtml(data) {
+        var card = document.createElement('div');
+        card.className = 'card';
+        var meta = data.meta || {};
+        card.innerHTML = 
+            '<button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>' +
+            '<div class="card-img-container" style="' + (data.bgImg ? 'background-image:' + data.bgImg + ';' : '') + '">' +
+                (data.bgImg ? '' : '<i class="fa-solid fa-user-shield fa-3x" style="color:#333;"></i>') +
+                '<div class="upload-btn-wrapper edit-only">' +
+                    '<button type="button" class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>' +
+                    '<input type="file" accept="image/*">' +
+                '</div>' +
+            '</div>' +
+            '<div class="card-body">' +
+                '<div class="card-title edit-protected" contenteditable="false">' + (data.title || 'Officer Name') + '</div>' +
+                '<div class="card-subtitle edit-protected" contenteditable="false">' + (data.subtitle || 'Rank / Badge') + '</div>' +
+                '<div class="meta-list">' +
+                    '<div class="meta-row"><span class="meta-label">Hire Date</span><span class="meta-value edit-protected" contenteditable="false" data-field="hireDate">' + (meta.hireDate || 'MM/DD/YYYY') + '</span></div>' +
+                    '<div class="meta-row"><span class="meta-label">Promotion</span><span class="meta-value edit-protected" contenteditable="false" data-field="promoDate">' + (meta.promoDate || 'MM/DD/YYYY') + '</span></div>' +
+                    '<div class="meta-row"><span class="meta-label">Awards / Certs</span><span class="meta-value edit-protected" contenteditable="false" data-field="awards">' + (meta.awards || 'None') + '</span></div>' +
+                    '<div class="meta-row"><span class="meta-label">Strikes</span><span class="meta-value edit-protected" contenteditable="false" data-field="strikes">' + (meta.strikes || '0') + '</span></div>' +
+                    '<div class="meta-row"><span class="meta-label">Notes</span><span class="meta-value edit-protected" contenteditable="false" data-field="notes">' + (meta.notes || 'No notes.') + '</span></div>' +
+                '</div>' +
+            '</div>';
+        return card;
+    }
+
+    function createBadgeCardHtml(data) {
+        var card = document.createElement('div');
+        card.className = 'card';
+        var meta = data.meta || {};
+        card.innerHTML = 
+            '<button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>' +
+            '<div class="card-img-container" style="' + (data.bgImg ? 'background-image:' + data.bgImg + ';' : '') + '">' +
+                (data.bgImg ? '' : '<i class="fa-solid fa-id-badge fa-3x" style="color:#333;"></i>') +
+                '<div class="upload-btn-wrapper edit-only">' +
+                    '<button type="button" class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>' +
+                    '<input type="file" accept="image/*">' +
+                '</div>' +
+            '</div>' +
+            '<div class="card-body">' +
+                '<div class="card-title edit-protected" contenteditable="false">' + (data.title || 'Officer Name') + '</div>' +
+                '<div class="badge-header-info">' +
+                    '<div class="badge-header-row"><span class="badge-header-tag">Badge #</span><span class="edit-protected" contenteditable="false" data-field="badgeNum">' + (meta.badgeNum || '#000') + '</span></div>' +
+                    '<div class="badge-header-row"><span class="badge-header-tag">Division</span><span class="edit-protected" contenteditable="false" data-field="divisionHeader">' + (meta.divisionHeader || 'Patrol Division') + '</span></div>' +
+                    '<div class="badge-header-row"><span class="badge-header-tag">Hired Date</span><span class="edit-protected" contenteditable="false" data-field="hireDateHeader">' + (meta.hireDateHeader || 'MM/DD/YYYY') + '</span></div>' +
+                '</div>' +
+                '<div class="meta-list">' +
+                    '<div style="font-size:0.75rem; font-weight:800; color:var(--accent-gold); text-transform:uppercase; margin-bottom:4px;">Department Assignment</div>' +
+                    '<div class="meta-row"><span class="meta-label">Rank</span><span class="meta-value edit-protected" contenteditable="false" data-field="rank">' + (meta.rank || 'Officer') + '</span></div>' +
+                    '<div class="meta-row"><span class="meta-label">Division</span><span class="meta-value edit-protected" contenteditable="false" data-field="division">' + (meta.division || 'Patrol Division') + '</span></div>' +
+                    '<div style="font-size:0.75rem; font-weight:800; color:var(--accent-gold); text-transform:uppercase; margin-top:8px; margin-bottom:4px;">Service Record</div>' +
+                    '<div class="meta-row"><span class="meta-label">Commendations</span><span class="meta-value edit-protected" contenteditable="false" data-field="commendations">' + (meta.commendations || 'None') + '</span></div>' +
+                    '<div class="meta-row"><span class="meta-label">Punishments</span><span class="meta-value edit-protected" contenteditable="false" data-field="punishments">' + (meta.punishments || 'None') + '</span></div>' +
+                    '<div style="font-size:0.75rem; font-weight:800; color:var(--accent-gold); text-transform:uppercase; margin-top:8px; margin-bottom:4px;">Notes</div>' +
+                    '<div class="meta-row"><span class="meta-label">Details</span><span class="meta-value edit-protected" contenteditable="false" data-field="notes">' + (meta.notes || 'Active personnel file.') + '</span></div>' +
+                '</div>' +
+            '</div>';
+        return card;
+    }
+
+    function createStandardCardHtml(data, defaultIconClass) {
+        var card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = 
+            '<button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>' +
+            '<div class="card-img-container" style="' + (data.bgImg ? 'background-image:' + data.bgImg + ';' : '') + '">' +
+                (data.bgImg ? '' : '<i class="fa-solid ' + defaultIconClass + ' fa-3x" style="color:#333;"></i>') +
+                '<div class="upload-btn-wrapper edit-only">' +
+                    '<button type="button" class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>' +
+                    '<input type="file" accept="image/*">' +
+                '</div>' +
+            '</div>' +
+            '<div class="card-body">' +
+                '<div class="card-title edit-protected" contenteditable="false">' + (data.title || 'Item Title') + '</div>' +
+                '<div class="card-subtitle edit-protected" contenteditable="false">' + (data.subtitle || 'Category') + '</div>' +
+                '<div class="card-text edit-protected" contenteditable="false">' + (data.text || 'Description...') + '</div>' +
+            '</div>';
+        return card;
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // SYNC & PERSISTENCE
+    // ═══════════════════════════════════════════════════════════
+    function triggerSave() {
+        if (isApplyingState || !isUnlocked) return;
+        clearTimeout(saveTimer);
+        saveTimer = setTimeout(saveState, 300);
+    }
+
+    function saveState() {
+        var state = serializeState();
+        try { localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+
+        if (DATA_API_URL) {
+            isSaving = true;
+            fetch(DATA_API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(state)
+            })
+            .then(function (res) { return res.json(); })
+            .then(function () {
+                isSaving = false;
+                showSaveNotification();
+            })
+            .catch(function () {
+                isSaving = false;
+                showSaveNotification();
+            });
+        } else {
+            showSaveNotification();
+        }
+    }
+
+    function fetchRemoteState() {
+        if (isSaving || isUnlocked) return;
+        if (!DATA_API_URL) {
+            try {
+                var local = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (local) applyState(JSON.parse(local));
+            } catch (e) {}
+            return;
+        }
+
+        fetch(DATA_API_URL)
+            .then(function (res) { return res.json(); })
+            .then(function (data) {
+                if (data && data.updatedAt && data.updatedAt > lastKnownUpdatedAt) {
+                    applyState(data);
+                }
+            })
+            .catch(function () {});
+    }
+
+    function startPolling() {
+        stopPolling();
+        pollTimer = setInterval(fetchRemoteState, POLL_INTERVAL_MS);
+    }
+    function stopPolling() {
+        if (pollTimer) clearInterval(pollTimer);
+    }
+
+    function showSaveNotification() {
+        var el = document.getElementById('saveNotification');
+        if (!el) return;
+        el.style.display = 'block';
+        setTimeout(function () { el.style.display = 'none'; }, 2000);
+    }
+
+    // ═══════════════════════════════════════════════════════════
+    // EVENT BINDINGS
+    // ═══════════════════════════════════════════════════════════
+    function bindDynamicListeners() {
+        document.querySelectorAll('.card-delete-btn').forEach(function (btn) {
+            btn.onclick = function () {
+                var parent = btn.closest('.card') || btn.closest('.partner-card');
+                if (parent) { parent.remove(); triggerSave(); }
+            };
+        });
+
+        document.querySelectorAll('.card-img-container input[type="file"]').forEach(function (input) {
+            input.onchange = function (e) {
+                var file = e.target.files[0];
+                if (!file) return;
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    var container = input.closest('.card-img-container');
+                    container.style.backgroundImage = 'url("' + evt.target.result + '")';
+                    var icon = container.querySelector('.fa-3x');
+                    if (icon) icon.style.display = 'none';
+                    triggerSave();
+                };
+                reader.readAsDataURL(file);
+            };
+        });
+
+        document.querySelectorAll('.edit-protected').forEach(function (el) {
+            el.oninput = triggerSave;
+        });
+    }
+
+    function initEvents() {
+        document.getElementById('navLinks').addEventListener('click', function (e) {
+            var btn = e.target.closest('.nav-item');
+            if (btn) switchTab(btn.getAttribute('data-tab'));
+        });
+
+        document.getElementById('editorToggle').onclick = function () {
+            if (isUnlocked) setUnlocked(false);
+            else showPinModal();
+        };
+        document.getElementById('pinSubmitBtn').onclick = tryUnlock;
+        document.getElementById('pinCancelBtn').onclick = hidePinModal;
+        document.getElementById('pinInput').onkeydown = function (e) {
+            if (e.key === 'Enter') tryUnlock();
+        };
+
+        document.getElementById('statusOpenBtn').onclick = function () {
+            document.getElementById('statusIndicator').className = 'status-indicator status-open';
+            document.getElementById('statusText').textContent = 'DEPARTMENT ACTIVE';
+            triggerSave();
+        };
+        document.getElementById('statusCallBtn').onclick = function () {
+            document.getElementById('statusIndicator').className = 'status-indicator status-call';
+            document.getElementById('statusText').textContent = 'LIMITED OPERATIONS';
+            triggerSave();
+        };
+        document.getElementById('statusClosedBtn').onclick = function () {
+            document.getElementById('statusIndicator').className = 'status-indicator status-closed';
+            document.getElementById('statusText').textContent = 'DEPARTMENT OFFLINE';
+            triggerSave();
+        };
+
+        // Header Background Uploader Fixed Handler
+        document.getElementById('bgUploader').onchange = function (e) {
+            var file = e.target.files[0];
+            if (!file) return;
+            var reader = new FileReader();
+            reader.onload = function (evt) {
+                document.getElementById('heroBanner').style.backgroundImage = 'url("' + evt.target.result + '")';
+                triggerSave(); // Immediately fire serialization and cloud sync
+            };
+            reader.readAsDataURL(file);
+        };
+
+        document.getElementById('addPartnerBtn').onclick = function () {
+            var grid = document.getElementById('partnersGrid');
+            var card = document.createElement('div');
+            card.className = 'partner-card';
+            card.innerHTML = 
+                '<button type="button" class="card-delete-btn edit-only"><i class="fa-solid fa-trash"></i></button>' +
+                '<div class="edit-protected" contenteditable="true" style="font-weight:bold;">New Partner</div>' +
+                '<div class="edit-protected" contenteditable="true" style="font-size:0.8rem; color:var(--text-muted);">Partner Description</div>';
+            grid.appendChild(card);
+            bindDynamicListeners();
+            triggerSave();
+        };
+
+        document.getElementById('addOfficerBtn').onclick = function () {
+            var grid = document.getElementById('rosterGrid');
+            var card = createOfficerCardHtml({ title: 'New Officer', subtitle: 'Officer / #000' });
+            grid.appendChild(card);
+            bindDynamicListeners();
+            setUnlocked(isUnlocked);
+            triggerSave();
+        };
+
+        document.getElementById('addBadgeBtn').onclick = function () {
+            var grid = document.getElementById('badgeGrid');
+            var card = createBadgeCardHtml({
+                title: 'New Personnel File',
+                meta: {
+                    badgeNum: '#000',
+                    divisionHeader: 'Central Division',
+                    hireDateHeader: 'MM/DD/YYYY',
+                    rank: 'Officer',
+                    division: 'Central Division',
+                    commendations: 'None',
+                    punishments: 'None',
+                    notes: 'Active personnel file.'
+                }
+            });
+            grid.appendChild(card);
+            bindDynamicListeners();
+            setUnlocked(isUnlocked);
+            triggerSave();
+        };
+
+        document.getElementById('addVehicleBtn').onclick = function () {
+            var grid = document.getElementById('vehicleGrid');
+            var card = createStandardCardHtml({ title: 'New Vehicle', subtitle: 'Patrol Unit', text: 'Vehicle details...' }, 'fa-car-side');
+            grid.appendChild(card);
+            bindDynamicListeners();
+            setUnlocked(isUnlocked);
+            triggerSave();
+        };
+
+        document.getElementById('addUniformBtn').onclick = function () {
+            var grid = document.getElementById('uniformGrid');
+            var card = createStandardCardHtml({ title: 'New Uniform', subtitle: 'Class B Duty', text: 'Uniform specification...' }, 'fa-shirt');
+            grid.appendChild(card);
+            bindDynamicListeners();
+            setUnlocked(isUnlocked);
+            triggerSave();
+        };
+
+        document.getElementById('resetBtn').onclick = function () {
+            if (confirm('Are you sure you want to reset all modifications to default?')) {
+                try { localStorage.removeItem(LOCAL_STORAGE_KEY); } catch (e) {}
+                location.reload();
+            }
+        };
+    }
+
+    // Initialize on Load
+    document.addEventListener('DOMContentLoaded', function () {
+        // First check local storage to load background immediately
+        try {
+            var local = localStorage.getItem(LOCAL_STORAGE_KEY);
+            if (local) {
+                var parsed = JSON.parse(local);
+                if (parsed && parsed.heroBg) {
+                    document.getElementById('heroBanner').style.backgroundImage = parsed.heroBg;
+                }
+            }
+        } catch (e) {}
+
+        initEvents();
+        
+        try {
+            if (sessionStorage.getItem('lapd_editor_unlocked') === '1') setUnlocked(true);
+        } catch (e) {}
+
+        fetchRemoteState();
+        if (!isUnlocked) startPolling();
+    });
+})();
+</script>
 </body>
 </html>

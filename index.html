@@ -337,7 +337,7 @@
         /* GRID CARDS */
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
@@ -410,7 +410,100 @@
             line-height: 1.4;
         }
 
-        /* EMPLOYEE STATUS & STRIKES & NOTES STYLES */
+        /* EMPLOYEE DATES, CERTIFICATIONS & STATUS STYLES */
+        .employee-date-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .employee-date-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .employee-field-label {
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--accent-cream);
+            text-transform: uppercase;
+        }
+
+        .employee-date-input {
+            background: var(--bg-matte);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+            padding: 4px;
+            border-radius: 4px;
+            width: 100%;
+            outline: none;
+        }
+
+        body.read-only .employee-date-input {
+            border: none;
+            background: transparent;
+            padding: 0;
+            pointer-events: none;
+        }
+
+        .cert-container {
+            margin-top: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .cert-options {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: var(--bg-matte);
+            padding: 6px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .cert-checkbox-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        body.read-only .cert-checkbox-label {
+            cursor: default;
+        }
+
+        body.read-only .cert-checkbox-label:has(input:not(:checked)) {
+            display: none;
+        }
+
+        body.read-only .cert-options {
+            background: transparent;
+            border: none;
+            padding: 0;
+        }
+
+        body.read-only input[type="checkbox"] {
+            display: none;
+        }
+
+        .cert-badge {
+            background: rgba(212, 175, 55, 0.15);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
         .employee-status-container, .employee-strikes-container {
             margin-top: 4px;
             display: flex;
@@ -443,25 +536,10 @@
             border-color: var(--border-color);
         }
 
-        .employee-status-select.status-active {
-            color: #00ff66;
-            border-color: #00ff66;
-        }
-
-        .employee-status-select.status-loa {
-            color: #ffcc00;
-            border-color: #ffcc00;
-        }
-
-        .employee-status-select.status-inactive {
-            color: #ff3333;
-            border-color: #ff3333;
-        }
-
-        .employee-status-select.status-suspended {
-            color: #ff3333;
-            border-color: #ff3333;
-        }
+        .employee-status-select.status-active { color: #00ff66; border-color: #00ff66; }
+        .employee-status-select.status-loa { color: #ffcc00; border-color: #ffcc00; }
+        .employee-status-select.status-inactive { color: #ff3333; border-color: #ff3333; }
+        .employee-status-select.status-suspended { color: #ff3333; border-color: #ff3333; }
 
         body.read-only .employee-status-select,
         body.read-only .employee-strikes-select {
@@ -978,6 +1056,32 @@
                         <div class="card-title edit-protected">Chief of Police J. Miller</div>
                         <div class="card-subtitle edit-protected">Executive Command | Badge #101</div>
                         <div class="card-text edit-protected">Oversees all department operations and division logistics. Contact via Command Secretariat.</div>
+                        
+                        <div class="employee-date-group">
+                            <div class="employee-date-item">
+                                <span class="employee-field-label">Hire Date</span>
+                                <input type="date" class="employee-date-input hire-date" value="2020-01-15" onchange="scheduleSave();">
+                            </div>
+                            <div class="employee-date-item">
+                                <span class="employee-field-label">Promotion Date</span>
+                                <input type="date" class="employee-date-input promotion-date" value="2024-06-01" onchange="scheduleSave();">
+                            </div>
+                        </div>
+
+                        <div class="cert-container">
+                            <span class="employee-field-label">Certifications</span>
+                            <div class="cert-options">
+                                <label class="cert-checkbox-label">
+                                    <input type="checkbox" class="cert-scene-cmd" checked onchange="scheduleSave();">
+                                    <span class="cert-badge">Scene Command Certified</span>
+                                </label>
+                                <label class="cert-checkbox-label">
+                                    <input type="checkbox" class="cert-watch-cmd" checked onchange="scheduleSave();">
+                                    <span class="cert-badge">Watch Command Certified</span>
+                                </label>
+                            </div>
+                        </div>
+
                         <div class="employee-status-container">
                             <span class="employee-status-label">Status:</span>
                             <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
@@ -989,7 +1093,7 @@
                         </div>
                         <div class="employee-strikes-container">
                             <span class="employee-strikes-label">Strikes:</span>
-                            <select class="employee-strikes-select" onchange="scheduleSave();">
+                            <select class="employee-strikes-select" onchange="updateStrikeColor(this); scheduleSave();">
                                 <option value="0/3" selected>0/3</option>
                                 <option value="1/3">1/3</option>
                                 <option value="2/3">2/3</option>
@@ -1323,7 +1427,7 @@
             if (activeNav) activeNav.classList.add('active');
         }
 
-        // ==================== STATUS DROPDOWN COLOR UPDATER ====================
+        // ==================== STATUS & STRIKE DROPDOWN COLOR UPDATERS ====================
         function updateStatusColor(selectEl) {
             selectEl.classList.remove('status-active', 'status-loa', 'status-inactive', 'status-suspended');
             const val = selectEl.value;
@@ -1331,6 +1435,19 @@
             else if (val === 'loa') selectEl.classList.add('status-loa');
             else if (val === 'inactive') selectEl.classList.add('status-inactive');
             else if (val === 'suspended') selectEl.classList.add('status-suspended');
+        }
+
+        // Function to update the select box color dynamically based on selection
+        function updateStrikeColor(selectElement) {
+            if (selectElement.value !== "0/3") {
+                selectElement.style.color = "#ff3333";
+                selectElement.style.borderColor = "#ff3333";
+                selectElement.style.fontWeight = "bold";
+            } else {
+                selectElement.style.color = ""; // Resets to default CSS color
+                selectElement.style.borderColor = "";
+                selectElement.style.fontWeight = "";
+            }
         }
 
         // ==================== PIN LOCK SYSTEM ====================
@@ -1553,10 +1670,15 @@
                 const imgUrl = imgEl ? extractBgUrl(imgEl.style.backgroundImage) : '';
                 const statusSelect = card.querySelector('.employee-status-select');
                 const strikesSelect = card.querySelector('.employee-strikes-select');
+                
                 return {
                     title: card.querySelector('.card-title')?.innerHTML || '',
                     subtitle: card.querySelector('.card-subtitle')?.innerHTML || '',
                     text: card.querySelector('.card-text')?.innerHTML || '',
+                    hireDate: card.querySelector('.hire-date')?.value || '',
+                    promotionDate: card.querySelector('.promotion-date')?.value || '',
+                    sceneCmdCert: card.querySelector('.cert-scene-cmd')?.checked || false,
+                    watchCmdCert: card.querySelector('.cert-watch-cmd')?.checked || false,
                     notes: card.querySelector('.card-notes-text')?.innerHTML || '',
                     status: statusSelect ? statusSelect.value : 'active',
                     strikes: strikesSelect ? strikesSelect.value : '0/3',
@@ -1667,6 +1789,11 @@
             const statusVal = item.status || 'active';
             const strikesVal = item.strikes || '0/3';
             const statusClass = statusVal === 'loa' ? 'status-loa' : (statusVal === 'inactive' ? 'status-inactive' : (statusVal === 'suspended' ? 'status-suspended' : 'status-active'));
+            
+            const hireDateVal = item.hireDate || '';
+            const promotionDateVal = item.promotionDate || '';
+            const sceneCmdChecked = item.sceneCmdCert ? 'checked' : '';
+            const watchCmdChecked = item.watchCmdCert ? 'checked' : '';
 
             return `
                 <div class="card">
@@ -1683,6 +1810,32 @@
                         <div class="card-title edit-protected" contenteditable="${!isReadOnly}">${item.title || 'Officer Name'}</div>
                         <div class="card-subtitle edit-protected" contenteditable="${!isReadOnly}">${item.subtitle || 'Rank / Badge #'}</div>
                         <div class="card-text edit-protected" contenteditable="${!isReadOnly}">${item.text || 'Assignment or details...'}</div>
+                        
+                        <div class="employee-date-group">
+                            <div class="employee-date-item">
+                                <span class="employee-field-label">Hire Date</span>
+                                <input type="date" class="employee-date-input hire-date" value="${hireDateVal}" onchange="scheduleSave();">
+                            </div>
+                            <div class="employee-date-item">
+                                <span class="employee-field-label">Promotion Date</span>
+                                <input type="date" class="employee-date-input promotion-date" value="${promotionDateVal}" onchange="scheduleSave();">
+                            </div>
+                        </div>
+
+                        <div class="cert-container">
+                            <span class="employee-field-label">Certifications</span>
+                            <div class="cert-options">
+                                <label class="cert-checkbox-label">
+                                    <input type="checkbox" class="cert-scene-cmd" ${sceneCmdChecked} onchange="scheduleSave();">
+                                    <span class="cert-badge">Scene Command Certified</span>
+                                </label>
+                                <label class="cert-checkbox-label">
+                                    <input type="checkbox" class="cert-watch-cmd" ${watchCmdChecked} onchange="scheduleSave();">
+                                    <span class="cert-badge">Watch Command Certified</span>
+                                </label>
+                            </div>
+                        </div>
+
                         <div class="employee-status-container">
                             <span class="employee-status-label">Status:</span>
                             <select class="employee-status-select ${statusClass}" onchange="updateStatusColor(this); scheduleSave();">
@@ -1694,7 +1847,7 @@
                         </div>
                         <div class="employee-strikes-container">
                             <span class="employee-strikes-label">Strikes:</span>
-                            <select class="employee-strikes-select" onchange="scheduleSave();">
+                            <select class="employee-strikes-select" onchange="updateStrikeColor(this); scheduleSave();">
                                 <option value="0/3" ${strikesVal === '0/3' ? 'selected' : ''}>0/3</option>
                                 <option value="1/3" ${strikesVal === '1/3' ? 'selected' : ''}>1/3</option>
                                 <option value="2/3" ${strikesVal === '2/3' ? 'selected' : ''}>2/3</option>
@@ -1834,6 +1987,9 @@
                 `).join('');
             }
 
+            // Update strike dropdown styles across loaded roster elements
+            document.querySelectorAll('.employee-strikes-select').forEach(updateStrikeColor);
+
             if (!isReadOnly) {
                 document.querySelectorAll('.edit-protected').forEach(el => el.setAttribute('contenteditable', 'true'));
                 bindEditListeners();
@@ -1929,6 +2085,10 @@
                 title: 'Officer Name',
                 subtitle: 'Rank / Call sign',
                 text: 'Division or contact details...',
+                hireDate: '',
+                promotionDate: '',
+                sceneCmdCert: false,
+                watchCmdCert: false,
                 notes: 'Add notes...',
                 status: 'active',
                 strikes: '0/3'
@@ -2106,6 +2266,9 @@
         // ==================== INIT ====================
         window.addEventListener('DOMContentLoaded', async function() {
             await loadState();
+
+            // Run color updates on existing initial strikes elements
+            document.querySelectorAll('.employee-strikes-select').forEach(updateStrikeColor);
 
             if (sessionStorage.getItem('editorUnlocked') === 'true') {
                 unlockEditor();

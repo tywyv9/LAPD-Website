@@ -277,6 +277,19 @@
             letter-spacing: 1px;
         }
 
+        /* SUBDIVISION SECTION HEADERS */
+        .subdivision-section-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: var(--accent-cream);
+            margin: 35px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         /* EDITABLE CONTROLS */
         .edit-protected[contenteditable="true"] {
             outline: 1px dashed var(--accent-gold);
@@ -972,7 +985,7 @@
         </label>
     </header>
 
-    <!-- NAVIGATION BAR -->
+    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="nav-container">
             <ul class="nav-links">
@@ -1272,6 +1285,19 @@
                         <div class="card-text edit-protected">Handles hostage negotiations, barricaded suspects, high-risk warrant execution, and heavy armor deployments.</div>
                     </div>
                 </div>
+                <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container">
+                        <i class="fa-solid fa-gauge-high fa-3x" style="color: #273754;"></i>
+                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title edit-protected">High Speed Interception Unit</div>
+                        <div class="card-subtitle edit-protected">H.S.I.U. Tactical Division</div>
+                        <div class="card-text edit-protected">Specialized pursuit division assigned to high-speed vehicle interdictions, street racing suppression, and high-velocity highway pursuits.</div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -1388,6 +1414,181 @@
                             <div class="card-text edit-protected">Protocol for requesting SWAT armor, tactical weapons, and specialized pursuit cars.</div>
                         </div>
                     </div>
+                </div>
+
+                <!-- SUBDIVISION ROSTERS SECTION -->
+                <div style="margin-top: 50px; border-top: 2px solid var(--border-color); padding-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <h2 style="font-family: 'Bebas Neue'; font-size: 2.2rem; color: var(--accent-gold);"><i class="fa-solid fa-layer-group"></i> SPECIALIZED SUBDIVISION ROSTERS</h2>
+                    </div>
+                    <p style="color: var(--text-muted); margin-bottom: 20px;">Internal specialized unit rosters. Command staff can manage unit members and qualifications.</p>
+
+                    <!-- K9 DIVISION -->
+                    <div class="subdivision-section-title">
+                        <span><i class="fa-solid fa-dog"></i> K9 DIVISION ROSTER</span>
+                        <button class="btn edit-control" onclick="addPortalRosterCard('k9RosterGrid')"><i class="fa-solid fa-plus"></i> Add K9 Handler</button>
+                    </div>
+                    <div class="grid-container" id="k9RosterGrid">
+                        <!-- Default K9 Operator Card -->
+                        <div class="card">
+                            <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                            <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                            <div class="card-img-container">
+                                <i class="fa-solid fa-dog fa-3x" style="color: #273754;"></i>
+                                <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title edit-protected">Officer S. Walker & K9 'Buster'</div>
+                                <div class="card-subtitle edit-protected">K9 Unit Lead | Call-Sign K-91</div>
+                                <div class="card-text edit-protected">Certified Narcotics & Handler Tracking Unit.</div>
+                                <div class="employee-status-container">
+                                    <span class="employee-status-label">Status:</span>
+                                    <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
+                                        <option value="active" selected>Active</option>
+                                        <option value="loa">LOA</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="card-notes-container">
+                                    <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
+                                    <div class="card-notes-text edit-protected">Primary scent tracker. Re-certified 07/2026.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MBU (MOTORCYCLE / TRAFFIC) DIVISION -->
+                    <div class="subdivision-section-title">
+                        <span><i class="fa-solid fa-motorcycle"></i> MOTORCYCLE DIVISION (MBU) ROSTER</span>
+                        <button class="btn edit-control" onclick="addPortalRosterCard('mbuRosterGrid')"><i class="fa-solid fa-plus"></i> Add MBU Officer</button>
+                    </div>
+                    <div class="grid-container" id="mbuRosterGrid">
+                        <div class="card">
+                            <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                            <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                            <div class="card-img-container">
+                                <i class="fa-solid fa-motorcycle fa-3x" style="color: #273754;"></i>
+                                <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title edit-protected">Officer M. Davis</div>
+                                <div class="card-subtitle edit-protected">Motor Officer | Call-Sign M-12</div>
+                                <div class="card-text edit-protected">Highway Patrol & Escort Division certified.</div>
+                                <div class="employee-status-container">
+                                    <span class="employee-status-label">Status:</span>
+                                    <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
+                                        <option value="active" selected>Active</option>
+                                        <option value="loa">LOA</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="card-notes-container">
+                                    <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
+                                    <div class="card-notes-text edit-protected">Traffic Enforcement Lead.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SWAT DIVISION -->
+                    <div class="subdivision-section-title">
+                        <span><i class="fa-solid fa-person-rifle"></i> S.W.A.T. TACTICAL ROSTER</span>
+                        <button class="btn edit-control" onclick="addPortalRosterCard('swatRosterGrid')"><i class="fa-solid fa-plus"></i> Add SWAT Operator</button>
+                    </div>
+                    <div class="grid-container" id="swatRosterGrid">
+                        <div class="card">
+                            <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                            <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                            <div class="card-img-container">
+                                <i class="fa-solid fa-person-rifle fa-3x" style="color: #273754;"></i>
+                                <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title edit-protected">Sgt. A. Reyes</div>
+                                <div class="card-subtitle edit-protected">Element Commander | Sierra-1</div>
+                                <div class="card-text edit-protected">Entry Team & Heavy Armor Specialist.</div>
+                                <div class="employee-status-container">
+                                    <span class="employee-status-label">Status:</span>
+                                    <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
+                                        <option value="active" selected>Active</option>
+                                        <option value="loa">LOA</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="card-notes-container">
+                                    <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
+                                    <div class="card-notes-text edit-protected">Breaching & Sniper Qualified.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AIR SUPPORT DIVISION -->
+                    <div class="subdivision-section-title">
+                        <span><i class="fa-solid fa-helicopter"></i> AIR SUPPORT DIVISION (ASD) ROSTER</span>
+                        <button class="btn edit-control" onclick="addPortalRosterCard('airRosterGrid')"><i class="fa-solid fa-plus"></i> Add Pilot</button>
+                    </div>
+                    <div class="grid-container" id="airRosterGrid">
+                        <div class="card">
+                            <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                            <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                            <div class="card-img-container">
+                                <i class="fa-solid fa-helicopter fa-3x" style="color: #273754;"></i>
+                                <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title edit-protected">Pilot T. Jenkins</div>
+                                <div class="card-subtitle edit-protected">Chief Flight Instructor | AIR-1</div>
+                                <div class="card-text edit-protected">Night Flight & Tactical Spotter lead.</div>
+                                <div class="employee-status-container">
+                                    <span class="employee-status-label">Status:</span>
+                                    <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
+                                        <option value="active" selected>Active</option>
+                                        <option value="loa">LOA</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="card-notes-container">
+                                    <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
+                                    <div class="card-notes-text edit-protected">Command flight clearance active.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CID DIVISION -->
+                    <div class="subdivision-section-title">
+                        <span><i class="fa-solid fa-user-secret"></i> DETECTIVE & CID DIVISION ROSTER</span>
+                        <button class="btn edit-control" onclick="addPortalRosterCard('cidRosterGrid')"><i class="fa-solid fa-plus"></i> Add Detective</button>
+                    </div>
+                    <div class="grid-container" id="cidRosterGrid">
+                        <div class="card">
+                            <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                            <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                            <div class="card-img-container">
+                                <i class="fa-solid fa-user-secret fa-3x" style="color: #273754;"></i>
+                                <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                            </div>
+                            <div class="card-body">
+                                <div class="card-title edit-protected">Det. H. Vance</div>
+                                <div class="card-subtitle edit-protected">Lead Detective | CID-101</div>
+                                <div class="card-text edit-protected">Major Crimes & Homicide Investigation.</div>
+                                <div class="employee-status-container">
+                                    <span class="employee-status-label">Status:</span>
+                                    <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
+                                        <option value="active" selected>Active</option>
+                                        <option value="loa">LOA</option>
+                                        <option value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                                <div class="card-notes-container">
+                                    <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
+                                    <div class="card-notes-text edit-protected">Undercover & Warrants division authorized.</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -1662,6 +1863,25 @@
             });
         }
 
+        function getPortalRosterData(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return [];
+            return Array.from(container.querySelectorAll('.card')).map(card => {
+                const imgEl = card.querySelector('.card-img-container');
+                const imgUrl = imgEl ? extractBgUrl(imgEl.style.backgroundImage) : '';
+                const statusSelect = card.querySelector('.employee-status-select');
+                
+                return {
+                    title: card.querySelector('.card-title')?.innerHTML || '',
+                    subtitle: card.querySelector('.card-subtitle')?.innerHTML || '',
+                    text: card.querySelector('.card-text')?.innerHTML || '',
+                    notes: card.querySelector('.card-notes-text')?.innerHTML || '',
+                    status: statusSelect ? statusSelect.value : 'active',
+                    image: imgUrl
+                };
+            });
+        }
+
         function getRosterCardData() {
             const container = document.getElementById('rosterGrid');
             if (!container) return [];
@@ -1754,7 +1974,12 @@
                 race: getCardData('raceGrid'),
                 calendar: getCardData('calendarGrid'),
                 pricing: getPricingData(),
-                portal: getCardData('portalGrid')
+                portal: getCardData('portalGrid'),
+                k9Roster: getPortalRosterData('k9RosterGrid'),
+                mbuRoster: getPortalRosterData('mbuRosterGrid'),
+                swatRoster: getPortalRosterData('swatRosterGrid'),
+                airRoster: getPortalRosterData('airRosterGrid'),
+                cidRoster: getPortalRosterData('cidRosterGrid')
             };
         }
 
@@ -1777,6 +2002,46 @@
                         <div class="card-title edit-protected" contenteditable="${!isReadOnly}">${item.title || ''}</div>
                         <div class="card-subtitle edit-protected" contenteditable="${!isReadOnly}">${item.subtitle || ''}</div>
                         <div class="card-text edit-protected" contenteditable="${!isReadOnly}">${item.text || ''}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function buildPortalRosterCardHTML(item, isReadOnly) {
+            const hasImg = item.image && item.image.length > 10;
+            const bgStyle = hasImg ? `style="background-image:url('${item.image}')"` : '';
+            const iconDisplay = hasImg ? 'display:none;' : '';
+            const statusVal = item.status || 'active';
+            const statusClass = statusVal === 'loa' ? 'status-loa' : (statusVal === 'inactive' ? 'status-inactive' : 'status-active');
+
+            return `
+                <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container" ${bgStyle}>
+                        <i class="fa-solid fa-user-shield fa-3x" style="color:#273754;${iconDisplay}"></i>
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>
+                            <input type="file" accept="image/*" onchange="uploadImage(event, this)">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title edit-protected" contenteditable="${!isReadOnly}">${item.title || 'Officer Name'}</div>
+                        <div class="card-subtitle edit-protected" contenteditable="${!isReadOnly}">${item.subtitle || 'Role / Callsign'}</div>
+                        <div class="card-text edit-protected" contenteditable="${!isReadOnly}">${item.text || 'Specialty / Details...'}</div>
+                        
+                        <div class="employee-status-container">
+                            <span class="employee-status-label">Status:</span>
+                            <select class="employee-status-select ${statusClass}" onchange="updateStatusColor(this); scheduleSave();">
+                                <option value="active" ${statusVal === 'active' ? 'selected' : ''}>Active</option>
+                                <option value="loa" ${statusVal === 'loa' ? 'selected' : ''}>LOA</option>
+                                <option value="inactive" ${statusVal === 'inactive' ? 'selected' : ''}>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="card-notes-container">
+                            <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
+                            <div class="card-notes-text edit-protected" contenteditable="${!isReadOnly}">${item.notes || 'Add notes...'}</div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -1975,6 +2240,22 @@
                 }
             });
 
+            // Apply Subdivision Rosters State
+            const subdivisionMap = {
+                k9Roster: 'k9RosterGrid',
+                mbuRoster: 'mbuRosterGrid',
+                swatRoster: 'swatRosterGrid',
+                airRoster: 'airRosterGrid',
+                cidRoster: 'cidRosterGrid'
+            };
+
+            Object.keys(subdivisionMap).forEach(key => {
+                const gridId = subdivisionMap[key];
+                if (Array.isArray(state[key]) && document.getElementById(gridId)) {
+                    document.getElementById(gridId).innerHTML = state[key].map(item => buildPortalRosterCardHTML(item, isReadOnly)).join('');
+                }
+            });
+
             if (Array.isArray(state.pricing)) {
                 const tbody = document.querySelector('#pricingTable tbody');
                 tbody.innerHTML = state.pricing.map(row => `
@@ -2075,6 +2356,26 @@
         }
 
         // ==================== DYNAMIC CARDS ====================
+        function addPortalRosterCard(gridId) {
+            const container = document.getElementById(gridId);
+            if (!container) return;
+
+            const isReadOnly = document.body.classList.contains('read-only');
+            const div = document.createElement('div');
+            div.innerHTML = buildPortalRosterCardHTML({
+                title: 'Officer Name',
+                subtitle: 'Unit Role / Callsign',
+                text: 'Specialty or division details...',
+                notes: 'Unit notes...',
+                status: 'active'
+            }, isReadOnly);
+
+            container.appendChild(div.firstElementChild);
+            bindEditListeners();
+            initDragAndDrop();
+            scheduleSave();
+        }
+
         function addEmployeeCard() {
             const container = document.getElementById('rosterGrid');
             if (!container) return;

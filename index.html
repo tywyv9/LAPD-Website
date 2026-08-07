@@ -450,6 +450,46 @@
             font-size: 0.9rem;
             line-height: 1.4;
         }
+
+        /* UNIFORM COMPONENT GRID STYLES */
+        .uniform-components-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+            background: rgba(11, 19, 32, 0.6);
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .uniform-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .uniform-item.full-width {
+            grid-column: span 2;
+        }
+
+        .uniform-field-label {
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: var(--accent-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .uniform-field-value {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            background: var(--bg-matte);
+            padding: 4px 6px;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+            min-height: 26px;
+        }
  
         /* EMPLOYEE DATES, CERTIFICATIONS & STATUS STYLES */
         .employee-date-group {
@@ -1019,6 +1059,7 @@
             <ul class="nav-links">
                 <li class="nav-item active" onclick="switchTab('home')"><i class="fa-solid fa-house-shield"></i> Home</li>
                 <li class="nav-item" onclick="switchTab('roster')"><i class="fa-solid fa-users"></i> Staff Roster</li>
+                <li class="nav-item" onclick="switchTab('uniforms')"><i class="fa-solid fa-shirt"></i> Uniform Roster</li>
                 <li class="nav-item" onclick="switchTab('badges')"><i class="fa-solid fa-id-badge"></i> Badge Database</li>
                 <li class="nav-item" onclick="switchTab('tow')"><i class="fa-solid fa-car-side"></i> Vehicle Fleet</li>
                 <li class="nav-item" onclick="switchTab('pricing')"><i class="fa-solid fa-scale-balanced"></i> Penal Code & Fines</li>
@@ -1144,6 +1185,76 @@
                         <div class="card-notes-container">
                             <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Notes</div>
                             <div class="card-notes-text edit-protected">High-command authorization active. Contact for administrative escalation.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- UNIFORM ROSTER TAB -->
+        <section id="tab-uniforms" class="tab-content">
+            <div class="tab-header">
+                <h2 class="tab-title"><i class="fa-solid fa-shirt"></i> UNIFORM ROSTER</h2>
+                <button class="btn edit-control" onclick="addUniformCard()"><i class="fa-solid fa-plus"></i> Add Uniform Preset</button>
+            </div>
+            <div class="grid-container" id="uniformsGrid">
+                <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container">
+                        <i class="fa-solid fa-shirt fa-3x" style="color: #273754;"></i>
+                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title edit-protected">Class A Patrol Uniform</div>
+                        <div class="card-subtitle edit-protected">Standard Patrol Preset</div>
+                        <div class="card-text edit-protected">Official LAPD Class A dress specification for general duty and formal details.</div>
+                        
+                        <div class="uniform-components-grid">
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Masks</span>
+                                <div class="uniform-field-value edit-protected">0 / None</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Upper Body</span>
+                                <div class="uniform-field-value edit-protected">0</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Lower Body</span>
+                                <div class="uniform-field-value edit-protected">35 / Texture 0</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Bags & Parachutes</span>
+                                <div class="uniform-field-value edit-protected">0 / None</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Shoes</span>
+                                <div class="uniform-field-value edit-protected">25 / Texture 0</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Scarfs & Chains</span>
+                                <div class="uniform-field-value edit-protected">0 / None</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Shirt & Accessories</span>
+                                <div class="uniform-field-value edit-protected">58 / Texture 0</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Body Armor & Accessories</span>
+                                <div class="uniform-field-value edit-protected">12 / Texture 0</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Badges & Logos</span>
+                                <div class="uniform-field-value edit-protected">1 / Texture 0</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Shirt Overlay & Jackets</span>
+                                <div class="uniform-field-value edit-protected">55 / Texture 0</div>
+                            </div>
+                            <div class="uniform-item full-width">
+                                <span class="uniform-field-label">Hats & Helmets</span>
+                                <div class="uniform-field-value edit-protected">8 / Texture 0</div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -2022,6 +2133,33 @@
                 };
             });
         }
+
+        function getUniformCardData(containerId) {
+            const container = document.getElementById(containerId || 'uniformsGrid');
+            if (!container) return [];
+            return Array.from(container.querySelectorAll('.card')).map(card => {
+                const imgEl = card.querySelector('.card-img-container');
+                const imgUrl = imgEl ? extractBgUrl(imgEl.style.backgroundImage) : '';
+                const values = card.querySelectorAll('.uniform-field-value');
+                return {
+                    title: card.querySelector('.card-title')?.innerHTML || '',
+                    subtitle: card.querySelector('.card-subtitle')?.innerHTML || '',
+                    text: card.querySelector('.card-text')?.innerHTML || '',
+                    image: imgUrl,
+                    masks: values[0]?.innerHTML || '',
+                    upperBody: values[1]?.innerHTML || '',
+                    lowerBody: values[2]?.innerHTML || '',
+                    bagsParachutes: values[3]?.innerHTML || '',
+                    shoes: values[4]?.innerHTML || '',
+                    scarfsChains: values[5]?.innerHTML || '',
+                    shirtAccessories: values[6]?.innerHTML || '',
+                    bodyArmorAccessories: values[7]?.innerHTML || '',
+                    badgesLogos: values[8]?.innerHTML || '',
+                    shirtOverlayJackets: values[9]?.innerHTML || '',
+                    hatsHelmets: values[10]?.innerHTML || ''
+                };
+            });
+        }
  
         function getPortalRosterData(containerId) {
             const container = document.getElementById(containerId);
@@ -2150,12 +2288,8 @@
                 raceText: document.getElementById('raceEditableText')?.innerHTML || '',
                 contactText: document.getElementById('contactEditableText')?.innerHTML || '',
                 partners: getPartnerData(),
-                administrationRoster: getRosterCardData('administrationRosterGrid'),
-                divisionCommandRoster: getRosterCardData('divisionCommandRosterGrid'),
-                fieldCommandRoster: getRosterCardData('fieldCommandRosterGrid'),
-                supervisorsRoster: getRosterCardData('supervisorsRosterGrid'),
-                patrolUnitsRoster: getRosterCardData('patrolUnitsRosterGrid'),
-                cadetsRoster: getRosterCardData('cadetsRosterGrid'),
+                roster: getRosterCardData('rosterGrid'),
+                uniforms: getUniformCardData('uniformsGrid'),
                 badges: getBadgeData(),
                 tow: getCardData('towGrid'),
                 awards: getCardData('awardsGrid'),
@@ -2191,6 +2325,78 @@
                         <div class="card-title edit-protected" contenteditable="${!isReadOnly}">${item.title || ''}</div>
                         <div class="card-subtitle edit-protected" contenteditable="${!isReadOnly}">${item.subtitle || ''}</div>
                         <div class="card-text edit-protected" contenteditable="${!isReadOnly}">${item.text || ''}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function buildUniformCardHTML(item, isReadOnly) {
+            const hasImg = item.image && item.image.length > 10;
+            const bgStyle = hasImg ? `style="background-image:url('${item.image}')"` : '';
+            const iconDisplay = hasImg ? 'display:none;' : '';
+
+            return `
+                <div class="card">
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container" ${bgStyle}>
+                        <i class="fa-solid fa-shirt fa-3x" style="color:#273754;${iconDisplay}"></i>
+                        <div class="upload-btn-wrapper">
+                            <button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button>
+                            <input type="file" accept="image/*" onchange="uploadImage(event, this)">
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title edit-protected" contenteditable="${!isReadOnly}">${item.title || 'Uniform Name'}</div>
+                        <div class="card-subtitle edit-protected" contenteditable="${!isReadOnly}">${item.subtitle || 'Preset Designation'}</div>
+                        <div class="card-text edit-protected" contenteditable="${!isReadOnly}">${item.text || 'Uniform description or usage guidelines...'}</div>
+                        
+                        <div class="uniform-components-grid">
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Masks</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.masks || '0 / None'}</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Upper Body</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.upperBody || '0'}</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Lower Body</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.lowerBody || '0'}</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Bags & Parachutes</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.bagsParachutes || '0 / None'}</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Shoes</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.shoes || '0'}</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Scarfs & Chains</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.scarfsChains || '0 / None'}</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Shirt & Accessories</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.shirtAccessories || '0'}</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Body Armor & Accessories</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.bodyArmorAccessories || '0'}</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Badges & Logos</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.badgesLogos || '0'}</div>
+                            </div>
+                            <div class="uniform-item">
+                                <span class="uniform-field-label">Shirt Overlay & Jackets</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.shirtOverlayJackets || '0'}</div>
+                            </div>
+                            <div class="uniform-item full-width">
+                                <span class="uniform-field-label">Hats & Helmets</span>
+                                <div class="uniform-field-value edit-protected" contenteditable="${!isReadOnly}">${item.hatsHelmets || '0 / None'}</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             `;
@@ -2420,13 +2626,13 @@
                         <div class="record-section">
                             <div class="record-title commendation"><i class="fa-solid fa-award"></i> Commendations</div>
                             <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">
-                                ${item.commendations || '• None recorded.'}
+                                ${item.commendations || '• None on record.'}
                             </div>
                         </div>
                         <div class="record-section">
                             <div class="record-title punishment"><i class="fa-solid fa-triangle-exclamation"></i> Disciplinary Actions / Punishments</div>
                             <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">
-                                ${item.punishments || '• None recorded.'}
+                                ${item.punishments || '• None on record.'}
                             </div>
                         </div>
                     </div>
@@ -2434,456 +2640,419 @@
                     <div class="notes-section">
                         <div class="record-title notes"><i class="fa-solid fa-clipboard-list"></i> Command Notes & Remarks</div>
                         <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">
-                            ${item.notes || 'No active notes.'}
+                            ${item.notes || 'No notes added.'}
                         </div>
                     </div>
                 </div>
             `;
         }
- 
+
         function applyState(state) {
             if (!state) return;
             isApplyingState = true;
- 
-            if (state.status) setStatus(state.status, true);
- 
+            const isReadOnly = document.body.classList.contains('read-only');
+
+            if (state.status) setStatus(state.status, false);
+
             if (state.heroBackground) {
                 window.__heroBackground = state.heroBackground;
                 const hero = document.getElementById('heroBanner');
-                hero.style.background = `center / cover no-repeat url("${state.heroBackground}")`;
-                hero.style.backgroundColor = '#0f172a';
+                if (hero) hero.style.backgroundImage = `url('${state.heroBackground}')`;
             }
- 
-            if (state.homeText != null) {
-                const el = document.getElementById('homeEditableText');
-                if (el) el.innerHTML = state.homeText;
+
+            if (state.homeText && document.getElementById('homeEditableText')) {
+                document.getElementById('homeEditableText').innerHTML = state.homeText;
             }
-            if (state.raceText != null) {
-                const el = document.getElementById('raceEditableText');
-                if (el) el.innerHTML = state.raceText;
+            if (state.raceText && document.getElementById('raceEditableText')) {
+                document.getElementById('raceEditableText').innerHTML = state.raceText;
             }
-            if (state.contactText != null) {
-                const el = document.getElementById('contactEditableText');
-                if (el) el.innerHTML = state.contactText;
+            if (state.contactText && document.getElementById('contactEditableText')) {
+                document.getElementById('contactEditableText').innerHTML = state.contactText;
             }
- 
-            const isReadOnly = document.body.classList.contains('read-only');
- 
-            if (Array.isArray(state.partners)) {
+
+            if (state.partners && Array.isArray(state.partners)) {
                 const grid = document.getElementById('partnersGrid');
-                grid.innerHTML = state.partners.map(p => `
-                    <div class="partner-card">
-                        <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                        <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight:bold;">${p.name || ''}</div>
-                        <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size:0.8rem; color:var(--text-muted);">${p.desc || ''}</div>
-                    </div>
-                `).join('');
-            }
- 
-            // Apply Main Roster Groups
-            const rosterGroupMap = {
-                administrationRoster: 'administrationRosterGrid',
-                divisionCommandRoster: 'divisionCommandRosterGrid',
-                fieldCommandRoster: 'fieldCommandRosterGrid',
-                supervisorsRoster: 'supervisorsRosterGrid',
-                patrolUnitsRoster: 'patrolUnitsRosterGrid',
-                cadetsRoster: 'cadetsRosterGrid'
-            };
- 
-            let anyRosterGroupPresent = false;
-            Object.keys(rosterGroupMap).forEach(key => {
-                const gridId = rosterGroupMap[key];
-                if (Array.isArray(state[key]) && document.getElementById(gridId)) {
-                    anyRosterGroupPresent = true;
-                    document.getElementById(gridId).innerHTML = state[key].map(item => buildEmployeeCardHTML(item, isReadOnly)).join('');
+                if (grid) {
+                    grid.innerHTML = state.partners.map(p => `
+                        <div class="partner-card">
+                            <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight:bold;">${p.name || ''}</div>
+                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size:0.8rem; color:var(--text-muted);">${p.desc || ''}</div>
+                        </div>
+                    `).join('');
                 }
-            });
- 
-            // Legacy fallback: older saved states used a single flat "roster" array.
-            // If no grouped roster data was found, load it into Administration so nothing is lost.
-            if (!anyRosterGroupPresent && Array.isArray(state.roster)) {
-                const grid = document.getElementById('administrationRosterGrid');
-                if (grid) grid.innerHTML = state.roster.map(item => buildEmployeeCardHTML(item, isReadOnly)).join('');
             }
- 
-            if (Array.isArray(state.badges)) {
+
+            const applyGrid = (id, list) => {
+                const container = document.getElementById(id);
+                if (container && Array.isArray(list)) {
+                    container.innerHTML = list.map(item => buildCardHTML(item, isReadOnly)).join('');
+                }
+            };
+
+            const applyRosterGrid = (id, list) => {
+                const container = document.getElementById(id);
+                if (container && Array.isArray(list)) {
+                    container.innerHTML = list.map(item => buildEmployeeCardHTML(item, isReadOnly)).join('');
+                }
+            };
+
+            const applyUniformGrid = (id, list) => {
+                const container = document.getElementById(id);
+                if (container && Array.isArray(list)) {
+                    container.innerHTML = list.map(item => buildUniformCardHTML(item, isReadOnly)).join('');
+                }
+            };
+
+            const applyPortalRosterGrid = (id, list, isK9 = false) => {
+                const container = document.getElementById(id);
+                if (container && Array.isArray(list)) {
+                    container.innerHTML = list.map(item => buildPortalRosterCardHTML(item, isReadOnly, isK9)).join('');
+                }
+            };
+
+            applyRosterGrid('rosterGrid', state.roster);
+            applyUniformGrid('uniformsGrid', state.uniforms);
+
+            if (state.badges && Array.isArray(state.badges)) {
                 const container = document.getElementById('badgeContainer');
-                container.innerHTML = state.badges.map(b => buildBadgeCardHTML(b, isReadOnly)).join('');
+                if (container) {
+                    container.innerHTML = state.badges.map(b => buildBadgeCardHTML(b, isReadOnly)).join('');
+                }
             }
- 
-            ['tow', 'awards', 'race', 'calendar', 'portal'].forEach(key => {
-                const map = { tow: 'towGrid', awards: 'awardsGrid', race: 'raceGrid', calendar: 'calendarGrid', portal: 'portalGrid' };
-                const id = map[key];
-                if (Array.isArray(state[key]) && id) {
-                    document.getElementById(id).innerHTML = state[key].map(item => buildCardHTML(item, isReadOnly)).join('');
-                }
-            });
- 
-            // Apply Subdivision Rosters State
-            const subdivisionMap = {
-                k9Roster: 'k9RosterGrid',
-                mbuRoster: 'mbuRosterGrid',
-                swatRoster: 'swatRosterGrid',
-                airRoster: 'airRosterGrid',
-                cidRoster: 'cidRosterGrid'
-            };
- 
-            Object.keys(subdivisionMap).forEach(key => {
-                const gridId = subdivisionMap[key];
-                if (Array.isArray(state[key]) && document.getElementById(gridId)) {
-                    const isK9 = gridId === 'k9RosterGrid';
-                    document.getElementById(gridId).innerHTML = state[key].map(item => buildPortalRosterCardHTML(item, isReadOnly, isK9)).join('');
-                }
-            });
- 
-            if (Array.isArray(state.pricing)) {
+
+            applyGrid('towGrid', state.tow);
+            applyGrid('awardsGrid', state.awards);
+            applyGrid('raceGrid', state.race);
+            applyGrid('calendarGrid', state.calendar);
+            applyGrid('portalGrid', state.portal);
+
+            applyPortalRosterGrid('k9RosterGrid', state.k9Roster, true);
+            applyPortalRosterGrid('mbuRosterGrid', state.mbuRoster);
+            applyPortalRosterGrid('swatRosterGrid', state.swatRoster);
+            applyPortalRosterGrid('airRosterGrid', state.airRoster);
+            applyPortalRosterGrid('cidRosterGrid', state.cidRoster);
+
+            if (state.pricing && Array.isArray(state.pricing)) {
                 const tbody = document.querySelector('#pricingTable tbody');
-                tbody.innerHTML = state.pricing.map(row => `
-                    <tr>
-                        <td class="edit-protected" contenteditable="${!isReadOnly}">${row.service || ''}</td>
-                        <td class="edit-protected" contenteditable="${!isReadOnly}">${row.rate || ''}</td>
-                        <td class="edit-protected" contenteditable="${!isReadOnly}">${row.notes || ''}</td>
-                        <td class="edit-control"><button class="btn btn-danger" style="padding:2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
-                    </tr>
-                `).join('');
-            }
- 
-            if (Array.isArray(state.rankStructure)) {
-                const tbody = document.querySelector('#rankStructureTable tbody');
                 if (tbody) {
-                    tbody.innerHTML = state.rankStructure.map(row => `
+                    tbody.innerHTML = state.pricing.map(p => `
                         <tr>
-                            <td class="edit-protected" contenteditable="${!isReadOnly}">${row.order || ''}</td>
-                            <td class="edit-protected" contenteditable="${!isReadOnly}">${row.title || ''}</td>
-                            <td class="edit-protected" contenteditable="${!isReadOnly}">${row.abbreviation || ''}</td>
-                            <td class="edit-protected" contenteditable="${!isReadOnly}">${row.description || ''}</td>
-                            <td class="edit-control"><button class="btn btn-danger" style="padding:2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
+                            <td class="edit-protected" contenteditable="${!isReadOnly}">${p.service || ''}</td>
+                            <td class="edit-protected" contenteditable="${!isReadOnly}">${p.rate || ''}</td>
+                            <td class="edit-protected" contenteditable="${!isReadOnly}">${p.notes || ''}</td>
+                            <td class="edit-control"><button class="btn btn-danger" style="padding: 2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
                         </tr>
                     `).join('');
                 }
             }
- 
-            // Update strike dropdown styles across loaded roster elements
-            document.querySelectorAll('.employee-strikes-select').forEach(updateStrikeColor);
- 
-            if (!isReadOnly) {
-                document.querySelectorAll('.edit-protected').forEach(el => el.setAttribute('contenteditable', 'true'));
-                bindEditListeners();
-            }
- 
+
+            bindEditListeners();
             initDragAndDrop();
             isApplyingState = false;
         }
- 
-        // ==================== KV REMOTE SAVE / LOAD ====================
-        function scheduleSave() {
-            if (isApplyingState) return;
-            if (sessionStorage.getItem('editorUnlocked') !== 'true') return;
-            clearTimeout(saveTimer);
-            saveTimer = setTimeout(persistState, 400);
-        }
- 
-        async function loadState() {
+
+        // ==================== WORKER PERSISTENCE ====================
+        async function fetchStateFromWorker() {
             try {
-                const response = await fetch(`${WORKER_URL}/api/data`);
-                if (response.ok) {
-                    const state = await response.json();
-                    if (state && Object.keys(state).length > 0) {
-                        applyState(state);
-                    }
+                const res = await fetch(WORKER_URL);
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data && data.version) {
+                    applyState(data);
                 }
             } catch (err) {
-                console.error("Failed to load global state from KV:", err);
+                console.warn("Could not load data from Worker:", err);
             }
         }
- 
-        async function persistState() {
+
+        async function saveStateToWorker() {
             if (isApplyingState) return;
-            if (sessionStorage.getItem('editorUnlocked') !== 'true') return;
- 
             const state = captureState();
- 
             try {
-                const response = await fetch(`${WORKER_URL}/api/save`, {
+                const res = await fetch(WORKER_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        pin: STAFF_PIN,
-                        state: state
-                    })
+                    body: JSON.stringify(state)
                 });
- 
-                if (response.ok) {
+                if (res.ok) {
                     showSaveNotification();
-                } else {
-                    alert("Failed to save changes remotely. Check your worker connection.");
                 }
             } catch (err) {
-                console.error("Error saving to KV store:", err);
-                alert("Network error: Could not reach worker.");
+                console.error("Save error:", err);
             }
         }
- 
+
+        function scheduleSave() {
+            if (isApplyingState) return;
+            if (saveTimer) clearTimeout(saveTimer);
+            saveTimer = setTimeout(() => {
+                saveStateToWorker();
+            }, 800);
+        }
+
+        function showSaveNotification() {
+            const notif = document.getElementById('saveNotification');
+            if (!notif) return;
+            notif.style.display = 'block';
+            setTimeout(() => {
+                notif.style.display = 'none';
+            }, 2000);
+        }
+
         function bindEditListeners() {
-            document.querySelectorAll('.edit-protected[contenteditable="true"]').forEach(el => {
+            document.querySelectorAll('.edit-protected').forEach(el => {
                 el.removeEventListener('input', scheduleSave);
                 el.addEventListener('input', scheduleSave);
             });
         }
- 
-        // ==================== DISPATCH STATUS ====================
-        function setStatus(status, skipSave) {
-            const indicator = document.getElementById('statusIndicator');
-            const text = document.getElementById('statusText');
- 
-            indicator.className = 'status-indicator';
-            if (status === 'open') {
-                indicator.classList.add('status-open');
-                text.textContent = 'DISPATCH ACTIVE';
-            } else if (status === 'call') {
-                indicator.classList.add('status-call');
-                text.textContent = 'HIGH ALERT';
-            } else if (status === 'closed') {
-                indicator.classList.add('status-closed');
-                text.textContent = 'CODE RED LOCKDOWN';
-            }
-            if (!skipSave) scheduleSave();
-        }
- 
-        // ==================== DYNAMIC CARDS ====================
-        function addPortalRosterCard(gridId) {
-            const container = document.getElementById(gridId);
+
+        // ==================== DYNAMIC ADD / REMOVE ====================
+        function addCard(containerId, title = 'New Entry', subtitle = 'Subheading', text = 'Description details...') {
+            const container = document.getElementById(containerId);
             if (!container) return;
- 
             const isReadOnly = document.body.classList.contains('read-only');
-            const isK9 = gridId === 'k9RosterGrid';
+            const item = { title, subtitle, text, image: '' };
             const div = document.createElement('div');
-            div.innerHTML = buildPortalRosterCardHTML({
-                title: 'Officer Name',
-                subtitle: 'Unit Role / Callsign',
-                text: 'Specialty or division details...',
-                hireDate: '',
-                promotionDate: '',
-                k9Name: '',
-                certSearch: false,
-                certNarcotics: false,
-                certExplosives: false,
-                certSRC: false,
-                notes: 'Unit notes...',
-                status: 'active',
-                strikes: '0/3'
-            }, isReadOnly, isK9);
- 
-            container.appendChild(div.firstElementChild);
+            div.innerHTML = buildCardHTML(item, isReadOnly);
+            const cardEl = div.firstElementChild;
+            container.appendChild(cardEl);
             bindEditListeners();
             initDragAndDrop();
             scheduleSave();
         }
- 
-        function addEmployeeCard(gridId) {
-            const container = document.getElementById(gridId || 'rosterGrid');
+
+        function addUniformCard() {
+            const container = document.getElementById('uniformsGrid');
             if (!container) return;
- 
             const isReadOnly = document.body.classList.contains('read-only');
+            const item = {
+                title: 'New Uniform Outfit',
+                subtitle: 'Unit Outfit Preset',
+                text: 'Uniform guidelines or division usage note.',
+                image: '',
+                masks: '0 / None',
+                upperBody: '0',
+                lowerBody: '0',
+                bagsParachutes: '0 / None',
+                shoes: '0',
+                scarfsChains: '0 / None',
+                shirtAccessories: '0',
+                bodyArmorAccessories: '0',
+                badgesLogos: '0',
+                shirtOverlayJackets: '0',
+                hatsHelmets: '0 / None'
+            };
             const div = document.createElement('div');
-            div.innerHTML = buildEmployeeCardHTML({
+            div.innerHTML = buildUniformCardHTML(item, isReadOnly);
+            const cardEl = div.firstElementChild;
+            container.appendChild(cardEl);
+            bindEditListeners();
+            initDragAndDrop();
+            scheduleSave();
+        }
+
+        function addEmployeeCard() {
+            const container = document.getElementById('rosterGrid');
+            if (!container) return;
+            const isReadOnly = document.body.classList.contains('read-only');
+            const item = {
                 title: 'Officer Name',
-                subtitle: 'Rank / Call sign',
-                text: 'Division or contact details...',
+                subtitle: 'Rank / Badge #',
+                text: 'Assignment or details...',
                 hireDate: '',
                 promotionDate: '',
                 sceneCmdCert: false,
                 watchCmdCert: false,
                 notes: 'Add notes...',
                 status: 'active',
-                strikes: '0/3'
-            }, isReadOnly);
- 
-            container.appendChild(div.firstElementChild);
+                strikes: '0/3',
+                image: ''
+            };
+            const div = document.createElement('div');
+            div.innerHTML = buildEmployeeCardHTML(item, isReadOnly);
+            const cardEl = div.firstElementChild;
+            container.appendChild(cardEl);
             bindEditListeners();
             initDragAndDrop();
             scheduleSave();
         }
- 
+
+        function addPortalRosterCard(containerId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            const isReadOnly = document.body.classList.contains('read-only');
+            const isK9 = containerId === 'k9RosterGrid';
+            const item = {
+                title: 'Officer Name',
+                subtitle: 'Role / Callsign',
+                text: 'Specialty details...',
+                hireDate: '',
+                promotionDate: '',
+                k9Name: isK9 ? 'K9 Name' : '',
+                certSearch: false,
+                certNarcotics: false,
+                certExplosives: false,
+                certSRC: false,
+                notes: 'Add notes...',
+                status: 'active',
+                strikes: '0/3',
+                image: ''
+            };
+            const div = document.createElement('div');
+            div.innerHTML = buildPortalRosterCardHTML(item, isReadOnly, isK9);
+            const cardEl = div.firstElementChild;
+            container.appendChild(cardEl);
+            bindEditListeners();
+            initDragAndDrop();
+            scheduleSave();
+        }
+
         function addBadgeCard() {
             const container = document.getElementById('badgeContainer');
             if (!container) return;
             const isReadOnly = document.body.classList.contains('read-only');
- 
             const item = {
                 name: 'Officer Name',
                 badgeNum: '#0000',
                 rank: 'Officer',
                 division: 'Patrol Division',
-                commendations: '• Add commendation...',
-                punishments: '• Add punishment or disciplinary note...',
-                notes: 'Add general remarks or certifications...'
+                commendations: '• None on record.',
+                punishments: '• None on record.',
+                notes: 'No notes added.'
             };
- 
             const div = document.createElement('div');
             div.innerHTML = buildBadgeCardHTML(item, isReadOnly);
             container.appendChild(div.firstElementChild);
             bindEditListeners();
             scheduleSave();
         }
- 
-        function addCard(containerId, titlePlaceholder, subtitlePlaceholder, textPlaceholder) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
- 
-            const isReadOnly = document.body.classList.contains('read-only');
-            const div = document.createElement('div');
-            div.innerHTML = buildCardHTML({
-                title: titlePlaceholder,
-                subtitle: subtitlePlaceholder,
-                text: textPlaceholder
-            }, isReadOnly);
- 
-            container.appendChild(div.firstElementChild);
-            bindEditListeners();
-            initDragAndDrop();
-            scheduleSave();
-        }
- 
-        function addTableRow(tableId) {
-            const table = document.getElementById(tableId).querySelector('tbody');
-            if (!table) return;
- 
-            const isReadOnly = document.body.classList.contains('read-only');
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td class="edit-protected" contenteditable="${!isReadOnly}">New Penal Citation</td>
-                <td class="edit-protected" contenteditable="${!isReadOnly}">$000</td>
-                <td class="edit-protected" contenteditable="${!isReadOnly}">Details...</td>
-                <td class="edit-control"><button class="btn btn-danger" style="padding: 2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
-            `;
-            table.appendChild(row);
-            bindEditListeners();
-            scheduleSave();
-        }
- 
+
         function addPartner() {
             const grid = document.getElementById('partnersGrid');
+            if (!grid) return;
             const isReadOnly = document.body.classList.contains('read-only');
             const card = document.createElement('div');
             card.className = 'partner-card';
             card.innerHTML = `
                 <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight:bold;">New Partner Agency</div>
-                <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size:0.8rem; color:var(--text-muted);">Agency Description</div>
+                <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight:bold;">Agency Name</div>
+                <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size:0.8rem; color:var(--text-muted);">Jurisdiction / Role</div>
             `;
             grid.appendChild(card);
             bindEditListeners();
             scheduleSave();
         }
- 
+
+        function addTableRow(tableId) {
+            const tbody = document.querySelector(`#${tableId} tbody`);
+            if (!tbody) return;
+            const isReadOnly = document.body.classList.contains('read-only');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td class="edit-protected" contenteditable="${!isReadOnly}">New Offense</td>
+                <td class="edit-protected" contenteditable="${!isReadOnly}">$0</td>
+                <td class="edit-protected" contenteditable="${!isReadOnly}">Sentence / Notes</td>
+                <td class="edit-control"><button class="btn btn-danger" style="padding: 2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
+            `;
+            tbody.appendChild(tr);
+            bindEditListeners();
+            scheduleSave();
+        }
+
         function removeCard(btn) {
-            btn.closest('.card, .partner-card, .badge-card').remove();
-            scheduleSave();
+            const card = btn.closest('.card, .badge-card, .partner-card');
+            if (card) {
+                card.remove();
+                scheduleSave();
+            }
         }
- 
+
         function removeTableRow(btn) {
-            btn.closest('tr').remove();
-            scheduleSave();
+            const row = btn.closest('tr');
+            if (row) {
+                row.remove();
+                scheduleSave();
+            }
         }
- 
-        // ==================== IMAGE UPLOAD ====================
-        function uploadImage(event, inputElement) {
+
+        // ==================== IMAGE UPLOADING ====================
+        function uploadImage(event, inputEl) {
             const file = event.target.files[0];
             if (!file) return;
- 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const img = new Image();
-                img.onload = function() {
-                    const maxW = 600;
-                    let w = img.width, h = img.height;
-                    if (w > maxW) {
-                        h = Math.round(h * (maxW / w));
-                        w = maxW;
-                    }
-                    const canvas = document.createElement('canvas');
-                    canvas.width = w;
-                    canvas.height = h;
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
- 
-                    const imgContainer = inputElement.closest('.card-img-container');
-                    imgContainer.style.backgroundImage = `url("${dataUrl}")`;
-                    const icon = imgContainer.querySelector('i.fa-3x');
+                const imgContainer = inputEl.closest('.card-img-container');
+                if (imgContainer) {
+                    imgContainer.style.backgroundImage = `url('${e.target.result}')`;
+                    const icon = imgContainer.querySelector('i');
                     if (icon) icon.style.display = 'none';
-                    clearTimeout(saveTimer);
-                    persistState();
-                };
-                img.src = e.target.result;
+                    scheduleSave();
+                }
             };
             reader.readAsDataURL(file);
         }
- 
-        document.getElementById('bgUploader').addEventListener('change', function(e) {
+
+        document.getElementById('bgUploader')?.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
-                img.onload = function() {
-                    const maxW = 900;
-                    let w = img.width, h = img.height;
-                    if (w > maxW) {
-                        h = Math.round(h * (maxW / w));
-                        w = maxW;
-                    }
-                    const maxH = 500;
-                    if (h > maxH) {
-                        w = Math.round(w * (maxH / h));
-                        h = maxH;
-                    }
-                    const canvas = document.createElement('canvas');
-                    canvas.width = w;
-                    canvas.height = h;
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    const dataUrl = canvas.toDataURL('image/jpeg', 0.55);
-                    window.__heroBackground = dataUrl;
-                    const hero = document.getElementById('heroBanner');
-                    hero.style.background = `center / cover no-repeat url("${dataUrl}")`;
-                    hero.style.backgroundColor = '#0f172a';
-                    clearTimeout(saveTimer);
-                    persistState();
-                };
-                img.src = event.target.result;
+            reader.onload = function(evt) {
+                const url = evt.target.result;
+                window.__heroBackground = url;
+                const hero = document.getElementById('heroBanner');
+                if (hero) hero.style.backgroundImage = `url('${url}')`;
+                scheduleSave();
             };
             reader.readAsDataURL(file);
         });
- 
-        // ==================== HELPERS ====================
-        function showSaveNotification() {
-            const toast = document.getElementById('saveNotification');
-            toast.style.display = 'block';
-            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+
+        // ==================== STATUS SWITCHING ====================
+        function setStatus(statusType, doSave = true) {
+            const indicator = document.getElementById('statusIndicator');
+            const text = document.getElementById('statusText');
+            if (!indicator || !text) return;
+
+            indicator.className = 'status-indicator';
+            if (statusType === 'open') {
+                indicator.classList.add('status-open');
+                text.textContent = 'DISPATCH ACTIVE';
+            } else if (statusType === 'call') {
+                indicator.classList.add('status-call');
+                text.textContent = 'HIGH ALERT';
+            } else if (statusType === 'closed') {
+                indicator.classList.add('status-closed');
+                text.textContent = 'CODE RED';
+            }
+            if (doSave) scheduleSave();
         }
- 
+
+        // ==================== RESET FUNCTION ====================
         async function resetSiteData() {
-            if (!confirm("Reset all customizations to default? This cannot be undone.")) return;
-            window.__heroBackground = '';
-            location.reload();
+            if (confirm("Are you sure you want to reset all site data to default? This will clear cloud storage.")) {
+                try {
+                    await fetch(WORKER_URL, { method: 'DELETE' });
+                } catch (e) {
+                    console.error("Cloud reset failed", e);
+                }
+                location.reload();
+            }
         }
- 
-        // ==================== INIT ====================
-        window.addEventListener('DOMContentLoaded', async function() {
-            await loadState();
- 
-            // Run color updates on existing initial strikes elements
-            document.querySelectorAll('.employee-strikes-select').forEach(updateStrikeColor);
- 
+
+        // ==================== INITIALIZATION ====================
+        window.addEventListener('DOMContentLoaded', () => {
+            renderEditorBadge();
             if (sessionStorage.getItem('editorUnlocked') === 'true') {
                 unlockEditor();
             } else {
                 setReadOnlyMode(true);
-                renderEditorBadge();
-                if (sessionStorage.getItem('portalUnlocked') === 'true') {
-                    showPortalContent();
-                }
             }
+
+            if (sessionStorage.getItem('portalUnlocked') === 'true') {
+                showPortalContent();
+            }
+
+            fetchStateFromWorker();
         });
     </script>
 </body>

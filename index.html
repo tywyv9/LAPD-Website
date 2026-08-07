@@ -281,7 +281,7 @@
             letter-spacing: 1px;
         }
 
-        /* SCROLLABLE SECTION CONTAINERS (Portal Optimization) */
+        /* SCROLLABLE SECTION CONTAINERS */
         .portal-scroll-section {
             max-height: 75vh;
             overflow-y: auto;
@@ -386,21 +386,15 @@
         }
 
         @media (max-width: 1400px) {
-            .grid-container {
-                grid-template-columns: repeat(3, 1fr);
-            }
+            .grid-container { grid-template-columns: repeat(3, 1fr); }
         }
 
         @media (max-width: 1100px) {
-            .grid-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            .grid-container { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 650px) {
-            .grid-container {
-                grid-template-columns: 1fr;
-            }
+            .grid-container { grid-template-columns: 1fr; }
         }
 
         .card {
@@ -603,23 +597,10 @@
             cursor: pointer;
         }
 
-        body.read-only .cert-checkbox-label {
-            cursor: default;
-        }
-
-        body.read-only .cert-checkbox-label:has(input:not(:checked)) {
-            display: none;
-        }
-
-        body.read-only .cert-options {
-            background: transparent;
-            border: none;
-            padding: 0;
-        }
-
-        body.read-only input[type="checkbox"] {
-            display: none;
-        }
+        body.read-only .cert-checkbox-label { cursor: default; }
+        body.read-only .cert-checkbox-label:has(input:not(:checked)) { display: none; }
+        body.read-only .cert-options { background: transparent; border: none; padding: 0; }
+        body.read-only input[type="checkbox"] { display: none; }
 
         .cert-badge {
             background: rgba(212, 175, 55, 0.15);
@@ -658,11 +639,7 @@
             cursor: pointer;
         }
 
-        .employee-strikes-select {
-            color: #ffaa00;
-            border-color: var(--border-color);
-        }
-
+        .employee-strikes-select { color: #ffaa00; border-color: var(--border-color); }
         .employee-status-select.status-active { color: #00ff66; border-color: #00ff66; }
         .employee-status-select.status-loa { color: #ffcc00; border-color: #ffcc00; }
         .employee-status-select.status-inactive { color: #ff3333; border-color: #ff3333; }
@@ -733,7 +710,7 @@
             z-index: 5;
         }
 
-        /* BADGE DATABASE SPECIFIC STYLES */
+        /* BADGE DATABASE STYLES */
         .badge-card {
             background: var(--bg-metallic);
             border: 1px solid var(--border-color);
@@ -786,10 +763,7 @@
             margin-bottom: 15px;
         }
 
-        .assignment-box {
-            display: flex;
-            flex-direction: column;
-        }
+        .assignment-box { display: flex; flex-direction: column; }
 
         .assignment-label {
             font-size: 0.75rem;
@@ -808,9 +782,7 @@
         }
 
         @media (max-width: 768px) {
-            .badge-service-record {
-                grid-template-columns: 1fr;
-            }
+            .badge-service-record { grid-template-columns: 1fr; }
         }
 
         .record-section {
@@ -978,9 +950,7 @@
             z-index: 2000;
         }
 
-        .pin-modal-overlay.active {
-            display: flex;
-        }
+        .pin-modal-overlay.active { display: flex; }
 
         .pin-modal {
             background: var(--bg-card);
@@ -1021,9 +991,7 @@
             font-family: monospace;
         }
 
-        .pin-modal input:focus {
-            border-color: var(--accent-gold);
-        }
+        .pin-modal input:focus { border-color: var(--accent-gold); }
 
         .pin-error {
             color: #ff3333;
@@ -1117,7 +1085,6 @@
             </ul>
             
             <div class="nav-right-group">
-                <!-- Editor Unlock / Badge Container -->
                 <div id="editorAuthContainer">
                     <button class="btn btn-secondary" onclick="openPinModal()" style="margin: 8px;">
                         <i class="fa-solid fa-key"></i> Admin Unlock
@@ -1260,50 +1227,17 @@
                         <div class="uniform-components-container">
                             <div class="uniform-components-title"><i class="fa-solid fa-shirt"></i> Uniform Asset Components</div>
                             <div class="uniform-grid">
-                                <div class="uniform-item">
-                                    <span class="uniform-label">Masks</span>
-                                    <input type="text" class="uniform-input uniform-masks" placeholder="0" value="0" onchange="scheduleSave();">
-                                </div>
-                                <div class="uniform-item">
-                                    <span class="uniform-label">Hats & Helmets</span>
-                                    <input type="text" class="uniform-input uniform-hats" placeholder="0" value="8" onchange="scheduleSave();">
-                                </div>
-                                <div class="uniform-item">
-                                    <span class="uniform-label">Upper Body</span>
-                                    <input type="text" class="uniform-input uniform-upper" placeholder="0" value="0" onchange="scheduleSave();">
-                                </div>
-                                <div class="uniform-item">
-                                    <span class="uniform-label">Lower Body</span>
-                                    <input type="text" class="uniform-input uniform-lower" placeholder="0" value="35" onchange="scheduleSave();">
-                                </div>
-                                <div class="uniform-item">
-                                    <span class="uniform-label">Bags & Parachutes</span>
-                                    <input type="text" class="uniform-input uniform-bags" placeholder="0" value="0" onchange="scheduleSave();">
-                                </div>
-                                <div class="uniform-item">
-                                    <span class="uniform-label">Shoes</span>
-                                    <input type="text" class="uniform-input uniform-shoes" placeholder="0" value="25" onchange="scheduleSave();">
-                                </div>
-                                <div class="uniform-item">
-                                    <span class="uniform-label">Scarfs & Chains</span>
-                                    <input type="text" class="uniform-input uniform-scarfs" placeholder="0" value="0" onchange="scheduleSave();">
-                                </div>
-                                <div class="uniform-item">
-                                    <span class="uniform-label">Shirts & Accessories</span>
-                                    <input type="text" class="uniform-input uniform-shirt" placeholder="0" value="15" onchange="scheduleSave();">
-                                </div>
-                                <div class="uniform-item">
-                                    <span class="uniform-label">Body Armor & Acc.</span>
-                                    <input type="text" class="uniform-input uniform-armor" placeholder="0" value="1" onchange="scheduleSave();">
-                                </div>
-                                <div class="uniform-item">
-                                    <span class="uniform-label">Badges & Logos</span>
-                                    <input type="text" class="uniform-input uniform-badges" placeholder="0" value="1" onchange="scheduleSave();">
-                                </div>
-                                <div class="uniform-item full-width">
-                                    <span class="uniform-label">Shirt Overlays & Jackets</span>
-                                    <input type="text" class="uniform-input uniform-jackets" placeholder="0" value="50" onchange="scheduleSave();">
-                                </div>
+                                <div class="uniform-item"><span class="uniform-label">Masks</span><input type="text" class="uniform-input uniform-masks" value="0" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Hats & Helmets</span><input type="text" class="uniform-input uniform-hats" value="8" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Upper Body</span><input type="text" class="uniform-input uniform-upper" value="0" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Lower Body</span><input type="text" class="uniform-input uniform-lower" value="35" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Bags & Parachutes</span><input type="text" class="uniform-input uniform-bags" value="0" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Shoes</span><input type="text" class="uniform-input uniform-shoes" value="25" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Scarfs & Chains</span><input type="text" class="uniform-input uniform-scarfs" value="0" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Shirts & Accessories</span><input type="text" class="uniform-input uniform-shirt" value="15" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Body Armor & Acc.</span><input type="text" class="uniform-input uniform-armor" value="1" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Badges & Logos</span><input type="text" class="uniform-input uniform-badges" value="1" onchange="scheduleSave();"></div>
+                                <div class="uniform-item full-width"><span class="uniform-label">Shirt Overlays & Jackets</span><input type="text" class="uniform-input uniform-jackets" value="50" onchange="scheduleSave();"></div>
                             </div>
                         </div>
 
@@ -1479,19 +1413,6 @@
                         <div class="card-text edit-protected">Handles hostage negotiations, barricaded suspects, high-risk warrant execution, and heavy armor deployments.</div>
                     </div>
                 </div>
-                <div class="card">
-                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                    <div class="card-img-container">
-                        <i class="fa-solid fa-gauge-high fa-3x" style="color: #273754;"></i>
-                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title edit-protected">High Speed Interception Unit</div>
-                        <div class="card-subtitle edit-protected">H.S.I.U. Tactical Division</div>
-                        <div class="card-text edit-protected">Specialized pursuit division assigned to high-speed vehicle interdictions, street racing suppression, and high-velocity highway pursuits.</div>
-                    </div>
-                </div>
             </div>
         </section>
 
@@ -1514,19 +1435,6 @@
                         <div class="card-title edit-protected">Academy Recruit Graduation</div>
                         <div class="card-subtitle edit-protected">Sat, Aug 15 &bull; 10:00 AM</div>
                         <div class="card-text edit-protected">Mission Row HQ, Main Courtyard. Formal dress uniform required for all attending command staff.</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                    <div class="card-img-container">
-                        <i class="fa-solid fa-calendar-day fa-3x" style="color: #273754;"></i>
-                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title edit-protected">Public Ride-Along Night</div>
-                        <div class="card-subtitle edit-protected">Fri, Aug 21 &bull; 7:00 PM</div>
-                        <div class="card-text edit-protected">Open to Discord members. Sign up in #ride-along-signups. Meet at the front desk 15 minutes early.</div>
                     </div>
                 </div>
             </div>
@@ -1581,7 +1489,6 @@
                 </div>
                 <p style="color: var(--text-muted); margin-bottom: 15px;">Confidential internal records, pursuit protocols, and arrest guidelines.</p>
                 
-                <!-- SCROLLABLE SECTION: OPERATIONAL DIRECTIVES -->
                 <div class="portal-scroll-section">
                     <div class="grid-container" id="portalGrid">
                         <div class="card">
@@ -1597,329 +1504,49 @@
                                 <div class="card-text edit-protected">Use of force ladder, pursuit tactics, Miranda rights procedures, and evidence logging.</div>
                             </div>
                         </div>
-                        <div class="card">
-                            <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                            <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                            <div class="card-img-container">
-                                <i class="fa-solid fa-file-invoice-dollar fa-3x" style="color: #273754;"></i>
-                                <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                            </div>
-                            <div class="card-body">
-                                <div class="card-title edit-protected">Armory & Equipment Requisition</div>
-                                <div class="card-subtitle edit-protected">Command Only</div>
-                                <div class="card-text edit-protected">Protocol for requesting SWAT armor, tactical weapons, and specialized pursuit cars.</div>
-                            </div>
-                        </div>
                     </div>
                 </div>
 
                 <!-- SUBDIVISION ROSTERS SECTION -->
                 <div style="margin-top: 30px; border-top: 2px solid var(--border-color); padding-top: 20px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-                        <h2 style="font-family: 'Bebas Neue'; font-size: 2.2rem; color: var(--accent-gold);"><i class="fa-solid fa-layer-group"></i> SPECIALIZED SUBDIVISION ROSTERS</h2>
-                    </div>
-                    <p style="color: var(--text-muted); margin-bottom: 15px;">Internal specialized unit rosters. Command staff can manage unit members and qualifications.</p>
+                    <h2 style="font-family: 'Bebas Neue'; font-size: 2.2rem; color: var(--accent-gold);"><i class="fa-solid fa-layer-group"></i> SPECIALIZED SUBDIVISION ROSTERS</h2>
 
-                    <!-- SCROLLABLE SECTION: SUBDIVISION ROSTERS -->
                     <div class="portal-scroll-section">
                         <!-- K9 DIVISION -->
                         <div class="subdivision-section-title">
                             <span><i class="fa-solid fa-dog"></i> K9 DIVISION ROSTER</span>
                             <button class="btn edit-control" onclick="addPortalRosterCard('k9RosterGrid')"><i class="fa-solid fa-plus"></i> Add K9 Handler</button>
                         </div>
-                        <div class="grid-container" id="k9RosterGrid">
-                            <div class="card">
-                                <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                                <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                                <div class="card-img-container">
-                                    <i class="fa-solid fa-dog fa-3x" style="color: #273754;"></i>
-                                    <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="card-title edit-protected">Officer S. Walker & K9 'Buster'</div>
-                                    <div class="card-subtitle edit-protected">K9 Unit Lead | Call-Sign K-91</div>
-                                    <div class="card-text edit-protected">Certified Narcotics & Handler Tracking Unit.</div>
-
-                                    <div class="employee-date-item" style="margin-top:4px;">
-                                        <span class="employee-field-label">K9 Name</span>
-                                        <input type="text" class="employee-date-input k9-name" placeholder="e.g. K9 'Rex'" value="Buster" onchange="scheduleSave();">
-                                    </div>
-
-                                    <div class="employee-date-group">
-                                        <div class="employee-date-item">
-                                            <span class="employee-field-label">Hire Date</span>
-                                            <input type="date" class="employee-date-input hire-date" value="" onchange="scheduleSave();">
-                                        </div>
-                                        <div class="employee-date-item">
-                                            <span class="employee-field-label">Promotion Date</span>
-                                            <input type="date" class="employee-date-input promotion-date" value="" onchange="scheduleSave();">
-                                        </div>
-                                    </div>
-
-                                    <div class="cert-container">
-                                        <span class="employee-field-label">Certifications</span>
-                                        <div class="cert-options">
-                                            <label class="cert-checkbox-label">
-                                                <input type="checkbox" class="cert-search" checked onchange="scheduleSave();">
-                                                <span class="cert-badge">Search Certified</span>
-                                            </label>
-                                            <label class="cert-checkbox-label">
-                                                <input type="checkbox" class="cert-narcotics" checked onchange="scheduleSave();">
-                                                <span class="cert-badge">Narcotics Certified</span>
-                                            </label>
-                                            <label class="cert-checkbox-label">
-                                                <input type="checkbox" class="cert-explosives" onchange="scheduleSave();">
-                                                <span class="cert-badge">Explosives Certified</span>
-                                            </label>
-                                            <label class="cert-checkbox-label">
-                                                <input type="checkbox" class="cert-src" onchange="scheduleSave();">
-                                                <span class="cert-badge">SRC Certified</span>
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div class="employee-status-container">
-                                        <span class="employee-status-label">Status:</span>
-                                        <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
-                                            <option value="active" selected>Active</option>
-                                            <option value="loa">LOA</option>
-                                            <option value="inactive">Inactive</option>
-                                        </select>
-                                    </div>
-                                    <div class="employee-strikes-container">
-                                        <span class="employee-strikes-label">Strikes:</span>
-                                        <select class="employee-strikes-select" onchange="updateStrikeColor(this); scheduleSave();">
-                                            <option value="0/3" selected>0/3</option>
-                                            <option value="1/3">1/3</option>
-                                            <option value="2/3">2/3</option>
-                                            <option value="3/3">3/3</option>
-                                        </select>
-                                    </div>
-                                    <div class="card-notes-container">
-                                        <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
-                                        <div class="card-notes-text edit-protected">Primary scent tracker. Re-certified 07/2026.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="grid-container" id="k9RosterGrid"></div>
 
                         <!-- MBU DIVISION -->
                         <div class="subdivision-section-title">
                             <span><i class="fa-solid fa-motorcycle"></i> MOTORCYCLE DIVISION (MBU) ROSTER</span>
                             <button class="btn edit-control" onclick="addPortalRosterCard('mbuRosterGrid')"><i class="fa-solid fa-plus"></i> Add MBU Officer</button>
                         </div>
-                        <div class="grid-container" id="mbuRosterGrid">
-                            <div class="card">
-                                <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                                <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                                <div class="card-img-container">
-                                    <i class="fa-solid fa-motorcycle fa-3x" style="color: #273754;"></i>
-                                    <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="card-title edit-protected">Officer M. Davis</div>
-                                    <div class="card-subtitle edit-protected">Motor Officer | Call-Sign M-12</div>
-                                    <div class="card-text edit-protected">Highway Patrol & Escort Division certified.</div>
-
-                                    <div class="employee-date-group">
-                                        <div class="employee-date-item">
-                                            <span class="employee-field-label">Hire Date</span>
-                                            <input type="date" class="employee-date-input hire-date" value="" onchange="scheduleSave();">
-                                        </div>
-                                        <div class="employee-date-item">
-                                            <span class="employee-field-label">Promotion Date</span>
-                                            <input type="date" class="employee-date-input promotion-date" value="" onchange="scheduleSave();">
-                                        </div>
-                                    </div>
-
-                                    <div class="employee-status-container">
-                                        <span class="employee-status-label">Status:</span>
-                                        <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
-                                            <option value="active" selected>Active</option>
-                                            <option value="loa">LOA</option>
-                                            <option value="inactive">Inactive</option>
-                                        </select>
-                                    </div>
-                                    <div class="employee-strikes-container">
-                                        <span class="employee-strikes-label">Strikes:</span>
-                                        <select class="employee-strikes-select" onchange="updateStrikeColor(this); scheduleSave();">
-                                            <option value="0/3" selected>0/3</option>
-                                            <option value="1/3">1/3</option>
-                                            <option value="2/3">2/3</option>
-                                            <option value="3/3">3/3</option>
-                                        </select>
-                                    </div>
-                                    <div class="card-notes-container">
-                                        <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
-                                        <div class="card-notes-text edit-protected">Traffic Enforcement Lead.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="grid-container" id="mbuRosterGrid"></div>
 
                         <!-- SWAT DIVISION -->
                         <div class="subdivision-section-title">
                             <span><i class="fa-solid fa-person-rifle"></i> S.W.A.T. TACTICAL ROSTER</span>
                             <button class="btn edit-control" onclick="addPortalRosterCard('swatRosterGrid')"><i class="fa-solid fa-plus"></i> Add SWAT Operator</button>
                         </div>
-                        <div class="grid-container" id="swatRosterGrid">
-                            <div class="card">
-                                <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                                <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                                <div class="card-img-container">
-                                    <i class="fa-solid fa-person-rifle fa-3x" style="color: #273754;"></i>
-                                    <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="card-title edit-protected">Sgt. A. Reyes</div>
-                                    <div class="card-subtitle edit-protected">Element Commander | Sierra-1</div>
-                                    <div class="card-text edit-protected">Entry Team & Heavy Armor Specialist.</div>
-
-                                    <div class="employee-date-group">
-                                        <div class="employee-date-item">
-                                            <span class="employee-field-label">Hire Date</span>
-                                            <input type="date" class="employee-date-input hire-date" value="" onchange="scheduleSave();">
-                                        </div>
-                                        <div class="employee-date-item">
-                                            <span class="employee-field-label">Promotion Date</span>
-                                            <input type="date" class="employee-date-input promotion-date" value="" onchange="scheduleSave();">
-                                        </div>
-                                    </div>
-
-                                    <div class="employee-status-container">
-                                        <span class="employee-status-label">Status:</span>
-                                        <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
-                                            <option value="active" selected>Active</option>
-                                            <option value="loa">LOA</option>
-                                            <option value="inactive">Inactive</option>
-                                        </select>
-                                    </div>
-                                    <div class="employee-strikes-container">
-                                        <span class="employee-strikes-label">Strikes:</span>
-                                        <select class="employee-strikes-select" onchange="updateStrikeColor(this); scheduleSave();">
-                                            <option value="0/3" selected>0/3</option>
-                                            <option value="1/3">1/3</option>
-                                            <option value="2/3">2/3</option>
-                                            <option value="3/3">3/3</option>
-                                        </select>
-                                    </div>
-                                    <div class="card-notes-container">
-                                        <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
-                                        <div class="card-notes-text edit-protected">Breaching & Sniper Qualified.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="grid-container" id="swatRosterGrid"></div>
 
                         <!-- AIR SUPPORT DIVISION -->
                         <div class="subdivision-section-title">
                             <span><i class="fa-solid fa-helicopter"></i> AIR SUPPORT DIVISION (ASD) ROSTER</span>
                             <button class="btn edit-control" onclick="addPortalRosterCard('airRosterGrid')"><i class="fa-solid fa-plus"></i> Add Pilot</button>
                         </div>
-                        <div class="grid-container" id="airRosterGrid">
-                            <div class="card">
-                                <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                                <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                                <div class="card-img-container">
-                                    <i class="fa-solid fa-helicopter fa-3x" style="color: #273754;"></i>
-                                    <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="card-title edit-protected">Pilot T. Jenkins</div>
-                                    <div class="card-subtitle edit-protected">Chief Flight Instructor | AIR-1</div>
-                                    <div class="card-text edit-protected">Night Flight & Tactical Spotter lead.</div>
-
-                                    <div class="employee-date-group">
-                                        <div class="employee-date-item">
-                                            <span class="employee-field-label">Hire Date</span>
-                                            <input type="date" class="employee-date-input hire-date" value="" onchange="scheduleSave();">
-                                        </div>
-                                        <div class="employee-date-item">
-                                            <span class="employee-field-label">Promotion Date</span>
-                                            <input type="date" class="employee-date-input promotion-date" value="" onchange="scheduleSave();">
-                                        </div>
-                                    </div>
-
-                                    <div class="employee-status-container">
-                                        <span class="employee-status-label">Status:</span>
-                                        <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
-                                            <option value="active" selected>Active</option>
-                                            <option value="loa">LOA</option>
-                                            <option value="inactive">Inactive</option>
-                                        </select>
-                                    </div>
-                                    <div class="employee-strikes-container">
-                                        <span class="employee-strikes-label">Strikes:</span>
-                                        <select class="employee-strikes-select" onchange="updateStrikeColor(this); scheduleSave();">
-                                            <option value="0/3" selected>0/3</option>
-                                            <option value="1/3">1/3</option>
-                                            <option value="2/3">2/3</option>
-                                            <option value="3/3">3/3</option>
-                                        </select>
-                                    </div>
-                                    <div class="card-notes-container">
-                                        <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
-                                        <div class="card-notes-text edit-protected">Command flight clearance active.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="grid-container" id="airRosterGrid"></div>
 
                         <!-- CID DIVISION -->
                         <div class="subdivision-section-title">
                             <span><i class="fa-solid fa-user-secret"></i> DETECTIVE & CID DIVISION ROSTER</span>
                             <button class="btn edit-control" onclick="addPortalRosterCard('cidRosterGrid')"><i class="fa-solid fa-plus"></i> Add Detective</button>
                         </div>
-                        <div class="grid-container" id="cidRosterGrid">
-                            <div class="card">
-                                <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                                <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                                <div class="card-img-container">
-                                    <i class="fa-solid fa-user-secret fa-3x" style="color: #273754;"></i>
-                                    <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                                </div>
-                                <div class="card-body">
-                                    <div class="card-title edit-protected">Det. H. Vance</div>
-                                    <div class="card-subtitle edit-protected">Lead Detective | CID-101</div>
-                                    <div class="card-text edit-protected">Major Crimes & Homicide Investigation.</div>
-
-                                    <div class="employee-date-group">
-                                        <div class="employee-date-item">
-                                            <span class="employee-field-label">Hire Date</span>
-                                            <input type="date" class="employee-date-input hire-date" value="" onchange="scheduleSave();">
-                                        </div>
-                                        <div class="employee-date-item">
-                                            <span class="employee-field-label">Promotion Date</span>
-                                            <input type="date" class="employee-date-input promotion-date" value="" onchange="scheduleSave();">
-                                        </div>
-                                    </div>
-
-                                    <div class="employee-status-container">
-                                        <span class="employee-status-label">Status:</span>
-                                        <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
-                                            <option value="active" selected>Active</option>
-                                            <option value="loa">LOA</option>
-                                            <option value="inactive">Inactive</option>
-                                        </select>
-                                    </div>
-                                    <div class="employee-strikes-container">
-                                        <span class="employee-strikes-label">Strikes:</span>
-                                        <select class="employee-strikes-select" onchange="updateStrikeColor(this); scheduleSave();">
-                                            <option value="0/3" selected>0/3</option>
-                                            <option value="1/3">1/3</option>
-                                            <option value="2/3">2/3</option>
-                                            <option value="3/3">3/3</option>
-                                        </select>
-                                    </div>
-                                    <div class="card-notes-container">
-                                        <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
-                                        <div class="card-notes-text edit-protected">Undercover & Warrants division authorized.</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <div class="grid-container" id="cidRosterGrid"></div>
                     </div>
-
                 </div>
             </div>
         </section>
@@ -1959,8 +1586,27 @@
             if (activeNav) activeNav.classList.add('active');
         }
 
+        function setStatus(type) {
+            const ind = document.getElementById('statusIndicator');
+            const txt = document.getElementById('statusText');
+            ind.className = 'status-indicator';
+
+            if (type === 'open') {
+                ind.classList.add('status-open');
+                txt.innerText = 'DISPATCH ACTIVE';
+            } else if (type === 'call') {
+                ind.classList.add('status-call');
+                txt.innerText = 'HIGH ALERT';
+            } else if (type === 'closed') {
+                ind.classList.add('status-closed');
+                txt.innerText = 'CODE RED';
+            }
+            scheduleSave();
+        }
+
         // ==================== STATUS & STRIKE DROPDOWN COLOR UPDATERS ====================
         function updateStatusColor(selectEl) {
+            if(!selectEl) return;
             selectEl.classList.remove('status-active', 'status-loa', 'status-inactive', 'status-suspended');
             const val = selectEl.value;
             if (val === 'active') selectEl.classList.add('status-active');
@@ -1970,6 +1616,7 @@
         }
 
         function updateStrikeColor(selectElement) {
+            if(!selectElement) return;
             if (selectElement.value !== "0/3") {
                 selectElement.style.color = "#ff3333";
                 selectElement.style.borderColor = "#ff3333";
@@ -2338,6 +1985,165 @@
             };
         }
 
+        function renderGenericCards(containerId, cardsData, defaultIconClass = 'fa-file-shield') {
+            const grid = document.getElementById(containerId);
+            if (!grid) return;
+            grid.innerHTML = '';
+            (cardsData || []).forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                const bgStyle = item.image ? `style="background-image: url('${item.image}')"` : '';
+                card.innerHTML = `
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container" ${bgStyle}>
+                        ${!item.image ? `<i class="fa-solid ${defaultIconClass} fa-3x" style="color: #273754;"></i>` : ''}
+                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title edit-protected">${item.title}</div>
+                        <div class="card-subtitle edit-protected">${item.subtitle}</div>
+                        <div class="card-text edit-protected">${item.text}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderUniformRoster(containerId, uniformsData) {
+            const grid = document.getElementById(containerId);
+            if (!grid) return;
+            grid.innerHTML = '';
+            (uniformsData || []).forEach(u => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                const bgStyle = u.image ? `style="background-image: url('${u.image}')"` : '';
+                const un = u.uniform || {};
+                card.innerHTML = `
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container" ${bgStyle}>
+                        ${!u.image ? '<i class="fa-solid fa-shirt fa-3x" style="color: #273754;"></i>' : ''}
+                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title edit-protected">${u.title}</div>
+                        <div class="card-subtitle edit-protected">${u.subtitle}</div>
+                        <div class="card-text edit-protected">${u.text}</div>
+
+                        <div class="uniform-components-container">
+                            <div class="uniform-components-title"><i class="fa-solid fa-shirt"></i> Uniform Asset Components</div>
+                            <div class="uniform-grid">
+                                <div class="uniform-item"><span class="uniform-label">Masks</span><input type="text" class="uniform-input uniform-masks" value="${un.masks || '0'}" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Hats & Helmets</span><input type="text" class="uniform-input uniform-hats" value="${un.hats || '0'}" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Upper Body</span><input type="text" class="uniform-input uniform-upper" value="${un.upper || '0'}" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Lower Body</span><input type="text" class="uniform-input uniform-lower" value="${un.lower || '0'}" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Bags & Parachutes</span><input type="text" class="uniform-input uniform-bags" value="${un.bags || '0'}" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Shoes</span><input type="text" class="uniform-input uniform-shoes" value="${un.shoes || '0'}" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Scarfs & Chains</span><input type="text" class="uniform-input uniform-scarfs" value="${un.scarfs || '0'}" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Shirts & Accessories</span><input type="text" class="uniform-input uniform-shirt" value="${un.shirt || '0'}" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Body Armor & Acc.</span><input type="text" class="uniform-input uniform-armor" value="${un.armor || '0'}" onchange="scheduleSave();"></div>
+                                <div class="uniform-item"><span class="uniform-label">Badges & Logos</span><input type="text" class="uniform-input uniform-badges" value="${un.badges || '0'}" onchange="scheduleSave();"></div>
+                                <div class="uniform-item full-width"><span class="uniform-label">Shirt Overlays & Jackets</span><input type="text" class="uniform-input uniform-jackets" value="${un.jackets || '0'}" onchange="scheduleSave();"></div>
+                            </div>
+                        </div>
+
+                        <div class="card-notes-container">
+                            <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Uniform Notes</div>
+                            <div class="card-notes-text edit-protected">${u.notes || ''}</div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function renderPortalRoster(containerId, itemsData, iconClass = 'fa-user-shield') {
+            const grid = document.getElementById(containerId);
+            if (!grid) return;
+            grid.innerHTML = '';
+            (itemsData || []).forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                const bgStyle = item.image ? `style="background-image: url('${item.image}')"` : '';
+                
+                let k9InputHtml = '';
+                let certsHtml = '';
+                
+                if(containerId === 'k9RosterGrid') {
+                    k9InputHtml = `
+                        <div class="employee-date-item" style="margin-top:4px;">
+                            <span class="employee-field-label">K9 Name</span>
+                            <input type="text" class="employee-date-input k9-name" value="${item.k9Name || ''}" onchange="scheduleSave();">
+                        </div>`;
+                    certsHtml = `
+                        <div class="cert-container">
+                            <span class="employee-field-label">Certifications</span>
+                            <div class="cert-options">
+                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-search" ${item.certSearch ? 'checked' : ''} onchange="scheduleSave();"><span class="cert-badge">Search Certified</span></label>
+                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-narcotics" ${item.certNarcotics ? 'checked' : ''} onchange="scheduleSave();"><span class="cert-badge">Narcotics Certified</span></label>
+                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-explosives" ${item.certExplosives ? 'checked' : ''} onchange="scheduleSave();"><span class="cert-badge">Explosives Certified</span></label>
+                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-src" ${item.certSRC ? 'checked' : ''} onchange="scheduleSave();"><span class="cert-badge">SRC Certified</span></label>
+                            </div>
+                        </div>`;
+                }
+
+                card.innerHTML = `
+                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                    <div class="card-img-container" ${bgStyle}>
+                        ${!item.image ? `<i class="fa-solid ${iconClass} fa-3x" style="color: #273754;"></i>` : ''}
+                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                    </div>
+                    <div class="card-body">
+                        <div class="card-title edit-protected">${item.title}</div>
+                        <div class="card-subtitle edit-protected">${item.subtitle}</div>
+                        <div class="card-text edit-protected">${item.text}</div>
+
+                        ${k9InputHtml}
+
+                        <div class="employee-date-group">
+                            <div class="employee-date-item">
+                                <span class="employee-field-label">Hire Date</span>
+                                <input type="date" class="employee-date-input hire-date" value="${item.hireDate || ''}" onchange="scheduleSave();">
+                            </div>
+                            <div class="employee-date-item">
+                                <span class="employee-field-label">Promotion Date</span>
+                                <input type="date" class="employee-date-input promotion-date" value="${item.promotionDate || ''}" onchange="scheduleSave();">
+                            </div>
+                        </div>
+
+                        ${certsHtml}
+
+                        <div class="employee-status-container">
+                            <span class="employee-status-label">Status:</span>
+                            <select class="employee-status-select" onchange="updateStatusColor(this); scheduleSave();">
+                                <option value="active" ${item.status === 'active' ? 'selected' : ''}>Active</option>
+                                <option value="loa" ${item.status === 'loa' ? 'selected' : ''}>LOA</option>
+                                <option value="inactive" ${item.status === 'inactive' ? 'selected' : ''}>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="employee-strikes-container">
+                            <span class="employee-strikes-label">Strikes:</span>
+                            <select class="employee-strikes-select" onchange="updateStrikeColor(this); scheduleSave();">
+                                <option value="0/3" ${item.strikes === '0/3' ? 'selected' : ''}>0/3</option>
+                                <option value="1/3" ${item.strikes === '1/3' ? 'selected' : ''}>1/3</option>
+                                <option value="2/3" ${item.strikes === '2/3' ? 'selected' : ''}>2/3</option>
+                                <option value="3/3" ${item.strikes === '3/3' ? 'selected' : ''}>3/3</option>
+                            </select>
+                        </div>
+                        <div class="card-notes-container">
+                            <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
+                            <div class="card-notes-text edit-protected">${item.notes || ''}</div>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+                updateStatusColor(card.querySelector('.employee-status-select'));
+                updateStrikeColor(card.querySelector('.employee-strikes-select'));
+            });
+        }
+
         function applyState(data) {
             if (!data) return;
             isApplyingState = true;
@@ -2501,252 +2307,71 @@
                     });
                 }
 
-                if (data.tow) renderGridCards('towGrid', data.tow, 'fa-car-on');
-                if (data.awards) renderGridCards('awardsGrid', data.awards, 'fa-award');
-                if (data.race) renderGridCards('raceGrid', data.race, 'fa-shield-cat');
-                if (data.calendar) renderGridCards('calendarGrid', data.calendar, 'fa-calendar-day');
-                if (data.portal) renderGridCards('portalGrid', data.portal, 'fa-file-shield');
-
-                if (data.k9Roster) renderPortalSubdivisionRoster('k9RosterGrid', data.k9Roster, 'fa-dog', 'K9');
-                if (data.mbuRoster) renderPortalSubdivisionRoster('mbuRosterGrid', data.mbuRoster, 'fa-motorcycle', 'MBU');
-                if (data.swatRoster) renderPortalSubdivisionRoster('swatRosterGrid', data.swatRoster, 'fa-person-rifle', 'SWAT');
-                if (data.airRoster) renderPortalSubdivisionRoster('airRosterGrid', data.airRoster, 'fa-helicopter', 'AIR');
-                if (data.cidRoster) renderPortalSubdivisionRoster('cidRosterGrid', data.cidRoster, 'fa-user-secret', 'CID');
-
                 if (data.pricing) {
                     const tbody = document.querySelector('#pricingTable tbody');
-                    tbody.innerHTML = '';
-                    data.pricing.forEach(row => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td class="edit-protected">${row.offense}</td>
-                            <td class="edit-protected">${row.fine}</td>
-                            <td class="edit-protected">${row.sentence}</td>
-                            <td class="edit-control"><button class="btn btn-danger" style="padding: 2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
-                        `;
-                        tbody.appendChild(tr);
-                    });
+                    if (tbody) {
+                        tbody.innerHTML = '';
+                        data.pricing.forEach(p => {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                                <td class="edit-protected">${p.offense}</td>
+                                <td class="edit-protected">${p.fine}</td>
+                                <td class="edit-protected">${p.sentence}</td>
+                                <td class="edit-control"><button class="btn btn-danger" style="padding: 2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    }
                 }
+
+                renderGenericCards('towGrid', data.tow, 'fa-car-on');
+                renderGenericCards('awardsGrid', data.awards, 'fa-award');
+                renderGenericCards('raceGrid', data.race, 'fa-shield-cat');
+                renderGenericCards('calendarGrid', data.calendar, 'fa-calendar-day');
+                renderGenericCards('portalGrid', data.portal, 'fa-file-shield');
+
+                renderPortalRoster('k9RosterGrid', data.k9Roster, 'fa-dog');
+                renderPortalRoster('mbuRosterGrid', data.mbuRoster, 'fa-motorcycle');
+                renderPortalRoster('swatRosterGrid', data.swatRoster, 'fa-person-rifle');
+                renderPortalRoster('airRosterGrid', data.airRoster, 'fa-helicopter');
+                renderPortalRoster('cidRosterGrid', data.cidRoster, 'fa-user-secret');
+
+                const isUnlocked = sessionStorage.getItem('editorUnlocked') === 'true';
+                setReadOnlyMode(!isUnlocked);
+                bindEditListeners();
             } finally {
                 isApplyingState = false;
-                setReadOnlyMode(sessionStorage.getItem('editorUnlocked') !== 'true');
-                bindEditListeners();
             }
         }
 
-        function renderGridCards(gridId, cards, fallbackIcon) {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            grid.innerHTML = '';
-            cards.forEach(c => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                const bgStyle = c.image ? `style="background-image: url('${c.image}')"` : '';
-                card.innerHTML = `
-                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                    <div class="card-img-container" ${bgStyle}>
-                        ${!c.image ? `<i class="fa-solid ${fallbackIcon} fa-3x" style="color: #273754;"></i>` : ''}
-                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title edit-protected">${c.title}</div>
-                        <div class="card-subtitle edit-protected">${c.subtitle}</div>
-                        <div class="card-text edit-protected">${c.text}</div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderUniformRoster(gridId, cards) {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            grid.innerHTML = '';
-            cards.forEach(c => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                const bgStyle = c.image ? `style="background-image: url('${c.image}')"` : '';
-                const u = c.uniform || {};
-
-                card.innerHTML = `
-                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                    <div class="card-img-container" ${bgStyle}>
-                        ${!c.image ? `<i class="fa-solid fa-shirt fa-3x" style="color: #273754;"></i>` : ''}
-                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title edit-protected">${c.title}</div>
-                        <div class="card-subtitle edit-protected">${c.subtitle}</div>
-                        <div class="card-text edit-protected">${c.text}</div>
-
-                        <div class="uniform-components-container">
-                            <div class="uniform-components-title"><i class="fa-solid fa-shirt"></i> Uniform Asset Components</div>
-                            <div class="uniform-grid">
-                                <div class="uniform-item"><span class="uniform-label">Masks</span><input type="text" class="uniform-input uniform-masks" value="${u.masks || '0'}" onchange="scheduleSave();"></div>
-                                <div class="uniform-item"><span class="uniform-label">Hats & Helmets</span><input type="text" class="uniform-input uniform-hats" value="${u.hats || '0'}" onchange="scheduleSave();"></div>
-                                <div class="uniform-item"><span class="uniform-label">Upper Body</span><input type="text" class="uniform-input uniform-upper" value="${u.upper || '0'}" onchange="scheduleSave();"></div>
-                                <div class="uniform-item"><span class="uniform-label">Lower Body</span><input type="text" class="uniform-input uniform-lower" value="${u.lower || '0'}" onchange="scheduleSave();"></div>
-                                <div class="uniform-item"><span class="uniform-label">Bags & Parachutes</span><input type="text" class="uniform-input uniform-bags" value="${u.bags || '0'}" onchange="scheduleSave();"></div>
-                                <div class="uniform-item"><span class="uniform-label">Shoes</span><input type="text" class="uniform-input uniform-shoes" value="${u.shoes || '0'}" onchange="scheduleSave();"></div>
-                                <div class="uniform-item"><span class="uniform-label">Scarfs & Chains</span><input type="text" class="uniform-input uniform-scarfs" value="${u.scarfs || '0'}" onchange="scheduleSave();"></div>
-                                <div class="uniform-item"><span class="uniform-label">Shirts & Accessories</span><input type="text" class="uniform-input uniform-shirt" value="${u.shirt || '0'}" onchange="scheduleSave();"></div>
-                                <div class="uniform-item"><span class="uniform-label">Body Armor & Acc.</span><input type="text" class="uniform-input uniform-armor" value="${u.armor || '0'}" onchange="scheduleSave();"></div>
-                                <div class="uniform-item"><span class="uniform-label">Badges & Logos</span><input type="text" class="uniform-input uniform-badges" value="${u.badges || '0'}" onchange="scheduleSave();"></div>
-                                <div class="uniform-item full-width"><span class="uniform-label">Shirt Overlays & Jackets</span><input type="text" class="uniform-input uniform-jackets" value="${u.jackets || '0'}" onchange="scheduleSave();"></div>
-                            </div>
-                        </div>
-
-                        <div class="card-notes-container">
-                            <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Uniform Notes</div>
-                            <div class="card-notes-text edit-protected">${c.notes || ''}</div>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function renderPortalSubdivisionRoster(gridId, cards, fallbackIcon, type) {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            grid.innerHTML = '';
-            cards.forEach(c => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                const bgStyle = c.image ? `style="background-image: url('${c.image}')"` : '';
-
-                let certsHtml = '';
-                if (type === 'K9') {
-                    certsHtml = `
-                        <div class="cert-container">
-                            <span class="employee-field-label">Certifications</span>
-                            <div class="cert-options">
-                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-search" ${c.certSearch ? 'checked' : ''} onchange="scheduleSave();"><span class="cert-badge">Search Certified</span></label>
-                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-narcotics" ${c.certNarcotics ? 'checked' : ''} onchange="scheduleSave();"><span class="cert-badge">Narcotics Certified</span></label>
-                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-explosives" ${c.certExplosives ? 'checked' : ''} onchange="scheduleSave();"><span class="cert-badge">Explosives Certified</span></label>
-                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-src" ${c.certSRC ? 'checked' : ''} onchange="scheduleSave();"><span class="cert-badge">SRC Certified</span></label>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                card.innerHTML = `
-                    <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                    <div class="card-img-container" ${bgStyle}>
-                        ${!c.image ? `<i class="fa-solid ${fallbackIcon} fa-3x" style="color: #273754;"></i>` : ''}
-                        <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title edit-protected">${c.title}</div>
-                        <div class="card-subtitle edit-protected">${c.subtitle}</div>
-                        <div class="card-text edit-protected">${c.text}</div>
-
-                        ${type === 'K9' ? `
-                            <div class="employee-date-item" style="margin-top:4px;">
-                                <span class="employee-field-label">K9 Name</span>
-                                <input type="text" class="employee-date-input k9-name" placeholder="e.g. K9 'Rex'" value="${c.k9Name || ''}" onchange="scheduleSave();">
-                            </div>
-                        ` : ''}
-
-                        <div class="employee-date-group">
-                            <div class="employee-date-item"><span class="employee-field-label">Hire Date</span><input type="date" class="employee-date-input hire-date" value="${c.hireDate || ''}" onchange="scheduleSave();"></div>
-                            <div class="employee-date-item"><span class="employee-field-label">Promotion Date</span><input type="date" class="employee-date-input promotion-date" value="${c.promotionDate || ''}" onchange="scheduleSave();"></div>
-                        </div>
-
-                        ${certsHtml}
-
-                        <div class="employee-status-container">
-                            <span class="employee-status-label">Status:</span>
-                            <select class="employee-status-select" onchange="updateStatusColor(this); scheduleSave();">
-                                <option value="active" ${c.status === 'active' ? 'selected' : ''}>Active</option>
-                                <option value="loa" ${c.status === 'loa' ? 'selected' : ''}>LOA</option>
-                                <option value="inactive" ${c.status === 'inactive' ? 'selected' : ''}>Inactive</option>
-                            </select>
-                        </div>
-                        <div class="employee-strikes-container">
-                            <span class="employee-strikes-label">Strikes:</span>
-                            <select class="employee-strikes-select" onchange="updateStrikeColor(this); scheduleSave();">
-                                <option value="0/3" ${c.strikes === '0/3' ? 'selected' : ''}>0/3</option>
-                                <option value="1/3" ${c.strikes === '1/3' ? 'selected' : ''}>1/3</option>
-                                <option value="2/3" ${c.strikes === '2/3' ? 'selected' : ''}>2/3</option>
-                                <option value="3/3" ${c.strikes === '3/3' ? 'selected' : ''}>3/3</option>
-                            </select>
-                        </div>
-                        <div class="card-notes-container">
-                            <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
-                            <div class="card-notes-text edit-protected">${c.notes || ''}</div>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-                updateStatusColor(card.querySelector('.employee-status-select'));
-                updateStrikeColor(card.querySelector('.employee-strikes-select'));
-            });
-        }
-
-        // ==================== AUTO SAVE & WORKER INTEGRATION ====================
+        // ==================== WORKER SYNC & AUTO-SAVE ====================
         function scheduleSave() {
             if (isApplyingState) return;
-            if (saveTimer) clearTimeout(saveTimer);
-            saveTimer = setTimeout(() => {
-                saveDataToCloud();
+            if (sessionStorage.getItem('editorUnlocked') !== 'true') return;
+
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(async () => {
+                const state = collectFullState();
+                try {
+                    const res = await fetch(`${WORKER_URL}/save-state`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(state)
+                    });
+                    if (res.ok) {
+                        showSaveNotification();
+                    }
+                } catch (e) {
+                    console.error('Failed to sync save with Cloudflare Workers:', e);
+                }
             }, 800);
         }
 
         function showSaveNotification() {
-            const notif = document.getElementById('saveNotification');
-            notif.style.display = 'block';
-            setTimeout(() => { notif.style.display = 'none'; }, 2000);
-        }
-
-        async function saveDataToCloud() {
-            const payload = collectFullState();
-            localStorage.setItem('lapd_site_data', JSON.stringify(payload));
-            showSaveNotification();
-
-            try {
-                await fetch(WORKER_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-            } catch (err) {
-                console.warn('KV persistence unavailable, saved to local storage.', err);
-            }
-        }
-
-        async function loadDataFromCloud() {
-            try {
-                const res = await fetch(WORKER_URL);
-                if (res.ok) {
-                    const cloudData = await res.json();
-                    if (cloudData && Object.keys(cloudData).length > 0) {
-                        applyState(cloudData);
-                        return;
-                    }
-                }
-            } catch (err) {
-                console.warn('Could not load from KV store, falling back to local storage.');
-            }
-
-            const cached = localStorage.getItem('lapd_site_data');
-            if (cached) {
-                try {
-                    applyState(JSON.parse(cached));
-                } catch (e) {
-                    console.error('Failed to parse cached local data', e);
-                }
-            }
-        }
-
-        function resetSiteData() {
-            if (confirm("Are you sure you want to reset all customized site data back to default?")) {
-                localStorage.removeItem('lapd_site_data');
-                location.reload();
-            }
+            const el = document.getElementById('saveNotification');
+            if (!el) return;
+            el.style.display = 'block';
+            setTimeout(() => { el.style.display = 'none'; }, 2000);
         }
 
         function bindEditListeners() {
@@ -2756,73 +2381,78 @@
             });
         }
 
-        // ==================== CARD CREATION HELPERS ====================
-        function addCard(gridId, defaultTitle, defaultSub, defaultText) {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.innerHTML = `
-                <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+        // Background Auto-Polling (Pulls latest changes for viewers every 10 seconds)
+        setInterval(async () => {
+            if (sessionStorage.getItem('editorUnlocked') === 'true') return;
+            try {
+                const response = await fetch(`${WORKER_URL}/get-state`);
+                if (response.ok) {
+                    const data = await response.json();
+                    applyState(data);
+                }
+            } catch (err) {
+                console.error("Auto-sync fetch error:", err);
+            }
+        }, 10000);
+
+        // Initial Load Fetch
+        window.addEventListener('DOMContentLoaded', async () => {
+            renderEditorBadge();
+            if (sessionStorage.getItem('portalUnlocked') === 'true') showPortalContent();
+
+            try {
+                const res = await fetch(`${WORKER_URL}/get-state`);
+                if (res.ok) {
+                    const data = await res.json();
+                    applyState(data);
+                }
+            } catch (e) {
+                console.warn('Unable to retrieve remote Worker state on startup:', e);
+            }
+        });
+
+        // ==================== CARD & TABLE MANIPULATION ====================
+        function removeCard(btn) {
+            const card = btn.closest('.card, .partner-card, .badge-card');
+            if (card) {
+                card.remove();
+                scheduleSave();
+            }
+        }
+
+        function addPartner() {
+            const grid = document.getElementById('partnersGrid');
+            const div = document.createElement('div');
+            div.className = 'partner-card';
+            div.innerHTML = `
                 <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                <div class="card-img-container">
-                    <i class="fa-solid fa-shield fa-3x" style="color: #273754;"></i>
-                    <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                </div>
-                <div class="card-body">
-                    <div class="card-title edit-protected">${defaultTitle}</div>
-                    <div class="card-subtitle edit-protected">${defaultSub}</div>
-                    <div class="card-text edit-protected">${defaultText}</div>
-                </div>
+                <div class="edit-protected" contenteditable="true" style="font-weight:bold;">New Partner Agency</div>
+                <div class="edit-protected" contenteditable="true" style="font-size:0.8rem; color:var(--text-muted);">Jurisdiction / Role</div>
             `;
-            grid.appendChild(card);
-            setReadOnlyMode(sessionStorage.getItem('editorUnlocked') !== 'true');
+            grid.appendChild(div);
             bindEditListeners();
             scheduleSave();
         }
 
-        function addUniformCard(gridId) {
+        function addCard(gridId, titleText, subtitleText, descText) {
             const grid = document.getElementById(gridId);
-            if (!grid) return;
             const card = document.createElement('div');
             card.className = 'card';
             card.innerHTML = `
                 <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                 <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
                 <div class="card-img-container">
-                    <i class="fa-solid fa-shirt fa-3x" style="color: #273754;"></i>
+                    <i class="fa-solid fa-file-shield fa-3x" style="color: #273754;"></i>
                     <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
                 </div>
                 <div class="card-body">
-                    <div class="card-title edit-protected">New Uniform Preset</div>
-                    <div class="card-subtitle edit-protected">Division Loadout</div>
-                    <div class="card-text edit-protected">Standard assignment uniform description.</div>
-
-                    <div class="uniform-components-container">
-                        <div class="uniform-components-title"><i class="fa-solid fa-shirt"></i> Uniform Asset Components</div>
-                        <div class="uniform-grid">
-                            <div class="uniform-item"><span class="uniform-label">Masks</span><input type="text" class="uniform-input uniform-masks" value="0" onchange="scheduleSave();"></div>
-                            <div class="uniform-item"><span class="uniform-label">Hats & Helmets</span><input type="text" class="uniform-input uniform-hats" value="0" onchange="scheduleSave();"></div>
-                            <div class="uniform-item"><span class="uniform-label">Upper Body</span><input type="text" class="uniform-input uniform-upper" value="0" onchange="scheduleSave();"></div>
-                            <div class="uniform-item"><span class="uniform-label">Lower Body</span><input type="text" class="uniform-input uniform-lower" value="0" onchange="scheduleSave();"></div>
-                            <div class="uniform-item"><span class="uniform-label">Bags & Parachutes</span><input type="text" class="uniform-input uniform-bags" value="0" onchange="scheduleSave();"></div>
-                            <div class="uniform-item"><span class="uniform-label">Shoes</span><input type="text" class="uniform-input uniform-shoes" value="0" onchange="scheduleSave();"></div>
-                            <div class="uniform-item"><span class="uniform-label">Scarfs & Chains</span><input type="text" class="uniform-input uniform-scarfs" value="0" onchange="scheduleSave();"></div>
-                            <div class="uniform-item"><span class="uniform-label">Shirts & Accessories</span><input type="text" class="uniform-input uniform-shirt" value="0" onchange="scheduleSave();"></div>
-                            <div class="uniform-item"><span class="uniform-label">Body Armor & Acc.</span><input type="text" class="uniform-input uniform-armor" value="0" onchange="scheduleSave();"></div>
-                            <div class="uniform-item"><span class="uniform-label">Badges & Logos</span><input type="text" class="uniform-input uniform-badges" value="0" onchange="scheduleSave();"></div>
-                            <div class="uniform-item full-width"><span class="uniform-label">Shirt Overlays & Jackets</span><input type="text" class="uniform-input uniform-jackets" value="0" onchange="scheduleSave();"></div>
-                        </div>
-                    </div>
-
-                    <div class="card-notes-container">
-                        <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Uniform Notes</div>
-                        <div class="card-notes-text edit-protected">Authorized uniform configuration.</div>
-                    </div>
+                    <div class="card-title edit-protected" contenteditable="true">${titleText}</div>
+                    <div class="card-subtitle edit-protected" contenteditable="true">${subtitleText}</div>
+                    <div class="card-text edit-protected" contenteditable="true">${descText}</div>
                 </div>
             `;
             grid.appendChild(card);
-            setReadOnlyMode(sessionStorage.getItem('editorUnlocked') !== 'true');
+            initDragAndDrop();
             bindEditListeners();
             scheduleSave();
         }
@@ -2839,20 +2469,32 @@
                     <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
                 </div>
                 <div class="card-body">
-                    <div class="card-title edit-protected">Officer Name</div>
-                    <div class="card-subtitle edit-protected">Rank | Badge #000</div>
-                    <div class="card-text edit-protected">Division assignment and primary operational duties.</div>
+                    <div class="card-title edit-protected" contenteditable="true">Officer Name</div>
+                    <div class="card-subtitle edit-protected" contenteditable="true">Rank | Badge #000</div>
+                    <div class="card-text edit-protected" contenteditable="true">Assignment details and unit role...</div>
 
                     <div class="employee-date-group">
-                        <div class="employee-date-item"><span class="employee-field-label">Hire Date</span><input type="date" class="employee-date-input hire-date" onchange="scheduleSave();"></div>
-                        <div class="employee-date-item"><span class="employee-field-label">Promotion Date</span><input type="date" class="employee-date-input promotion-date" onchange="scheduleSave();"></div>
+                        <div class="employee-date-item">
+                            <span class="employee-field-label">Hire Date</span>
+                            <input type="date" class="employee-date-input hire-date" onchange="scheduleSave();">
+                        </div>
+                        <div class="employee-date-item">
+                            <span class="employee-field-label">Promotion Date</span>
+                            <input type="date" class="employee-date-input promotion-date" onchange="scheduleSave();">
+                        </div>
                     </div>
 
                     <div class="cert-container">
                         <span class="employee-field-label">Certifications</span>
                         <div class="cert-options">
-                            <label class="cert-checkbox-label"><input type="checkbox" class="cert-scene-cmd" onchange="scheduleSave();"><span class="cert-badge">Scene Command Certified</span></label>
-                            <label class="cert-checkbox-label"><input type="checkbox" class="cert-watch-cmd" onchange="scheduleSave();"><span class="cert-badge">Watch Command Certified</span></label>
+                            <label class="cert-checkbox-label">
+                                <input type="checkbox" class="cert-scene-cmd" onchange="scheduleSave();">
+                                <span class="cert-badge">Scene Command Certified</span>
+                            </label>
+                            <label class="cert-checkbox-label">
+                                <input type="checkbox" class="cert-watch-cmd" onchange="scheduleSave();">
+                                <span class="cert-badge">Watch Command Certified</span>
+                            </label>
                         </div>
                     </div>
 
@@ -2876,84 +2518,78 @@
                     </div>
                     <div class="card-notes-container">
                         <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Notes</div>
-                        <div class="card-notes-text edit-protected">Service remarks or commendations...</div>
+                        <div class="card-notes-text edit-protected" contenteditable="true">Enter personnel notes...</div>
                     </div>
                 </div>
             `;
             grid.appendChild(card);
-            setReadOnlyMode(sessionStorage.getItem('editorUnlocked') !== 'true');
+            initDragAndDrop();
+            bindEditListeners();
+            scheduleSave();
+        }
+
+        function addUniformCard(gridId) {
+            const grid = document.getElementById(gridId);
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.innerHTML = `
+                <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
+                <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                <div class="card-img-container">
+                    <i class="fa-solid fa-shirt fa-3x" style="color: #273754;"></i>
+                    <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-title edit-protected" contenteditable="true">Uniform Title</div>
+                    <div class="card-subtitle edit-protected" contenteditable="true">Division Preset</div>
+                    <div class="card-text edit-protected" contenteditable="true">Description of uniform setup...</div>
+
+                    <div class="uniform-components-container">
+                        <div class="uniform-components-title"><i class="fa-solid fa-shirt"></i> Uniform Asset Components</div>
+                        <div class="uniform-grid">
+                            <div class="uniform-item"><span class="uniform-label">Masks</span><input type="text" class="uniform-input uniform-masks" value="0" onchange="scheduleSave();"></div>
+                            <div class="uniform-item"><span class="uniform-label">Hats & Helmets</span><input type="text" class="uniform-input uniform-hats" value="0" onchange="scheduleSave();"></div>
+                            <div class="uniform-item"><span class="uniform-label">Upper Body</span><input type="text" class="uniform-input uniform-upper" value="0" onchange="scheduleSave();"></div>
+                            <div class="uniform-item"><span class="uniform-label">Lower Body</span><input type="text" class="uniform-input uniform-lower" value="0" onchange="scheduleSave();"></div>
+                            <div class="uniform-item"><span class="uniform-label">Bags & Parachutes</span><input type="text" class="uniform-input uniform-bags" value="0" onchange="scheduleSave();"></div>
+                            <div class="uniform-item"><span class="uniform-label">Shoes</span><input type="text" class="uniform-input uniform-shoes" value="0" onchange="scheduleSave();"></div>
+                            <div class="uniform-item"><span class="uniform-label">Scarfs & Chains</span><input type="text" class="uniform-input uniform-scarfs" value="0" onchange="scheduleSave();"></div>
+                            <div class="uniform-item"><span class="uniform-label">Shirts & Accessories</span><input type="text" class="uniform-input uniform-shirt" value="0" onchange="scheduleSave();"></div>
+                            <div class="uniform-item"><span class="uniform-label">Body Armor & Acc.</span><input type="text" class="uniform-input uniform-armor" value="0" onchange="scheduleSave();"></div>
+                            <div class="uniform-item"><span class="uniform-label">Badges & Logos</span><input type="text" class="uniform-input uniform-badges" value="0" onchange="scheduleSave();"></div>
+                            <div class="uniform-item full-width"><span class="uniform-label">Shirt Overlays & Jackets</span><input type="text" class="uniform-input uniform-jackets" value="0" onchange="scheduleSave();"></div>
+                        </div>
+                    </div>
+
+                    <div class="card-notes-container">
+                        <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Uniform Notes</div>
+                        <div class="card-notes-text edit-protected" contenteditable="true">Notes or guidelines...</div>
+                    </div>
+                </div>
+            `;
+            grid.appendChild(card);
+            initDragAndDrop();
             bindEditListeners();
             scheduleSave();
         }
 
         function addPortalRosterCard(gridId) {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            const isK9 = gridId.includes('k9');
-            const card = document.createElement('div');
-            card.className = 'card';
-
-            card.innerHTML = `
-                <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
-                <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                <div class="card-img-container">
-                    <i class="fa-solid fa-user-shield fa-3x" style="color: #273754;"></i>
-                    <div class="upload-btn-wrapper"><button class="btn btn-secondary"><i class="fa-solid fa-camera"></i></button><input type="file" accept="image/*" onchange="uploadImage(event, this)"></div>
-                </div>
-                <div class="card-body">
-                    <div class="card-title edit-protected">Officer Name</div>
-                    <div class="card-subtitle edit-protected">Role | Call-Sign</div>
-                    <div class="card-text edit-protected">Specialized subdivision operational assignment.</div>
-
-                    ${isK9 ? `
-                        <div class="employee-date-item" style="margin-top:4px;">
-                            <span class="employee-field-label">K9 Name</span>
-                            <input type="text" class="employee-date-input k9-name" placeholder="e.g. K9 'Rex'" onchange="scheduleSave();">
-                        </div>
-                    ` : ''}
-
-                    <div class="employee-date-group">
-                        <div class="employee-date-item"><span class="employee-field-label">Hire Date</span><input type="date" class="employee-date-input hire-date" onchange="scheduleSave();"></div>
-                        <div class="employee-date-item"><span class="employee-field-label">Promotion Date</span><input type="date" class="employee-date-input promotion-date" onchange="scheduleSave();"></div>
-                    </div>
-
-                    ${isK9 ? `
-                        <div class="cert-container">
-                            <span class="employee-field-label">Certifications</span>
-                            <div class="cert-options">
-                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-search" onchange="scheduleSave();"><span class="cert-badge">Search Certified</span></label>
-                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-narcotics" onchange="scheduleSave();"><span class="cert-badge">Narcotics Certified</span></label>
-                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-explosives" onchange="scheduleSave();"><span class="cert-badge">Explosives Certified</span></label>
-                                <label class="cert-checkbox-label"><input type="checkbox" class="cert-src" onchange="scheduleSave();"><span class="cert-badge">SRC Certified</span></label>
-                            </div>
-                        </div>
-                    ` : ''}
-
-                    <div class="employee-status-container">
-                        <span class="employee-status-label">Status:</span>
-                        <select class="employee-status-select status-active" onchange="updateStatusColor(this); scheduleSave();">
-                            <option value="active" selected>Active</option>
-                            <option value="loa">LOA</option>
-                            <option value="inactive">Inactive</option>
-                        </select>
-                    </div>
-                    <div class="employee-strikes-container">
-                        <span class="employee-strikes-label">Strikes:</span>
-                        <select class="employee-strikes-select" onchange="updateStrikeColor(this); scheduleSave();">
-                            <option value="0/3" selected>0/3</option>
-                            <option value="1/3">1/3</option>
-                            <option value="2/3">2/3</option>
-                            <option value="3/3">3/3</option>
-                        </select>
-                    </div>
-                    <div class="card-notes-container">
-                        <div class="card-notes-title"><i class="fa-solid fa-sticky-note"></i> Unit Notes</div>
-                        <div class="card-notes-text edit-protected">Unit remarks and qualifications...</div>
-                    </div>
-                </div>
-            `;
-            grid.appendChild(card);
-            setReadOnlyMode(sessionStorage.getItem('editorUnlocked') !== 'true');
+            renderPortalRoster(gridId, [{
+                title: 'Officer Name',
+                subtitle: 'Rank | Callsign',
+                text: 'Division Role details...',
+                hireDate: '',
+                promotionDate: '',
+                k9Name: '',
+                certSearch: false,
+                certNarcotics: false,
+                certExplosives: false,
+                certSRC: false,
+                status: 'active',
+                strikes: '0/3',
+                notes: 'Notes...'
+            }]);
+            initDragAndDrop();
             bindEditListeners();
             scheduleSave();
         }
@@ -2968,48 +2604,41 @@
                     <div class="badge-info-main">
                         <div class="badge-icon-box"><i class="fa-solid fa-shield-halved"></i></div>
                         <div>
-                            <h3 class="edit-protected" style="font-family: 'Bebas Neue'; font-size: 1.8rem; color: #fff;">Officer Name</h3>
+                            <h3 class="edit-protected" contenteditable="true" style="font-family: 'Bebas Neue'; font-size: 1.8rem; color: #fff;">Officer Name</h3>
                             <p style="color: var(--accent-gold); font-size: 0.85rem; font-weight: bold;">OFFICIAL SERVICE RECORD</p>
                         </div>
                     </div>
                 </div>
                 <div class="badge-assignments-grid">
-                    <div class="assignment-box"><span class="assignment-label">Badge Number</span><div class="edit-protected" style="font-weight: 600;">#0000</div></div>
-                    <div class="assignment-box"><span class="assignment-label">Rank</span><div class="edit-protected" style="font-weight: 600;">Officer</div></div>
-                    <div class="assignment-box"><span class="assignment-label">Division Assignment</span><div class="edit-protected" style="font-weight: 600;">Patrol Division</div></div>
+                    <div class="assignment-box">
+                        <span class="assignment-label">Badge Number</span>
+                        <div class="edit-protected" contenteditable="true" style="font-weight: 600;">#0000</div>
+                    </div>
+                    <div class="assignment-box">
+                        <span class="assignment-label">Rank</span>
+                        <div class="edit-protected" contenteditable="true" style="font-weight: 600;">Officer Rank</div>
+                    </div>
+                    <div class="assignment-box">
+                        <span class="assignment-label">Division Assignment</span>
+                        <div class="edit-protected" contenteditable="true" style="font-weight: 600;">Patrol Division</div>
+                    </div>
                 </div>
                 <div class="badge-service-record">
                     <div class="record-section">
                         <div class="record-title commendation"><i class="fa-solid fa-award"></i> Commendations</div>
-                        <div class="edit-protected" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">• None recorded.</div>
+                        <div class="edit-protected" contenteditable="true" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">• Commendation records...</div>
                     </div>
                     <div class="record-section">
                         <div class="record-title punishment"><i class="fa-solid fa-triangle-exclamation"></i> Disciplinary Actions / Punishments</div>
-                        <div class="edit-protected" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">• None active.</div>
+                        <div class="edit-protected" contenteditable="true" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">• Disciplinary details...</div>
                     </div>
                 </div>
                 <div class="notes-section">
                     <div class="record-title notes"><i class="fa-solid fa-clipboard-list"></i> Command Notes & Remarks</div>
-                    <div class="edit-protected" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">General service remarks...</div>
+                    <div class="edit-protected" contenteditable="true" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">Command notes...</div>
                 </div>
             `;
             container.appendChild(card);
-            setReadOnlyMode(sessionStorage.getItem('editorUnlocked') !== 'true');
-            bindEditListeners();
-            scheduleSave();
-        }
-
-        function addPartner() {
-            const grid = document.getElementById('partnersGrid');
-            const card = document.createElement('div');
-            card.className = 'partner-card';
-            card.innerHTML = `
-                <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                <div class="edit-protected" style="font-weight:bold;">Agency Name</div>
-                <div class="edit-protected" style="font-size:0.8rem; color:var(--text-muted);">Cooperation Scope</div>
-            `;
-            grid.appendChild(card);
-            setReadOnlyMode(sessionStorage.getItem('editorUnlocked') !== 'true');
             bindEditListeners();
             scheduleSave();
         }
@@ -3018,23 +2647,14 @@
             const tbody = document.querySelector(`#${tableId} tbody`);
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td class="edit-protected">New Offense</td>
-                <td class="edit-protected">$000</td>
-                <td class="edit-protected">Penalty / Notes</td>
+                <td class="edit-protected" contenteditable="true">New Offense Description</td>
+                <td class="edit-protected" contenteditable="true">$0</td>
+                <td class="edit-protected" contenteditable="true">Penalty details...</td>
                 <td class="edit-control"><button class="btn btn-danger" style="padding: 2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
             `;
             tbody.appendChild(tr);
-            setReadOnlyMode(sessionStorage.getItem('editorUnlocked') !== 'true');
             bindEditListeners();
             scheduleSave();
-        }
-
-        function removeCard(btn) {
-            const card = btn.closest('.card, .partner-card, .badge-card');
-            if (card) {
-                card.remove();
-                scheduleSave();
-            }
         }
 
         function removeTableRow(btn) {
@@ -3045,17 +2665,17 @@
             }
         }
 
-        // ==================== IMAGE UPLOADER HANDLERS ====================
-        function uploadImage(event, inputEl) {
+        // Image Handling
+        function uploadImage(event, btn) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const cardImgContainer = inputEl.closest('.card-img-container');
-                if (cardImgContainer) {
-                    cardImgContainer.style.backgroundImage = `url('${e.target.result}')`;
-                    const icon = cardImgContainer.querySelector('i.fa-3x');
+                const imgContainer = btn.closest('.card-img-container');
+                if (imgContainer) {
+                    imgContainer.style.backgroundImage = `url('${e.target.result}')`;
+                    const icon = imgContainer.querySelector('i.fa-3x');
                     if (icon) icon.style.display = 'none';
                     scheduleSave();
                 }
@@ -3075,35 +2695,20 @@
             reader.readAsDataURL(file);
         });
 
-        // ==================== DISPATCH STATUS TOGGLE ====================
-        function setStatus(type) {
-            const ind = document.getElementById('statusIndicator');
-            const txt = document.getElementById('statusText');
-
-            ind.className = 'status-indicator';
-            if (type === 'open') {
-                ind.classList.add('status-open');
-                txt.innerText = 'DISPATCH ACTIVE';
-            } else if (type === 'call') {
-                ind.classList.add('status-call');
-                txt.innerText = 'HIGH ALERT / CODE 2';
-            } else if (type === 'closed') {
-                ind.classList.add('status-closed');
-                txt.innerText = 'CODE RED / TACTICAL';
+        async function resetSiteData() {
+            if (confirm("Are you sure you want to reset all portal data to standard defaults across all users?")) {
+                try {
+                    await fetch(`${WORKER_URL}/save-state`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({})
+                    });
+                    window.location.reload();
+                } catch(e) {
+                    alert("Error resetting data.");
+                }
             }
-            scheduleSave();
         }
-
-        // ==================== INITIALIZATION ====================
-        window.addEventListener('DOMContentLoaded', async () => {
-            renderEditorBadge();
-            if (sessionStorage.getItem('portalUnlocked') === 'true' || sessionStorage.getItem('editorUnlocked') === 'true') {
-                showPortalContent();
-            } else {
-                hidePortalContent();
-            }
-            await loadDataFromCloud();
-        });
     </script>
 </body>
 </html>

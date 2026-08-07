@@ -2150,7 +2150,6 @@
                 raceText: document.getElementById('raceEditableText')?.innerHTML || '',
                 contactText: document.getElementById('contactEditableText')?.innerHTML || '',
                 partners: getPartnerData(),
-                roster: getRosterCardData('rosterGrid'),
                 administrationRoster: getRosterCardData('administrationRosterGrid'),
                 divisionCommandRoster: getRosterCardData('divisionCommandRosterGrid'),
                 fieldCommandRoster: getRosterCardData('fieldCommandRosterGrid'),
@@ -2413,7 +2412,7 @@
                         </div>
                         <div class="assignment-box">
                             <span class="assignment-label">Division Assignment</span>
-                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight: 600;">${item.division || 'Patrol'}</div>
+                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight: 600;">${item.division || 'Patrol Division'}</div>
                         </div>
                     </div>
  
@@ -2427,7 +2426,7 @@
                         <div class="record-section">
                             <div class="record-title punishment"><i class="fa-solid fa-triangle-exclamation"></i> Disciplinary Actions / Punishments</div>
                             <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size: 0.9rem; color: var(--text-light); line-height: 1.4;">
-                                ${item.punishments || '• None active.'}
+                                ${item.punishments || '• None recorded.'}
                             </div>
                         </div>
                     </div>
@@ -2435,260 +2434,272 @@
                     <div class="notes-section">
                         <div class="record-title notes"><i class="fa-solid fa-clipboard-list"></i> Command Notes & Remarks</div>
                         <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.4;">
-                            ${item.notes || 'No remarks.'}
+                            ${item.notes || 'No active notes.'}
                         </div>
                     </div>
                 </div>
             `;
         }
  
-        function renderGrid(containerId, items, builderFn) {
-            const container = document.getElementById(containerId);
-            if (!container || !Array.isArray(items)) return;
-            const isReadOnly = document.body.classList.contains('read-only');
-            container.innerHTML = items.map(item => builderFn(item, isReadOnly)).join('');
-        }
- 
-        function applyState(data) {
-            if (!data) return;
+        function applyState(state) {
+            if (!state) return;
             isApplyingState = true;
  
-            if (data.status) setStatus(data.status, false);
-            if (data.heroBackground) {
-                window.__heroBackground = data.heroBackground;
-                document.getElementById('heroBanner').style.backgroundImage = `url('${data.heroBackground}')`;
+            if (state.status) setStatus(state.status, true);
+ 
+            if (state.heroBackground) {
+                window.__heroBackground = state.heroBackground;
+                const hero = document.getElementById('heroBanner');
+                hero.style.background = `center / cover no-repeat url("${state.heroBackground}")`;
+                hero.style.backgroundColor = '#0f172a';
             }
  
-            if (data.homeText && document.getElementById('homeEditableText')) {
-                document.getElementById('homeEditableText').innerHTML = data.homeText;
+            if (state.homeText != null) {
+                const el = document.getElementById('homeEditableText');
+                if (el) el.innerHTML = state.homeText;
             }
-            if (data.raceText && document.getElementById('raceEditableText')) {
-                document.getElementById('raceEditableText').innerHTML = data.raceText;
+            if (state.raceText != null) {
+                const el = document.getElementById('raceEditableText');
+                if (el) el.innerHTML = state.raceText;
             }
-            if (data.contactText && document.getElementById('contactEditableText')) {
-                document.getElementById('contactEditableText').innerHTML = data.contactText;
+            if (state.contactText != null) {
+                const el = document.getElementById('contactEditableText');
+                if (el) el.innerHTML = state.contactText;
             }
  
             const isReadOnly = document.body.classList.contains('read-only');
  
-            if (data.partners) {
-                const partnersGrid = document.getElementById('partnersGrid');
-                if (partnersGrid) {
-                    partnersGrid.innerHTML = data.partners.map(p => `
-                        <div class="partner-card">
-                            <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight:bold;">${p.name || ''}</div>
-                            <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size:0.8rem; color:var(--text-muted);">${p.desc || ''}</div>
-                        </div>
-                    `).join('');
-                }
+            if (Array.isArray(state.partners)) {
+                const grid = document.getElementById('partnersGrid');
+                grid.innerHTML = state.partners.map(p => `
+                    <div class="partner-card">
+                        <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                        <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight:bold;">${p.name || ''}</div>
+                        <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size:0.8rem; color:var(--text-muted);">${p.desc || ''}</div>
+                    </div>
+                `).join('');
             }
  
-            if (data.roster) renderGrid('rosterGrid', data.roster, buildEmployeeCardHTML);
-            if (data.administrationRoster) renderGrid('administrationRosterGrid', data.administrationRoster, buildEmployeeCardHTML);
-            if (data.divisionCommandRoster) renderGrid('divisionCommandRosterGrid', data.divisionCommandRoster, buildEmployeeCardHTML);
-            if (data.fieldCommandRoster) renderGrid('fieldCommandRosterGrid', data.fieldCommandRoster, buildEmployeeCardHTML);
-            if (data.supervisorsRoster) renderGrid('supervisorsRosterGrid', data.supervisorsRoster, buildEmployeeCardHTML);
-            if (data.patrolUnitsRoster) renderGrid('patrolUnitsRosterGrid', data.patrolUnitsRoster, buildEmployeeCardHTML);
-            if (data.cadetsRoster) renderGrid('cadetsRosterGrid', data.cadetsRoster, buildEmployeeCardHTML);
+            // Apply Main Roster Groups
+            const rosterGroupMap = {
+                administrationRoster: 'administrationRosterGrid',
+                divisionCommandRoster: 'divisionCommandRosterGrid',
+                fieldCommandRoster: 'fieldCommandRosterGrid',
+                supervisorsRoster: 'supervisorsRosterGrid',
+                patrolUnitsRoster: 'patrolUnitsRosterGrid',
+                cadetsRoster: 'cadetsRosterGrid'
+            };
  
-            if (data.badges) renderGrid('badgeContainer', data.badges, buildBadgeCardHTML);
-            if (data.tow) renderGrid('towGrid', data.tow, buildCardHTML);
-            if (data.awards) renderGrid('awardsGrid', data.awards, buildCardHTML);
-            if (data.race) renderGrid('raceGrid', data.race, buildCardHTML);
-            if (data.calendar) renderGrid('calendarGrid', data.calendar, buildCardHTML);
-            if (data.portal) renderGrid('portalGrid', data.portal, buildCardHTML);
+            let anyRosterGroupPresent = false;
+            Object.keys(rosterGroupMap).forEach(key => {
+                const gridId = rosterGroupMap[key];
+                if (Array.isArray(state[key]) && document.getElementById(gridId)) {
+                    anyRosterGroupPresent = true;
+                    document.getElementById(gridId).innerHTML = state[key].map(item => buildEmployeeCardHTML(item, isReadOnly)).join('');
+                }
+            });
  
-            if (data.k9Roster) renderGrid('k9RosterGrid', data.k9Roster, (item, ro) => buildPortalRosterCardHTML(item, ro, true));
-            if (data.mbuRoster) renderGrid('mbuRosterGrid', data.mbuRoster, (item, ro) => buildPortalRosterCardHTML(item, ro, false));
-            if (data.swatRoster) renderGrid('swatRosterGrid', data.swatRoster, (item, ro) => buildPortalRosterCardHTML(item, ro, false));
-            if (data.airRoster) renderGrid('airRosterGrid', data.airRoster, (item, ro) => buildPortalRosterCardHTML(item, ro, false));
-            if (data.cidRoster) renderGrid('cidRosterGrid', data.cidRoster, (item, ro) => buildPortalRosterCardHTML(item, ro, false));
+            // Legacy fallback: older saved states used a single flat "roster" array.
+            // If no grouped roster data was found, load it into Administration so nothing is lost.
+            if (!anyRosterGroupPresent && Array.isArray(state.roster)) {
+                const grid = document.getElementById('administrationRosterGrid');
+                if (grid) grid.innerHTML = state.roster.map(item => buildEmployeeCardHTML(item, isReadOnly)).join('');
+            }
  
-            if (data.pricing) {
+            if (Array.isArray(state.badges)) {
+                const container = document.getElementById('badgeContainer');
+                container.innerHTML = state.badges.map(b => buildBadgeCardHTML(b, isReadOnly)).join('');
+            }
+ 
+            ['tow', 'awards', 'race', 'calendar', 'portal'].forEach(key => {
+                const map = { tow: 'towGrid', awards: 'awardsGrid', race: 'raceGrid', calendar: 'calendarGrid', portal: 'portalGrid' };
+                const id = map[key];
+                if (Array.isArray(state[key]) && id) {
+                    document.getElementById(id).innerHTML = state[key].map(item => buildCardHTML(item, isReadOnly)).join('');
+                }
+            });
+ 
+            // Apply Subdivision Rosters State
+            const subdivisionMap = {
+                k9Roster: 'k9RosterGrid',
+                mbuRoster: 'mbuRosterGrid',
+                swatRoster: 'swatRosterGrid',
+                airRoster: 'airRosterGrid',
+                cidRoster: 'cidRosterGrid'
+            };
+ 
+            Object.keys(subdivisionMap).forEach(key => {
+                const gridId = subdivisionMap[key];
+                if (Array.isArray(state[key]) && document.getElementById(gridId)) {
+                    const isK9 = gridId === 'k9RosterGrid';
+                    document.getElementById(gridId).innerHTML = state[key].map(item => buildPortalRosterCardHTML(item, isReadOnly, isK9)).join('');
+                }
+            });
+ 
+            if (Array.isArray(state.pricing)) {
                 const tbody = document.querySelector('#pricingTable tbody');
-                if (tbody) {
-                    tbody.innerHTML = data.pricing.map(row => `
-                        <tr>
-                            <td class="edit-protected" contenteditable="${!isReadOnly}">${row.service || ''}</td>
-                            <td class="edit-protected" contenteditable="${!isReadOnly}">${row.rate || ''}</td>
-                            <td class="edit-protected" contenteditable="${!isReadOnly}">${row.notes || ''}</td>
-                            <td class="edit-control"><button class="btn btn-danger" style="padding: 2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
-                        </tr>
-                    `).join('');
-                }
+                tbody.innerHTML = state.pricing.map(row => `
+                    <tr>
+                        <td class="edit-protected" contenteditable="${!isReadOnly}">${row.service || ''}</td>
+                        <td class="edit-protected" contenteditable="${!isReadOnly}">${row.rate || ''}</td>
+                        <td class="edit-protected" contenteditable="${!isReadOnly}">${row.notes || ''}</td>
+                        <td class="edit-control"><button class="btn btn-danger" style="padding:2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
+                    </tr>
+                `).join('');
             }
-
-            if (data.rankStructure) {
+ 
+            if (Array.isArray(state.rankStructure)) {
                 const tbody = document.querySelector('#rankStructureTable tbody');
                 if (tbody) {
-                    tbody.innerHTML = data.rankStructure.map(row => `
+                    tbody.innerHTML = state.rankStructure.map(row => `
                         <tr>
                             <td class="edit-protected" contenteditable="${!isReadOnly}">${row.order || ''}</td>
                             <td class="edit-protected" contenteditable="${!isReadOnly}">${row.title || ''}</td>
                             <td class="edit-protected" contenteditable="${!isReadOnly}">${row.abbreviation || ''}</td>
                             <td class="edit-protected" contenteditable="${!isReadOnly}">${row.description || ''}</td>
-                            <td class="edit-control"><button class="btn btn-danger" style="padding: 2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
+                            <td class="edit-control"><button class="btn btn-danger" style="padding:2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
                         </tr>
                     `).join('');
                 }
             }
  
-            // Update strike dropdown colors after load
-            document.querySelectorAll('.employee-strikes-select').forEach(sel => updateStrikeColor(sel));
-
-            bindEditListeners();
+            // Update strike dropdown styles across loaded roster elements
+            document.querySelectorAll('.employee-strikes-select').forEach(updateStrikeColor);
+ 
+            if (!isReadOnly) {
+                document.querySelectorAll('.edit-protected').forEach(el => el.setAttribute('contenteditable', 'true'));
+                bindEditListeners();
+            }
+ 
             initDragAndDrop();
             isApplyingState = false;
         }
  
-        // ==================== WORKER PERSISTENCE ====================
-        async function fetchRemoteState() {
-            try {
-                const res = await fetch(`${WORKER_URL}/api/data`);
-                if (!res.ok) return null;
-                const json = await res.json();
-                return json.data || null;
-            } catch (e) {
-                console.error("Fetch failed:", e);
-                return null;
-            }
-        }
- 
-        async function saveRemoteState() {
-            if (isApplyingState) return;
-            const state = captureState();
-            try {
-                const res = await fetch(`${WORKER_URL}/api/data`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(state)
-                });
-                if (res.ok) showSaveNotification();
-            } catch (e) {
-                console.error("Save failed:", e);
-            }
-        }
-
-        async function resetSiteData() {
-            if (!confirm("Are you sure you want to reset all site data to default? This cannot be undone.")) return;
-            try {
-                const res = await fetch(`${WORKER_URL}/api/data`, { method: 'DELETE' });
-                if (res.ok) {
-                    location.reload();
-                } else {
-                    alert("Failed to reset site data.");
-                }
-            } catch (e) {
-                console.error("Reset failed:", e);
-                alert("Error connecting to server to reset data.");
-            }
-        }
- 
+        // ==================== KV REMOTE SAVE / LOAD ====================
         function scheduleSave() {
             if (isApplyingState) return;
-            if (saveTimer) clearTimeout(saveTimer);
-            saveTimer = setTimeout(saveRemoteState, 1000);
+            if (sessionStorage.getItem('editorUnlocked') !== 'true') return;
+            clearTimeout(saveTimer);
+            saveTimer = setTimeout(persistState, 400);
         }
  
-        function showSaveNotification() {
-            const notif = document.getElementById('saveNotification');
-            if (!notif) return;
-            notif.style.display = 'block';
-            setTimeout(() => { notif.style.display = 'none'; }, 2000);
+        async function loadState() {
+            try {
+                const response = await fetch(`${WORKER_URL}/api/data`);
+                if (response.ok) {
+                    const state = await response.json();
+                    if (state && Object.keys(state).length > 0) {
+                        applyState(state);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to load global state from KV:", err);
+            }
+        }
+ 
+        async function persistState() {
+            if (isApplyingState) return;
+            if (sessionStorage.getItem('editorUnlocked') !== 'true') return;
+ 
+            const state = captureState();
+ 
+            try {
+                const response = await fetch(`${WORKER_URL}/api/save`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        pin: STAFF_PIN,
+                        state: state
+                    })
+                });
+ 
+                if (response.ok) {
+                    showSaveNotification();
+                } else {
+                    alert("Failed to save changes remotely. Check your worker connection.");
+                }
+            } catch (err) {
+                console.error("Error saving to KV store:", err);
+                alert("Network error: Could not reach worker.");
+            }
         }
  
         function bindEditListeners() {
-            document.querySelectorAll('.edit-protected').forEach(el => {
+            document.querySelectorAll('.edit-protected[contenteditable="true"]').forEach(el => {
                 el.removeEventListener('input', scheduleSave);
                 el.addEventListener('input', scheduleSave);
             });
         }
  
-        // ==================== DOM MANIPULATION HELPERS ====================
-        function setStatus(type, save = true) {
-            const ind = document.getElementById('statusIndicator');
-            const txt = document.getElementById('statusText');
-            if (!ind || !txt) return;
-
-            ind.className = 'status-indicator';
-            if (type === 'open') {
-                ind.classList.add('status-open');
-                txt.textContent = 'DISPATCH ACTIVE';
-            } else if (type === 'call') {
-                ind.classList.add('status-call');
-                txt.textContent = 'HIGH ALERT';
-            } else {
-                ind.classList.add('status-closed');
-                txt.textContent = 'CODE RED';
+        // ==================== DISPATCH STATUS ====================
+        function setStatus(status, skipSave) {
+            const indicator = document.getElementById('statusIndicator');
+            const text = document.getElementById('statusText');
+ 
+            indicator.className = 'status-indicator';
+            if (status === 'open') {
+                indicator.classList.add('status-open');
+                text.textContent = 'DISPATCH ACTIVE';
+            } else if (status === 'call') {
+                indicator.classList.add('status-call');
+                text.textContent = 'HIGH ALERT';
+            } else if (status === 'closed') {
+                indicator.classList.add('status-closed');
+                text.textContent = 'CODE RED LOCKDOWN';
             }
-            if (save) scheduleSave();
+            if (!skipSave) scheduleSave();
         }
  
-        function removeCard(btn) {
-            const card = btn.closest('.card') || btn.closest('.badge-card') || btn.closest('.partner-card');
-            if (card) {
-                card.remove();
-                scheduleSave();
-            }
-        }
- 
-        function addCard(gridId, title, subtitle, text) {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
-            const item = { title, subtitle, text, image: '' };
-            const isReadOnly = document.body.classList.contains('read-only');
-            grid.insertAdjacentHTML('beforeend', buildCardHTML(item, isReadOnly));
-            bindEditListeners();
-            initDragAndDrop();
-            scheduleSave();
-        }
- 
-        function addEmployeeCard(containerId = 'rosterGrid') {
-            const grid = document.getElementById(containerId);
-            if (!grid) return;
-            const item = {
-                title: 'Officer Name',
-                subtitle: 'Rank / Badge #',
-                text: 'Assignment and unit details...',
-                hireDate: '',
-                promotionDate: '',
-                sceneCmdCert: false,
-                watchCmdCert: false,
-                notes: 'Additional officer notes...',
-                status: 'active',
-                strikes: '0/3',
-                image: ''
-            };
-            const isReadOnly = document.body.classList.contains('read-only');
-            grid.insertAdjacentHTML('beforeend', buildEmployeeCardHTML(item, isReadOnly));
-            bindEditListeners();
-            initDragAndDrop();
-            scheduleSave();
-        }
- 
+        // ==================== DYNAMIC CARDS ====================
         function addPortalRosterCard(gridId) {
-            const grid = document.getElementById(gridId);
-            if (!grid) return;
+            const container = document.getElementById(gridId);
+            if (!container) return;
+ 
+            const isReadOnly = document.body.classList.contains('read-only');
             const isK9 = gridId === 'k9RosterGrid';
-            const item = {
+            const div = document.createElement('div');
+            div.innerHTML = buildPortalRosterCardHTML({
                 title: 'Officer Name',
-                subtitle: 'Callsign / Role',
-                text: 'Specialized qualifications...',
+                subtitle: 'Unit Role / Callsign',
+                text: 'Specialty or division details...',
                 hireDate: '',
                 promotionDate: '',
-                k9Name: isK9 ? 'Buster' : '',
+                k9Name: '',
                 certSearch: false,
                 certNarcotics: false,
                 certExplosives: false,
                 certSRC: false,
                 notes: 'Unit notes...',
                 status: 'active',
-                strikes: '0/3',
-                image: ''
-            };
+                strikes: '0/3'
+            }, isReadOnly, isK9);
+ 
+            container.appendChild(div.firstElementChild);
+            bindEditListeners();
+            initDragAndDrop();
+            scheduleSave();
+        }
+ 
+        function addEmployeeCard(gridId) {
+            const container = document.getElementById(gridId || 'rosterGrid');
+            if (!container) return;
+ 
             const isReadOnly = document.body.classList.contains('read-only');
-            grid.insertAdjacentHTML('beforeend', buildPortalRosterCardHTML(item, isReadOnly, isK9));
+            const div = document.createElement('div');
+            div.innerHTML = buildEmployeeCardHTML({
+                title: 'Officer Name',
+                subtitle: 'Rank / Call sign',
+                text: 'Division or contact details...',
+                hireDate: '',
+                promotionDate: '',
+                sceneCmdCert: false,
+                watchCmdCert: false,
+                notes: 'Add notes...',
+                status: 'active',
+                strikes: '0/3'
+            }, isReadOnly);
+ 
+            container.appendChild(div.firstElementChild);
             bindEditListeners();
             initDragAndDrop();
             scheduleSave();
@@ -2697,111 +2708,181 @@
         function addBadgeCard() {
             const container = document.getElementById('badgeContainer');
             if (!container) return;
+            const isReadOnly = document.body.classList.contains('read-only');
+ 
             const item = {
                 name: 'Officer Name',
                 badgeNum: '#0000',
                 rank: 'Officer',
-                division: 'Patrol',
-                commendations: '• None recorded.',
-                punishments: '• None active.',
-                notes: 'No remarks.'
+                division: 'Patrol Division',
+                commendations: '• Add commendation...',
+                punishments: '• Add punishment or disciplinary note...',
+                notes: 'Add general remarks or certifications...'
             };
+ 
+            const div = document.createElement('div');
+            div.innerHTML = buildBadgeCardHTML(item, isReadOnly);
+            container.appendChild(div.firstElementChild);
+            bindEditListeners();
+            scheduleSave();
+        }
+ 
+        function addCard(containerId, titlePlaceholder, subtitlePlaceholder, textPlaceholder) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+ 
             const isReadOnly = document.body.classList.contains('read-only');
-            container.insertAdjacentHTML('beforeend', buildBadgeCardHTML(item, isReadOnly));
+            const div = document.createElement('div');
+            div.innerHTML = buildCardHTML({
+                title: titlePlaceholder,
+                subtitle: subtitlePlaceholder,
+                text: textPlaceholder
+            }, isReadOnly);
+ 
+            container.appendChild(div.firstElementChild);
+            bindEditListeners();
+            initDragAndDrop();
+            scheduleSave();
+        }
+ 
+        function addTableRow(tableId) {
+            const table = document.getElementById(tableId).querySelector('tbody');
+            if (!table) return;
+ 
+            const isReadOnly = document.body.classList.contains('read-only');
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="edit-protected" contenteditable="${!isReadOnly}">New Penal Citation</td>
+                <td class="edit-protected" contenteditable="${!isReadOnly}">$000</td>
+                <td class="edit-protected" contenteditable="${!isReadOnly}">Details...</td>
+                <td class="edit-control"><button class="btn btn-danger" style="padding: 2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
+            `;
+            table.appendChild(row);
             bindEditListeners();
             scheduleSave();
         }
  
         function addPartner() {
             const grid = document.getElementById('partnersGrid');
-            if (!grid) return;
             const isReadOnly = document.body.classList.contains('read-only');
-            grid.insertAdjacentHTML('beforeend', `
-                <div class="partner-card">
-                    <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
-                    <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight:bold;">New Partner Agency</div>
-                    <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size:0.8rem; color:var(--text-muted);">Jurisdictional Role</div>
-                </div>
-            `);
+            const card = document.createElement('div');
+            card.className = 'partner-card';
+            card.innerHTML = `
+                <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
+                <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-weight:bold;">New Partner Agency</div>
+                <div class="edit-protected" contenteditable="${!isReadOnly}" style="font-size:0.8rem; color:var(--text-muted);">Agency Description</div>
+            `;
+            grid.appendChild(card);
             bindEditListeners();
             scheduleSave();
         }
  
-        function addTableRow(tableId) {
-            const tbody = document.querySelector(`#${tableId} tbody`);
-            if (!tbody) return;
-            const isReadOnly = document.body.classList.contains('read-only');
-            tbody.insertAdjacentHTML('beforeend', `
-                <tr>
-                    <td class="edit-protected" contenteditable="${!isReadOnly}">Offense / Item</td>
-                    <td class="edit-protected" contenteditable="${!isReadOnly}">$0</td>
-                    <td class="edit-protected" contenteditable="${!isReadOnly}">Notes / Penalties</td>
-                    <td class="edit-control"><button class="btn btn-danger" style="padding: 2px 8px;" onclick="removeTableRow(this)"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>
-            `);
-            bindEditListeners();
+        function removeCard(btn) {
+            btn.closest('.card, .partner-card, .badge-card').remove();
             scheduleSave();
         }
  
         function removeTableRow(btn) {
-            const row = btn.closest('tr');
-            if (row) {
-                row.remove();
-                scheduleSave();
-            }
+            btn.closest('tr').remove();
+            scheduleSave();
         }
  
-        function uploadImage(event, inputEl) {
+        // ==================== IMAGE UPLOAD ====================
+        function uploadImage(event, inputElement) {
             const file = event.target.files[0];
             if (!file) return;
+ 
             const reader = new FileReader();
             reader.onload = function(e) {
-                const cardImgContainer = inputEl.closest('.card-img-container');
-                if (cardImgContainer) {
-                    cardImgContainer.style.backgroundImage = `url('${e.target.result}')`;
-                    const icon = cardImgContainer.querySelector('i.fa-3x');
+                const img = new Image();
+                img.onload = function() {
+                    const maxW = 600;
+                    let w = img.width, h = img.height;
+                    if (w > maxW) {
+                        h = Math.round(h * (maxW / w));
+                        w = maxW;
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+ 
+                    const imgContainer = inputElement.closest('.card-img-container');
+                    imgContainer.style.backgroundImage = `url("${dataUrl}")`;
+                    const icon = imgContainer.querySelector('i.fa-3x');
                     if (icon) icon.style.display = 'none';
-                    scheduleSave();
-                }
+                    clearTimeout(saveTimer);
+                    persistState();
+                };
+                img.src = e.target.result;
             };
             reader.readAsDataURL(file);
         }
-
-        document.getElementById('bgUploader')?.addEventListener('change', function(e) {
+ 
+        document.getElementById('bgUploader').addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = function(evt) {
-                const hero = document.getElementById('heroBanner');
-                if (hero) {
-                    hero.style.backgroundImage = `url('${evt.target.result}')`;
-                    window.__heroBackground = evt.target.result;
-                    scheduleSave();
-                }
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    const maxW = 900;
+                    let w = img.width, h = img.height;
+                    if (w > maxW) {
+                        h = Math.round(h * (maxW / w));
+                        w = maxW;
+                    }
+                    const maxH = 500;
+                    if (h > maxH) {
+                        w = Math.round(w * (maxH / h));
+                        h = maxH;
+                    }
+                    const canvas = document.createElement('canvas');
+                    canvas.width = w;
+                    canvas.height = h;
+                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.55);
+                    window.__heroBackground = dataUrl;
+                    const hero = document.getElementById('heroBanner');
+                    hero.style.background = `center / cover no-repeat url("${dataUrl}")`;
+                    hero.style.backgroundColor = '#0f172a';
+                    clearTimeout(saveTimer);
+                    persistState();
+                };
+                img.src = event.target.result;
             };
             reader.readAsDataURL(file);
         });
-
-        // ==================== INITIALIZATION ====================
-        window.addEventListener('DOMContentLoaded', async () => {
-            const editorUnlocked = sessionStorage.getItem('editorUnlocked') === 'true';
-            const portalUnlocked = sessionStorage.getItem('portalUnlocked') === 'true';
-
-            setReadOnlyMode(!editorUnlocked);
-            renderEditorBadge();
-
-            if (editorUnlocked || portalUnlocked) {
-                showPortalContent();
+ 
+        // ==================== HELPERS ====================
+        function showSaveNotification() {
+            const toast = document.getElementById('saveNotification');
+            toast.style.display = 'block';
+            setTimeout(() => { toast.style.display = 'none'; }, 2000);
+        }
+ 
+        async function resetSiteData() {
+            if (!confirm("Reset all customizations to default? This cannot be undone.")) return;
+            window.__heroBackground = '';
+            location.reload();
+        }
+ 
+        // ==================== INIT ====================
+        window.addEventListener('DOMContentLoaded', async function() {
+            await loadState();
+ 
+            // Run color updates on existing initial strikes elements
+            document.querySelectorAll('.employee-strikes-select').forEach(updateStrikeColor);
+ 
+            if (sessionStorage.getItem('editorUnlocked') === 'true') {
+                unlockEditor();
             } else {
-                hidePortalContent();
-            }
-
-            const remoteData = await fetchRemoteState();
-            if (remoteData) {
-                applyState(remoteData);
-            } else {
-                bindEditListeners();
-                initDragAndDrop();
+                setReadOnlyMode(true);
+                renderEditorBadge();
+                if (sessionStorage.getItem('portalUnlocked') === 'true') {
+                    showPortalContent();
+                }
             }
         });
     </script>

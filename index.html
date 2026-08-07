@@ -410,22 +410,23 @@
             line-height: 1.4;
         }
 
-        /* EMPLOYEE STATUS & NOTES STYLES */
-        .employee-status-container {
+        /* EMPLOYEE STATUS & STRIKES & NOTES STYLES */
+        .employee-status-container, .employee-strikes-container {
             margin-top: 4px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
 
-        .employee-status-label {
+        .employee-status-label, .employee-strikes-label {
             font-size: 0.75rem;
             font-weight: bold;
             color: var(--accent-cream);
             text-transform: uppercase;
+            min-width: 55px;
         }
 
-        .employee-status-select {
+        .employee-status-select, .employee-strikes-select {
             background: var(--bg-matte);
             border: 1px solid var(--border-color);
             font-family: 'Inter', sans-serif;
@@ -435,6 +436,11 @@
             border-radius: 4px;
             outline: none;
             cursor: pointer;
+        }
+
+        .employee-strikes-select {
+            color: #ffaa00;
+            border-color: var(--border-color);
         }
 
         .employee-status-select.status-active {
@@ -452,7 +458,13 @@
             border-color: #ff3333;
         }
 
-        body.read-only .employee-status-select {
+        .employee-status-select.status-suspended {
+            color: #ff3333;
+            border-color: #ff3333;
+        }
+
+        body.read-only .employee-status-select,
+        body.read-only .employee-strikes-select {
             pointer-events: none;
             appearance: none;
             -webkit-appearance: none;
@@ -929,7 +941,7 @@
             </div>
 
             <div class="partners-section">
-                <div style="display:flex; justify-content:space-between; align-align:center;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
                     <h3 style="font-family: 'Bebas Neue'; font-size: 1.8rem; color: var(--accent-cream);">ALLIED AGENCIES & PARTNERS</h3>
                     <button class="btn btn-secondary edit-control" onclick="addPartner()"><i class="fa-solid fa-plus"></i> Add Partner Agency</button>
                 </div>
@@ -972,6 +984,16 @@
                                 <option value="active" selected>Active</option>
                                 <option value="loa">LOA</option>
                                 <option value="inactive">Inactive</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                        </div>
+                        <div class="employee-strikes-container">
+                            <span class="employee-strikes-label">Strikes:</span>
+                            <select class="employee-strikes-select" onchange="scheduleSave();">
+                                <option value="0/3" selected>0/3</option>
+                                <option value="1/3">1/3</option>
+                                <option value="2/3">2/3</option>
+                                <option value="3/3">3/3</option>
                             </select>
                         </div>
                         <div class="card-notes-container">
@@ -1303,11 +1325,12 @@
 
         // ==================== STATUS DROPDOWN COLOR UPDATER ====================
         function updateStatusColor(selectEl) {
-            selectEl.classList.remove('status-active', 'status-loa', 'status-inactive');
+            selectEl.classList.remove('status-active', 'status-loa', 'status-inactive', 'status-suspended');
             const val = selectEl.value;
             if (val === 'active') selectEl.classList.add('status-active');
             else if (val === 'loa') selectEl.classList.add('status-loa');
             else if (val === 'inactive') selectEl.classList.add('status-inactive');
+            else if (val === 'suspended') selectEl.classList.add('status-suspended');
         }
 
         // ==================== PIN LOCK SYSTEM ====================
@@ -1529,12 +1552,14 @@
                 const imgEl = card.querySelector('.card-img-container');
                 const imgUrl = imgEl ? extractBgUrl(imgEl.style.backgroundImage) : '';
                 const statusSelect = card.querySelector('.employee-status-select');
+                const strikesSelect = card.querySelector('.employee-strikes-select');
                 return {
                     title: card.querySelector('.card-title')?.innerHTML || '',
                     subtitle: card.querySelector('.card-subtitle')?.innerHTML || '',
                     text: card.querySelector('.card-text')?.innerHTML || '',
                     notes: card.querySelector('.card-notes-text')?.innerHTML || '',
                     status: statusSelect ? statusSelect.value : 'active',
+                    strikes: strikesSelect ? strikesSelect.value : '0/3',
                     image: imgUrl
                 };
             });
@@ -1640,7 +1665,8 @@
             const bgStyle = hasImg ? `style="background-image:url('${item.image}')"` : '';
             const iconDisplay = hasImg ? 'display:none;' : '';
             const statusVal = item.status || 'active';
-            const statusClass = statusVal === 'loa' ? 'status-loa' : (statusVal === 'inactive' ? 'status-inactive' : 'status-active');
+            const strikesVal = item.strikes || '0/3';
+            const statusClass = statusVal === 'loa' ? 'status-loa' : (statusVal === 'inactive' ? 'status-inactive' : (statusVal === 'suspended' ? 'status-suspended' : 'status-active'));
 
             return `
                 <div class="card">
@@ -1663,6 +1689,16 @@
                                 <option value="active" ${statusVal === 'active' ? 'selected' : ''}>Active</option>
                                 <option value="loa" ${statusVal === 'loa' ? 'selected' : ''}>LOA</option>
                                 <option value="inactive" ${statusVal === 'inactive' ? 'selected' : ''}>Inactive</option>
+                                <option value="suspended" ${statusVal === 'suspended' ? 'selected' : ''}>Suspended</option>
+                            </select>
+                        </div>
+                        <div class="employee-strikes-container">
+                            <span class="employee-strikes-label">Strikes:</span>
+                            <select class="employee-strikes-select" onchange="scheduleSave();">
+                                <option value="0/3" ${strikesVal === '0/3' ? 'selected' : ''}>0/3</option>
+                                <option value="1/3" ${strikesVal === '1/3' ? 'selected' : ''}>1/3</option>
+                                <option value="2/3" ${strikesVal === '2/3' ? 'selected' : ''}>2/3</option>
+                                <option value="3/3" ${strikesVal === '3/3' ? 'selected' : ''}>3/3</option>
                             </select>
                         </div>
                         <div class="card-notes-container">
@@ -1894,7 +1930,8 @@
                 subtitle: 'Rank / Call sign',
                 text: 'Division or contact details...',
                 notes: 'Add notes...',
-                status: 'active'
+                status: 'active',
+                strikes: '0/3'
             }, isReadOnly);
 
             container.appendChild(div.firstElementChild);

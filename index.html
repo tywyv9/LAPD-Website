@@ -382,6 +382,29 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ROSTER-SPECIFIC CARDS: wider columns so Hire/Promotion dates aren't cutoff */
+        .grid-container.roster-grid {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        @media (max-width: 1400px) {
+            .grid-container.roster-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 1100px) {
+            .grid-container.roster-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 620px) {
+            .grid-container.roster-grid {
+                grid-template-columns: 1fr;
+            }
+        }
  
         .card {
             background: var(--bg-metallic);
@@ -518,9 +541,10 @@
             color: var(--text-light);
             font-family: 'Inter', sans-serif;
             font-size: 0.75rem;
-            padding: 4px;
+            padding: 4px 2px;
             border-radius: 4px;
             width: 100%;
+            min-width: 0;
             outline: none;
         }
  
@@ -1126,7 +1150,7 @@
                 <h2 class="tab-title">DEPARTMENT ROSTER</h2>
                 <button class="btn edit-control" onclick="addEmployeeCard()"><i class="fa-solid fa-plus"></i> Add Personnel</button>
             </div>
-            <div class="grid-container" id="rosterGrid">
+            <div class="grid-container roster-grid" id="rosterGrid">
                 <div class="card">
                     <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                     <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
@@ -1567,7 +1591,7 @@
                         <span><i class="fa-solid fa-dog"></i> K9 DIVISION ROSTER</span>
                         <button class="btn edit-control" onclick="addPortalRosterCard('k9RosterGrid')"><i class="fa-solid fa-plus"></i> Add K9 Handler</button>
                     </div>
-                    <div class="grid-container" id="k9RosterGrid">
+                    <div class="grid-container roster-grid" id="k9RosterGrid">
                         <!-- Default K9 Operator Card -->
                         <div class="card">
                             <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
@@ -1649,7 +1673,7 @@
                         <span><i class="fa-solid fa-motorcycle"></i> MOTORCYCLE DIVISION (MBU) ROSTER</span>
                         <button class="btn edit-control" onclick="addPortalRosterCard('mbuRosterGrid')"><i class="fa-solid fa-plus"></i> Add MBU Officer</button>
                     </div>
-                    <div class="grid-container" id="mbuRosterGrid">
+                    <div class="grid-container roster-grid" id="mbuRosterGrid">
                         <div class="card">
                             <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                             <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
@@ -1703,7 +1727,7 @@
                         <span><i class="fa-solid fa-person-rifle"></i> S.W.A.T. TACTICAL ROSTER</span>
                         <button class="btn edit-control" onclick="addPortalRosterCard('swatRosterGrid')"><i class="fa-solid fa-plus"></i> Add SWAT Operator</button>
                     </div>
-                    <div class="grid-container" id="swatRosterGrid">
+                    <div class="grid-container roster-grid" id="swatRosterGrid">
                         <div class="card">
                             <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                             <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
@@ -1757,7 +1781,7 @@
                         <span><i class="fa-solid fa-helicopter"></i> AIR SUPPORT DIVISION (ASD) ROSTER</span>
                         <button class="btn edit-control" onclick="addPortalRosterCard('airRosterGrid')"><i class="fa-solid fa-plus"></i> Add Pilot</button>
                     </div>
-                    <div class="grid-container" id="airRosterGrid">
+                    <div class="grid-container roster-grid" id="airRosterGrid">
                         <div class="card">
                             <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                             <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
@@ -1811,7 +1835,7 @@
                         <span><i class="fa-solid fa-user-secret"></i> DETECTIVE & CID DIVISION ROSTER</span>
                         <button class="btn edit-control" onclick="addPortalRosterCard('cidRosterGrid')"><i class="fa-solid fa-plus"></i> Add Detective</button>
                     </div>
-                    <div class="grid-container" id="cidRosterGrid">
+                    <div class="grid-container roster-grid" id="cidRosterGrid">
                         <div class="card">
                             <span class="card-drag-handle" title="Drag to reorder"><i class="fa-solid fa-grip-vertical"></i> Move</span>
                             <button class="card-delete-btn" onclick="removeCard(this)"><i class="fa-solid fa-trash"></i></button>
